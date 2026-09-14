@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pastor Annual Report 2026 — Print</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Times New Roman",serif;font-size:11pt;color:#000;background:white}
+.no-print{background:#6B2D8B;color:white;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.no-print button{padding:8px 18px;background:#C4972A;color:white;border:none;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer}
+.no-print .msg{font-size:13px}
+.page{max-width:210mm;margin:0 auto;padding:15mm 15mm 20mm}
+.doc-header{text-align:center;border-bottom:2px solid #000;padding-bottom:10px;margin-bottom:14px}
+.doc-title{font-size:13pt;font-weight:bold;text-transform:uppercase;letter-spacing:1px}
+.doc-sub{font-size:10pt;margin-top:4px}
+.doc-note{font-size:9pt;font-style:italic;margin-top:6px;color:#333}
+.section{margin-bottom:16px;break-inside:avoid}
+.section-title{background:#000;color:#fff;padding:4px 8px;font-size:10pt;font-weight:bold;text-transform:uppercase;letter-spacing:.5px;margin-bottom:0}
+table{width:100%;border-collapse:collapse;font-size:10pt}
+td,th{border:1px solid #333;padding:4px 7px;vertical-align:middle}
+th{background:#e8e8e8;font-weight:bold;font-size:9pt;text-align:left}
+.label{background:#f0f0f0;font-weight:bold;width:35%}
+.label2{background:#f0f0f0;font-weight:bold;width:30%}
+.val{min-width:120px}
+.total-row{background:#e8e8e8;font-weight:bold}
+.narrative-box{border:1px solid #333;padding:8px;min-height:50px;margin-bottom:0;font-size:10pt;line-height:1.5}
+.cert-sig{border-bottom:1px solid #000;min-height:30px;margin-bottom:3px}
+.cert-label{font-size:9pt;color:#333}
+.footer{text-align:center;font-size:9pt;color:#333;margin-top:20px;border-top:1px solid #333;padding-top:8px}
+@media print{
+  .no-print{display:none!important}
+  body{font-size:10pt}
+  .page{padding:10mm 12mm 15mm}
+}
+</style>
+</head>
+<body>
+<div class="no-print">
+  <div class="msg">&#9432; Review your report below then click Print. This is your official submission record.</div>
+  <button onclick="window.print()">&#128438; Print / Save as PDF</button>
+</div>
+<div class="page" id="page">
+  <div class="doc-header">
+    <div class="doc-title">African Methodist Episcopal Church</div>
+    <div class="doc-title">Nineteenth Episcopal District</div>
+    <div class="doc-sub">Pastor&#8217;s Annual Conference Summary Report &mdash; 2026</div>
+    <div class="doc-sub">M.M. Mokone Memorial Annual Conference</div>
+    <div class="doc-note">To be completed by every Pastor and submitted to the Presiding Elder before the opening of the Annual Conference.</div>
+  </div>
+  <div id="report-content"><p style="text-align:center;padding:40px;color:#666">Loading your report&#8230;</p></div>
+  <div class="footer">African Methodist Episcopal Church &middot; 19th Episcopal District &middot; M.M. Mokone Memorial Annual Conference 2026<br>Senior Bishop Wilfred Jacobus Messiah, Presiding Prelate</div>
+</div>
+<script>
+var d = null;
+try { d = JSON.parse(sessionStorage.getItem('lastReport')); } catch(e) {}
+
+function v(val) { return val || ''; }
+function row2(l1,v1,l2,v2) {
+  return '<tr><td class="label">'+l1+'</td><td class="val">'+v(v1)+'</td><td class="label2">'+l2+'</td><td class="val">'+v(v2)+'</td></tr>';
+}
+function row1(l,val) {
+  return '<tr><td class="label">'+l+'</td><td class="val" colspan="3">'+v(val)+'</td></tr>';
+}
+
+if (!d) {
+  document.getElementById('report-content').innerHTML = '<p style="padding:40px;color:#c0392b;text-align:center">No report data found. Please return to the form and submit first, then click Print.</p>';
+} else {
+  var html = '';
+
+  // SECTION A
+  html += '<div class="section"><div class="section-title">Section A &mdash; Identification</div><table>';
+  html += row2('Annual Conference','M.M. Mokone Memorial Annual Conference','Conference Year','2026');
+  html += row2('Presiding Elder District',d.district,'Name of Presiding Elder',d.presidingElder);
+  html += row2('Name of Church / Charge',d.church,'Station or Circuit',d.stationCircuit);
+  html += row2('Number of Preaching Points',d.numPreachingPoints,'Physical Address',d.churchAddress);
+  html += row2('Name of Pastor',d.pastor,'Ministerial Status',d.ministerialStatus);
+  html += row2('Date of Appointment',d.dateAppointment,'Years Served at this Charge',d.yearsServed);
+  html += row2('Pastor's Contact Number',d.pastorContact,'Pastor's E-mail Address',d.pastorEmail);
+  html += row2('Adult Delegate',d.adultDelegate,'Youth Delegate',d.youthDelegate);
+  html += '</table></div>';
+
+  // SECTION B
+  html += '<div class="section"><div class="section-title">Section B &mdash; Membership, Growth &amp; Discipleship</div><table>';
+  html += '<tr><th>Item</th><th>Previous Year (2025)</th><th>This Year (2026)</th><th>Variance</th></tr>';
+  var bRows = [
+    ['Full members &mdash; Adults','adultsPadultsC'],
+    ['Full members &mdash; Youth','youthPyouthC'],
+    ['Full members &mdash; Children','childrenPchildrenC'],
+    ['TOTAL MEMBERSHIP','totalMembPtotalMembC'],
+    ['Average Sunday attendance','attendancePattendanceC'],
+    ['Church School enrolment','churchSchoolPchurchSchoolC'],
+    ['Number of tithers','tithersPtithersC'],
+    ['Conversions','conversionsPconversionsC'],
+    ['Accessions','accessionsPaccessionsC'],
+    ['Baptisms','baptismsPbaptismsC'],
+    ['Confirmations','confirmationsPconfirmationsC'],
+    ['Deaths during the year','deathsPdeathsC'],
+    ['Transfers out and removals','transfersPtransfersC']
+  ];
+  bRows.forEach(function(r,i) {
+    var parts = r[1].split(/(?=[A-Z])/);
+    var pKey = r[1].replace(/([a-z])([A-Z])/,function(m,a,b){return a+'|'+b;}).split('|');
+    // Simple approach: define keys directly
+    var keys = [
+      ['adultsP','adultsC'],['youthP','youthC'],['childrenP','childrenC'],
+      ['totalMembP','totalMembC'],['attendanceP','attendanceC'],
+      ['churchSchoolP','churchSchoolC'],['tithersP','tithersC'],
+      ['conversionsP','conversionsC'],['accessionsP','accessionsC'],
+      ['baptismsP','baptismsC'],['confirmationsP','confirmationsC'],
+      ['deathsP','deathsC'],['transfersP','transfersC']
+    ];
+    var k = keys[i];
+    var prev = v(d[k[0]]), curr = v(d[k[1]]);
+    var variance = (parseFloat(curr)||0)-(parseFloat(prev)||0);
+    var isTot = i===3;
+    var style = isTot ? ' class="total-row"' : '';
+    html += '<tr'+style+'><td>'+(isTot?'<strong>':'')+(r[0])+(isTot?'</strong>':'')+'</td><td>'+prev+'</td><td>'+curr+'</td><td>'+(prev||curr?variance:'')+'</td></tr>';
+  });
+  html += '</table></div>';
+
+  // SECTION C
+  html += '<div class="section"><div class="section-title">Section C &mdash; Financial Report (South African Rand)</div><table>';
+  html += '<tr><th>Item</th><th>Assessed / Due</th><th>Paid</th><th>Outstanding</th><th>Date / Reference</th></tr>';
+  var cRows = [
+    ['Annual Conference Budget','acb'],
+    ['Mid-Year Budget','myb'],
+    ['Advance Offering','adv'],
+    ['Office Staff / Staffing','ost'],
+    ['Presiding Elder &mdash; Apportionment','pea'],
+    ['Presiding Elder &mdash; District','ped'],
+    ['Presiding Elder &mdash; Church School','pec'],
+    ["Presiding Elder's Annuity",'pan'],
+    ["Pastor's Annuity",'pas'],
+    ['Retirement Benefits &amp; Risk (AMEC Plans)','ret'],
+    ['Episcopal Residence Project','erp'],
+    ['TOTAL BROUGHT TO ANNUAL CONFERENCE','tac']
+  ];
+  cRows.forEach(function(r,i) {
+    var pfx = r[1];
+    var assessed = v(d[pfx+'Assessed']), paid = v(d[pfx+'Paid']), date = v(d[pfx+'Date']);
+    var outstanding = (assessed&&paid) ? Math.max(0,(parseFloat(assessed)||0)-(parseFloat(paid)||0)) : '';
+    var isTot = i===11;
+    var style = isTot ? ' class="total-row"' : (i%2===0?' style="background:#f9f9f9"':'');
+    html += '<tr'+style+'><td>'+(isTot?'<strong>':'')+r[0]+(isTot?'</strong>':'')+'</td><td>'+assessed+'</td><td>'+paid+'</td><td>'+(outstanding!==''?outstanding:'')+'</td><td>'+date+'</td></tr>';
+  });
+  html += '<tr><td colspan="5" style="padding:0"><table style="width:100%;border:none"><tr>';
+  html += '<td style="border:none;border-right:1px solid #333;padding:5px 7px"><strong>Total funds raised:</strong> R '+v(d.fundsRaised)+'</td>';
+  html += '<td style="border:none;border-right:1px solid #333;padding:5px 7px"><strong>Total paid to Pastor:</strong> R '+v(d.paidPastor)+'</td>';
+  html += '<td style="border:none;padding:5px 7px"><strong>Total tithes received:</strong> R '+v(d.totalTithes)+'</td>';
+  html += '</tr></table></td></tr>';
+  html += '</table></div>';
+
+  // SECTION D
+  html += '<div class="section"><div class="section-title">Section D &mdash; Episcopal Residence Project</div><table>';
+  html += row2('Amount pledged by the charge','R '+v(d.erpPledged),'Date / reference',v(d.erpPledgedRef));
+  html += row2('Paid during this conference year','R '+v(d.erpPaidYear),'Date / reference',v(d.erpPaidYearRef));
+  html += row2('Cumulative amount paid to date','R '+v(d.erpCumulative),'Date / reference',v(d.erpCumRef));
+  html += '<tr class="total-row"><td class="label"><strong>Outstanding balance on pledge</strong></td><td class="val">R '+v(d.erpOutstanding)+'</td><td class="label2">Expected date of settlement</td><td class="val">'+v(d.erpSettleDate)+'</td></tr>';
+  html += '</table></div>';
+
+  // SECTION E
+  html += '<div class="section"><div class="section-title">Section E &mdash; Organised Ministries &amp; Components</div><table>';
+  html += '<tr><th>Component / Ministry</th><th>Active? Y/N</th><th>Membership</th><th>Meetings held</th><th>Name of the leader</th></tr>';
+  var mins = {};
+  try { mins = JSON.parse(d.ministries||'{}'); } catch(e) {}
+  var mList = ["Women's Missionary Society","Lay Organisation","Young People's and Children's Division","Sons of Allen","Allen Christian Evangelical League","Richard Allen Young Adult Council","Charlotte Maxeke Ladies Fellowship","Women in Ministry","MSWAWO + PK's","Church School","Music Ministry","Evangelism and Outreach Ministry"];
+  mList.forEach(function(m,i){
+    var info = mins[m]||{};
+    var style = i%2===0?' style="background:#f9f9f9"':'';
+    html += '<tr'+style+'><td>'+m+'</td><td>'+v(info.active)+'</td><td>'+v(info.members)+'</td><td>'+v(info.meetings)+'</td><td>'+v(info.leader)+'</td></tr>';
+  });
+  html += '</table></div>';
+
+  // SECTION F
+  html += '<div class="section"><div class="section-title">Section F &mdash; Property, Governance &amp; Compliance</div><table>';
+  html += row2('Title deed held? (Y/N)',d.titleDeed,'In whose name?',d.titleDeedName);
+  html += row2('Registered in name of A.M.E. Church?',d.ameRegistered,'Title deed / erf number',d.erfNumber);
+  html += row2('Church property insured?',d.insured,'Insurer and policy number',d.insurerPolicy);
+  html += row2('Parsonage provided?',d.parsonage,'Condition of parsonage',d.parsonageCond);
+  html += row2('NPO registration number',d.npoNumber,'SARS PBO number',d.sarsNumber);
+  html += row2('Bank account in name of A.M.E.?',d.bankAME,'Number of authorised signatories',d.numSignatories);
+  html += row2('Financial statements prepared?',d.finStatements,'Date submitted to Presiding Elder',d.finStatementsDate);
+  html += row2('Steward/Trustee Board constituted?',d.boardConstituted,'Date of last Church Conference',d.lastChurchConf);
+  html += '</table></div>';
+
+  // SECTION G
+  html += '<div class="section"><div class="section-title">Section G &mdash; Narrative Report</div>';
+  html += '<table><tr><td colspan="2" class="label" style="border-bottom:none">Two major accomplishments of this charge during the conference year</td></tr>';
+  html += '<tr><td style="vertical-align:top;padding:6px;width:50%;border-right:1px solid #333"><strong>1.</strong><br>'+v(d.accomplishment1)+'</td><td style="vertical-align:top;padding:6px"><strong>2.</strong><br>'+v(d.accomplishment2)+'</td></tr>';
+  html += '<tr><td colspan="2" class="label" style="border-bottom:none">Two major challenges faced by this charge during the conference year</td></tr>';
+  html += '<tr><td style="vertical-align:top;padding:6px;width:50%;border-right:1px solid #333"><strong>1.</strong><br>'+v(d.challenge1)+'</td><td style="vertical-align:top;padding:6px"><strong>2.</strong><br>'+v(d.challenge2)+'</td></tr>';
+  html += '<tr><td colspan="2" class="label" style="border-bottom:none">Ministry and outreach undertaken in the community</td></tr>';
+  html += '<tr><td colspan="2" style="padding:6px;min-height:40px">'+v(d.outreach)+'</td></tr>';
+  html += '<tr><td colspan="2" class="label" style="border-bottom:none">Matters requiring the attention of the Presiding Elder or the Bishop</td></tr>';
+  html += '<tr><td colspan="2" style="padding:6px;min-height:40px">'+v(d.mattersForPE)+'</td></tr>';
+  html += '</table></div>';
+
+  // SECTION H
+  html += '<div class="section"><div class="section-title">Section H &mdash; Certification</div>';
+  html += '<p style="font-style:italic;font-size:9pt;padding:6px;border:1px solid #ccc;margin-bottom:8px">I certify that, to the best of my knowledge and belief, the above is a true and accurate statement of the numerical, financial and material condition of the above-named charge for this conference year.</p>';
+  html += '<table>';
+  html += row2('Pastor',d.pastor,'Date',d.certPastorDate);
+  html += row2('Chairperson of the Steward Board',d.stewardBoardChair,'Date',d.stewardBoardDate);
+  html += row2('Adult Delegate',d.adultDelegate,'Signature','');
+  html += row2('Youth Delegate',d.youthDelegate,'Signature','');
+  html += '<tr><td class="label">Presiding Elder &mdash; Verified</td><td class="val"></td><td class="label2">Date</td><td class="val"></td></tr>';
+  html += '</table></div>';
+
+  // Reference
+  html += '<div style="text-align:right;font-size:9pt;color:#555;margin-top:10px">Submitted: '+new Date(d.timestamp).toLocaleString('en-ZA',{year:"numeric",month:"long",day:"numeric",hour:"2-digit",minute:"2-digit"})+'</div>';
+
+  document.getElementById('report-content').innerHTML = html;
+}
+</script>
+</body>
+</html>

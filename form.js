@@ -277,12 +277,28 @@ function v(id){var e=n(id);return e?e.value:'';}
 // COUNTDOWN
 function startCountdown(){
   function tick(){
-    var diff = new Date('2026-09-15T23:59:59') - new Date();
-    if(diff<=0)return;
-    n('c1d').textContent=String(Math.floor(diff/86400000)).padStart(2,'0');
-    n('c1h').textContent=String(Math.floor(diff%86400000/3600000)).padStart(2,'0');
-    n('c1m').textContent=String(Math.floor(diff%3600000/60000)).padStart(2,'0');
-    n('c1s').textContent=String(Math.floor(diff%60000/1000)).padStart(2,'0');
+    // Submission deadline
+    var diff1 = new Date('2026-09-20T23:59:59') - new Date();
+    if(diff1>0){
+      n('c1d').textContent=String(Math.floor(diff1/86400000)).padStart(2,'0');
+      n('c1h').textContent=String(Math.floor(diff1%86400000/3600000)).padStart(2,'0');
+      n('c1m').textContent=String(Math.floor(diff1%3600000/60000)).padStart(2,'0');
+      n('c1s').textContent=String(Math.floor(diff1%60000/1000)).padStart(2,'0');
+    } else {
+      var els=['c1d','c1h','c1m','c1s'];
+      els.forEach(function(id){var e=n(id);if(e)e.textContent='00';});
+    }
+    // Annual Conference
+    var diff2 = new Date('2026-10-08T08:00:00') - new Date();
+    if(diff2>0){
+      n('c2d').textContent=String(Math.floor(diff2/86400000)).padStart(2,'0');
+      n('c2h').textContent=String(Math.floor(diff2%86400000/3600000)).padStart(2,'0');
+      n('c2m').textContent=String(Math.floor(diff2%3600000/60000)).padStart(2,'0');
+      n('c2s').textContent=String(Math.floor(diff2%60000/1000)).padStart(2,'0');
+    } else {
+      var els2=['c2d','c2h','c2m','c2s'];
+      els2.forEach(function(id){var e=n(id);if(e)e.textContent='00';});
+    }
   }
   tick();setInterval(tick,1000);
 }
@@ -546,6 +562,14 @@ function submitForm(){
     n('cqa').textContent='&#8212; '+q.author;
     n('cqr').textContent=q.role;
     try{var lk='sub_'+(data.church+data.district).replace(/[^a-z0-9]/gi,'').toLowerCase();localStorage.setItem(lk,new Date().toLocaleString('en-ZA'));}catch(e){}
+    // Store for printing
+    try{sessionStorage.setItem('lastReport',JSON.stringify(data));}catch(e){}
+    // Add print button to confirmation
+    var pBtn=document.createElement('button');
+    pBtn.textContent='Print / Download My Report';
+    pBtn.style.cssText='margin-top:14px;width:100%;padding:13px;background:linear-gradient(135deg,#3a1750,#6B2D8B);color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:"Open Sans",sans-serif';
+    pBtn.onclick=function(){window.open('print.html','_blank');};
+    document.querySelector('.ccard').appendChild(pBtn);
     window.scrollTo(0,0);
   };
 
