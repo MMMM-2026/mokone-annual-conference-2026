@@ -453,17 +453,29 @@ function validate(s){
   if(s===1){
     if(!v('district')){showErr('err1','Please select your district.');return false;}
     if(v('church')===''){showErr('err1','Please select your church.');return false;}
+    if(!v('station')){showErr('err1','Please select Station or Circuit.');return false;}
     if(n('resub').classList.contains('show')){showErr('err1','Please respond to the resubmission notice above.');return false;}
     hideErr('err1');return true;
   }
   if(s===2){
     var tc=parseFloat(n('tot-c').value)||0;
-    if(!tc){showErr('err2','Please enter membership figures.');return false;}
+    if(!tc){showErr('err2','Please enter this year\'s membership figures (Adults, Youth or Children).');return false;}
+    var attc=n('att-c').value;
+    if(!attc){showErr('err2','Please enter the Average Sunday Attendance for this year.');return false;}
     hideErr('err2');return true;
   }
   if(s===3){
-    if(!v('funds-raised')){showErr('err3','Please enter total funds raised.');return false;}
+    if(!v('funds-raised')){showErr('err3','Please enter the Total Funds Raised by the church.');return false;}
+    if(!v('tac-p')){showErr('err3','Please enter the Total Brought to Annual Conference.');return false;}
     hideErr('err3');return true;
+  }
+  if(s===4){return true;}
+  if(s===5){return true;}
+  if(s===6){return true;}
+  if(s===7){
+    if(!n('g-acc1').value.trim()){showErr('err7','Please describe at least one major accomplishment (Section G).');return false;}
+    if(!n('g-ch1').value.trim()){showErr('err7','Please describe at least one major challenge (Section G).');return false;}
+    hideErr('err7');return true;
   }
   return true;
 }
@@ -477,7 +489,6 @@ function submitForm(){
   var dv=v('district'), cv_=v('church');
   var ch=D[dv].c[+cv_];
   n('ov').classList.add('show');
-  n('main-form').style.display='none';
 
   // Build ministry data
   var minData={};
@@ -553,8 +564,11 @@ function submitForm(){
 
   var show = function(){
     n('ov').classList.remove('show');
-    n('conf').classList.add('show');
+    // Hide form sections, show confirmation
+    var fw=n('fw'); if(fw) fw.style.display='none';
+    var spb=document.querySelector('.spbar'); if(spb) spb.style.display='none';
     n('conf').style.display='block';
+    n('conf').classList.add('show');
     n('ctext').innerHTML='Thank you, <strong>'+data.pastor+'</strong>.<br>The summary report for <strong>'+data.church+'</strong> has been received and recorded.';
     n('cref').textContent='Reference: RPT-'+Date.now().toString(36).toUpperCase()+' &#183; '+new Date().toLocaleDateString('en-ZA',{year:'numeric',month:'long',day:'numeric'});
     var q=COMPLETION_QUOTES[Math.floor(Math.random()*COMPLETION_QUOTES.length)];

@@ -44,7 +44,6 @@ function fetchLive(){
       LD.total = data.total||0;
       LD.districts = data.districts||{};
       LD.submissions = data.submissions||[];
-      window._liveSubmissions = data.submissions||[];
       updateRing();
     })
     .catch(function(e){
@@ -107,29 +106,8 @@ function switchTab(tabsId, paneIds, idx){
 }
 
 function dvTab(name, idx){
-  switchTab("dvTabs", ["dvList","dvSum","dvRoster"], idx);
+  switchTab("dvTabs", ["dvList","dvSum"], idx);
   if(name==="sum") buildDistrictSummary();
-  if(name==="roster") {
-    // Load roster from live data
-    var district = document.getElementById("dvTitle") ? document.getElementById("dvTitle").textContent : "";
-    if(district && window._liveSubmissions) {
-      showPERoster(district, window._liveSubmissions);
-    } else {
-      // Fetch live data
-      var rc = document.getElementById("pe-roster-container");
-      if(rc) rc.innerHTML = '<div style="text-align:center;padding:30px;color:#9b7bb5">Loading charge roster&#8230;</div>';
-      if(rc) rc.style.display = "block";
-      fetch("https://script.google.com/macros/s/AKfycbzuLLT1P3bypTDws-lwex8Ieq_svIeXJpjN3a5yX5R-GSLWH4t9C8T3zyMRXT5WWac78Q/exec")
-        .then(function(r){return r.json();})
-        .then(function(data){
-          window._liveSubmissions = data.submissions||[];
-          showPERoster(district, window._liveSubmissions);
-        })
-        .catch(function(){
-          if(rc) rc.innerHTML = '<div style="text-align:center;padding:30px;color:#c0392b">Could not load roster. Check connection.</div>';
-        });
-    }
-  }
 }
 
 function avTab(name, idx){
@@ -178,7 +156,7 @@ function showDistrict(dName, peName){
   });
   document.getElementById("dvSum").innerHTML = "";
   document.getElementById("dvWrap").classList.add("on");
-  switchTab("dvTabs", ["dvList","dvSum","dvRoster"], 0);
+  switchTab("dvTabs", ["dvList","dvSum"], 0);
 }
 
 function buildDistrictSummary(){
@@ -480,155 +458,3 @@ countdown("2026-09-20T23:59:59","c1d","c1h","c1m","c1s");
 countdown("2026-10-08T08:00:00","c2d","c2h","c2m","c2s");
 fetchLive();
 setInterval(fetchLive, 120000);
-
-
-
-// PE CHARGE ROSTER - Official Summary Table
-function printPESummary() {
-  var d = document.getElementById('dvTitle') ? document.getElementById('dvTitle').textContent : '';
-  window.open('pe-print.html?district=' + encodeURIComponent(d), '_blank');
-}
-
-function showPERoster(district, submissions) {
-  var container = document.getElementById('pe-roster-container');
-  if (!container) return;
-  
-  var distSubs = submissions.filter(function(s) {
-    return (s['District']||'').trim() === district.trim();
-  });
-  
-  // Get unique churches (latest submission per church)
-  var churchMap = {};
-  distSubs.forEach(function(s) {
-    var c = s['Church'];
-    if (!churchMap[c] || s['Timestamp'] > churchMap[c]['Timestamp']) {
-      churchMap[c] = s;
-    }
-  });
-  var churches = Object.values(churchMap);
-  
-  if (churches.length === 0) {
-    container.innerHTML = '<div style="text-align:center;padding:30px;color:#9b7bb5">No submissions received for this district yet.</div>';
-    return;
-  }
-
-  var html = '<div style="margin-bottom:14px;display:flex;justify-content:space-between;align-items:center">';
-  html += '<div><div style="font-size:13px;color:#e8c97a;font-weight:700">'+district+' — Charge Roster Summary</div>';
-  html += '<div style="font-size:11px;color:#d4b8f0;margin-top:2px">'+churches.length+' of churches submitted</div></div>';
-  html += '<button onclick="printPESummary()" style="padding:8px 16px;background:#C4972A;color:white;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer">&#128438; Print PE Summary</button>';
-  html += '</div>';
-  
-  html += '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11px;min-width:1200px">';
-  html += '<thead><tr style="background:#3a1750">';
-  html += '<th style="padding:7px 6px;text-align:left;color:#e8c97a;border:1px solid #4a2560;white-space:nowrap">No.</th>';
-  html += '<th style="padding:7px 6px;text-align:left;color:#e8c97a;border:1px solid #4a2560;white-space:nowrap">Charge / Circuit</th>';
-  html += '<th style="padding:7px 6px;text-align:left;color:#e8c97a;border:1px solid #4a2560;white-space:nowrap">Name of Pastor</th>';
-  html += '<th style="padding:7px 6px;text-align:right;color:#e8c97a;border:1px solid #4a2560;white-space:nowrap">Members<br>Prev Yr</th>';
-  html += '<th style="padding:7px 6px;text-align:right;color:#e8c97a;border:1px solid #4a2560;white-space:nowrap">Members<br>This Yr</th>';
-  html += '<th style="padding:7px 6px;text-align:right;color:#e8c97a;border:1px solid #4a2560;white-space:nowrap">Avg<br>Attend</th>';
-  html += '<th style="padding:7px 6px;text-align:right;color:#e8c97a;border:1px solid #4a2560;white-space:nowrap">Conv</th>';
-  html += '<th style="padding:7px 6px;text-align:right;color:#e8c97a;border:1px solid #4a2560;white-space:nowrap">Access</th>';
-  html += '<th style="padding:7px 6px;text-align:right;color:#e8c97a;border:1px solid #4a2560;white-space:nowrap">Bapt</th>';
-  html += '<th style="padding:7px 6px;text-align:right;color:#e8c97a;border:1px solid #4a2560;white-space:nowrap">Tithers</th>';
-  html += '<th style="padding:7px 6px;text-align:right;color:#e8c97a;border:1px solid #4a2560;white-space:nowrap">Total Funds<br>Raised</th>';
-  html += '<th style="padding:7px 6px;text-align:right;color:#e8c97a;border:1px solid #4a2560;white-space:nowrap">AC Budget<br>Assessed</th>';
-  html += '<th style="padding:7px 6px;text-align:right;color:#e8c97a;border:1px solid #4a2560;white-space:nowrap">AC Budget<br>Paid</th>';
-  html += '<th style="padding:7px 6px;text-align:right;color:#e8c97a;border:1px solid #4a2560;white-space:nowrap">Advance<br>Offering</th>';
-  html += '<th style="padding:7px 6px;text-align:right;color:#e8c97a;border:1px solid #4a2560;white-space:nowrap">Office<br>Staff</th>';
-  html += '<th style="padding:7px 6px;text-align:right;color:#e8c97a;border:1px solid #4a2560;white-space:nowrap">PE<br>Annuity</th>';
-  html += '<th style="padding:7px 6px;text-align:right;color:#e8c97a;border:1px solid #4a2560;white-space:nowrap">Pastor<br>Annuity</th>';
-  html += '<th style="padding:7px 6px;text-align:right;color:#e8c97a;border:1px solid #4a2560;white-space:nowrap">Provident<br>/Risk</th>';
-  html += '<th style="padding:7px 6px;text-align:right;color:#e8c97a;border:1px solid #4a2560;white-space:nowrap">Episcopal<br>Residence</th>';
-  html += '<th style="padding:7px 6px;text-align:right;color:#e8c97a;border:1px solid #4a2560;white-space:nowrap">Total Brought<br>to Conf</th>';
-  html += '</tr></thead><tbody>';
-
-  var totals = {membP:0,membC:0,att:0,conv:0,acc:0,bap:0,tith:0,funds:0,acbA:0,acbP:0,adv:0,ost:0,pan:0,pas:0,ret:0,erp:0,tac:0};
-
-  churches.forEach(function(s, i) {
-    var n = function(k) { return parseFloat(s[k]||'0')||0; };
-    var f = function(k) { return s[k]||''; };
-    var membP = n('Total Prev') || n('totalMembP');
-    var membC = n('Total Curr') || n('totalMembC');
-    var att = n('Attendance Curr') || n('attendanceC');
-    var conv = n('Conversions Curr') || n('conversionsC');
-    var acc = n('Accessions Curr') || n('accessionsC');
-    var bap = n('Baptisms Curr') || n('baptismsC');
-    var tith = n('Tithers Curr') || n('tithersC');
-    var funds = n('Funds Raised') || n('fundsRaised');
-    var acbA = n('ACB Assessed') || n('acbAssessed');
-    var acbP = n('ACB Paid') || n('acbPaid');
-    var adv = n('ADV Paid') || n('advPaid');
-    var ost = n('OST Paid') || n('ostPaid');
-    var pan = n('PAN Paid') || n('panPaid');
-    var pas = n('PAS Paid') || n('pasPaid');
-    var ret = n('RET Paid') || n('retPaid');
-    var erp = n('ERP Paid') || n('erpPaid');
-    var tac = n('TAC Paid') || n('tacPaid');
-
-    totals.membP+=membP; totals.membC+=membC; totals.att+=att;
-    totals.conv+=conv; totals.acc+=acc; totals.bap+=bap; totals.tith+=tith;
-    totals.funds+=funds; totals.acbA+=acbA; totals.acbP+=acbP;
-    totals.adv+=adv; totals.ost+=ost; totals.pan+=pan; totals.pas+=pas;
-    totals.ret+=ret; totals.erp+=erp; totals.tac+=tac;
-
-    var bg = i%2===0 ? 'rgba(255,255,255,.04)' : 'rgba(255,255,255,.08)';
-    var td = function(val,right) {
-      return '<td style="padding:6px;border:1px solid #3a2560;color:#e8e4f0;text-align:'+(right?'right':'left')+'">'+val+'</td>';
-    };
-    var fmt = function(n) { return n>0 ? n.toLocaleString('en-ZA') : '&#8212;'; };
-
-    html += '<tr style="background:'+bg+'">';
-    html += td(i+1);
-    html += td('<strong style="color:white">'+f('Church')+'</strong>');
-    html += td(f('Pastor'));
-    html += td(fmt(membP),true);
-    html += td(fmt(membC),true);
-    html += td(fmt(att),true);
-    html += td(fmt(conv),true);
-    html += td(fmt(acc),true);
-    html += td(fmt(bap),true);
-    html += td(fmt(tith),true);
-    html += td(funds>0?'R '+funds.toLocaleString('en-ZA'):'&#8212;',true);
-    html += td(acbA>0?'R '+acbA.toLocaleString('en-ZA'):'&#8212;',true);
-    html += td(acbP>0?'R '+acbP.toLocaleString('en-ZA'):'&#8212;',true);
-    html += td(adv>0?'R '+adv.toLocaleString('en-ZA'):'&#8212;',true);
-    html += td(ost>0?'R '+ost.toLocaleString('en-ZA'):'&#8212;',true);
-    html += td(pan>0?'R '+pan.toLocaleString('en-ZA'):'&#8212;',true);
-    html += td(pas>0?'R '+pas.toLocaleString('en-ZA'):'&#8212;',true);
-    html += td(ret>0?'R '+ret.toLocaleString('en-ZA'):'&#8212;',true);
-    html += td(erp>0?'R '+erp.toLocaleString('en-ZA'):'&#8212;',true);
-    html += td(tac>0?'R '+tac.toLocaleString('en-ZA'):'&#8212;',true);
-    html += '</tr>';
-  });
-
-  // TOTALS ROW
-  var td2 = function(val) { return '<td style="padding:6px;border:1px solid #3a2560;color:#e8c97a;text-align:right;font-weight:700">'+val+'</td>'; };
-  var fmt2 = function(n) { return n>0 ? 'R '+Math.round(n).toLocaleString('en-ZA') : '&#8212;'; };
-  html += '<tr style="background:#3a1750">';
-  html += '<td colspan="3" style="padding:6px;border:1px solid #3a2560;color:#e8c97a;font-weight:700;font-size:12px">DISTRICT TOTALS</td>';
-  html += td2(totals.membP>0?totals.membP:'&#8212;');
-  html += td2(totals.membC>0?totals.membC:'&#8212;');
-  html += td2(totals.att>0?totals.att:'&#8212;');
-  html += td2(totals.conv>0?totals.conv:'&#8212;');
-  html += td2(totals.acc>0?totals.acc:'&#8212;');
-  html += td2(totals.bap>0?totals.bap:'&#8212;');
-  html += td2(totals.tith>0?totals.tith:'&#8212;');
-  html += td2(fmt2(totals.funds));
-  html += td2(fmt2(totals.acbA));
-  html += td2(fmt2(totals.acbP));
-  html += td2(fmt2(totals.adv));
-  html += td2(fmt2(totals.ost));
-  html += td2(fmt2(totals.pan));
-  html += td2(fmt2(totals.pas));
-  html += td2(fmt2(totals.ret));
-  html += td2(fmt2(totals.erp));
-  html += td2(fmt2(totals.tac));
-  html += '</tr>';
-
-  html += '</tbody></table></div>';
-  container.innerHTML = html;
-  container.style.display = 'block';
-  
-  // Store for PE print
-  try { sessionStorage.setItem('peRosterData', JSON.stringify({district:district, churches:churches, totals:totals})); } catch(e) {}
-}
