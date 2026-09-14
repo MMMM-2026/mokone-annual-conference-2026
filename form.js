@@ -1,7 +1,7 @@
 // M.M. Mokone Memorial Annual Conference 2026 — Full 8-Section Form
 // GitHub Pages version
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyjlcDvCPxFQjSKsusnTQ-7IS6WU0wWdoPkhPxXueaOVRI1vx_0QmY7rvsNRxPrsIac0A/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzuLLT1P3bypTDws-lwex8Ieq_svIeXJpjN3a5yX5R-GSLWH4t9C8T3zyMRXT5WWac78Q/exec";
 
 const D={
   "Capital District":{pe:"The Rev. Mandisi Albert Mexico",c:[

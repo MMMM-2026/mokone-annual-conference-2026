@@ -1,4 +1,4 @@
-var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyjlcDvCPxFQjSKsusnTQ-7IS6WU0wWdoPkhPxXueaOVRI1vx_0QmY7rvsNRxPrsIac0A/exec";
+var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzuLLT1P3bypTDws-lwex8Ieq_svIeXJpjN3a5yX5R-GSLWH4t9C8T3zyMRXT5WWac78Q/exec";
 var TOTAL = 68;
 var LD = {total:0, districts:{}, submissions:[]};
 
@@ -119,7 +119,7 @@ function dvTab(name, idx){
       var rc = document.getElementById("pe-roster-container");
       if(rc) rc.innerHTML = '<div style="text-align:center;padding:30px;color:#9b7bb5">Loading charge roster&#8230;</div>';
       if(rc) rc.style.display = "block";
-      fetch("https://script.google.com/macros/s/AKfycbyjlcDvCPxFQjSKsusnTQ-7IS6WU0wWdoPkhPxXueaOVRI1vx_0QmY7rvsNRxPrsIac0A/exec")
+      fetch("https://script.google.com/macros/s/AKfycbzuLLT1P3bypTDws-lwex8Ieq_svIeXJpjN3a5yX5R-GSLWH4t9C8T3zyMRXT5WWac78Q/exec")
         .then(function(r){return r.json();})
         .then(function(data){
           window._liveSubmissions = data.submissions||[];
@@ -178,7 +178,7 @@ function showDistrict(dName, peName){
   });
   document.getElementById("dvSum").innerHTML = "";
   document.getElementById("dvWrap").classList.add("on");
-  switchTab("dvTabs", ["dvList","dvSum"], 0);
+  switchTab("dvTabs", ["dvList","dvSum","dvRoster"], 0);
 }
 
 function buildDistrictSummary(){
