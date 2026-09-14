@@ -484,6 +484,11 @@ setInterval(fetchLive, 120000);
 
 
 // PE CHARGE ROSTER - Official Summary Table
+function printPESummary() {
+  var d = document.getElementById('dvTitle') ? document.getElementById('dvTitle').textContent : '';
+  window.open('pe-print.html?district=' + encodeURIComponent(d), '_blank');
+}
+
 function showPERoster(district, submissions) {
   var container = document.getElementById('pe-roster-container');
   if (!container) return;
@@ -510,7 +515,7 @@ function showPERoster(district, submissions) {
   var html = '<div style="margin-bottom:14px;display:flex;justify-content:space-between;align-items:center">';
   html += '<div><div style="font-size:13px;color:#e8c97a;font-weight:700">'+district+' — Charge Roster Summary</div>';
   html += '<div style="font-size:11px;color:#d4b8f0;margin-top:2px">'+churches.length+' of churches submitted</div></div>';
-  html += '<button onclick="window.open('pe-print.html?district='+encodeURIComponent(district)+'','_blank')" style="padding:8px 16px;background:#C4972A;color:white;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer">&#128438; Print PE Summary</button>';
+  html += '<button onclick="printPESummary()" style="padding:8px 16px;background:#C4972A;color:white;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer">&#128438; Print PE Summary</button>';
   html += '</div>';
   
   html += '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11px;min-width:1200px">';
