@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M.M. Mokone Annual Conference 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Open Sans',sans-serif;background:#1a0a2e;color:white;min-height:100vh}
+.hero{background:linear-gradient(160deg,#1a0a2e 0%,#3a1750 50%,#1a0a2e 100%);padding:28px 20px 32px;text-align:center;border-bottom:3px solid #C4972A}
+.hero img{width:88px;height:88px;object-fit:contain;margin:0 auto 14px;display:block}
+.eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:3px;color:#e8c97a;margin-bottom:5px}
+.hero-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:4px;line-height:1.3}
+.hero-sub{font-size:12px;color:#d4b8f0}
+.submit-wrap{padding:20px 20px 8px;text-align:center}
+.submit-btn{display:inline-block;background:linear-gradient(135deg,#C4972A,#d4a830);color:white;text-decoration:none;border-radius:50px;padding:14px 36px;font-size:15px;font-weight:700;box-shadow:0 6px 20px rgba(196,151,42,.4)}
+.submit-note{font-size:11px;color:rgba(255,255,255,.35);margin-top:7px}
+.ring-section{margin:16px 16px 0;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:24px 20px;text-align:center}
+.ring-label{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:#e8c97a;margin-bottom:16px}
+.ring-wrap{position:relative;width:148px;height:148px;margin:0 auto 12px}
+.ring-svg{transform:rotate(-90deg)}
+.ring-bg{fill:none;stroke:rgba(255,255,255,.07);stroke-width:13}
+.ring-fill{fill:none;stroke:#C4972A;stroke-width:13;stroke-linecap:round;stroke-dasharray:420;stroke-dashoffset:420;transition:stroke-dashoffset 2s ease}
+.ring-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-num{font-family:'Playfair Display',serif;font-size:36px;font-weight:700;color:#C4972A;line-height:1}
+.ring-of{font-size:12px;color:rgba(255,255,255,.4);margin-top:2px}
+.ring-cap{font-size:11px;color:rgba(255,255,255,.5);margin-top:4px}
+.live-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(26,122,74,.2);border:1px solid rgba(26,122,74,.3);border-radius:20px;padding:3px 11px;font-size:10px;color:#4caf50;margin-top:8px}
+.live-dot{width:6px;height:6px;background:#4caf50;border-radius:50%;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+.mini{background:rgba(255,255,255,.05);border-radius:9px;padding:9px 7px;text-align:center}
+.mini-name{font-size:9px;color:rgba(255,255,255,.45);margin-bottom:3px}
+.mini-frac{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:#C4972A}
+.mini-bar{height:3px;background:rgba(255,255,255,.1);border-radius:2px;margin-top:5px;overflow:hidden}
+.mini-fill{height:100%;background:#C4972A;border-radius:2px;width:0;transition:width 2s ease}
+.cds{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 16px 0}
+.cd{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:16px 10px;text-align:center}
+.cd-urgent{border-color:rgba(192,57,43,.3);background:rgba(192,57,43,.06)}
+.cd-title{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:#e8c97a;margin-bottom:10px;line-height:1.5}
+.cd-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:3px}
+.cd-box{background:rgba(107,45,139,.3);border-radius:6px;padding:6px 2px}
+.cd-urgent .cd-box{background:rgba(192,57,43,.3)}
+.cd-num{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;display:block;line-height:1}
+.cd-urgent .cd-num{color:#ff9a8a}
+.cd-unit{font-size:8px;text-transform:uppercase;color:rgba(255,255,255,.35);display:block;margin-top:2px}
+.cd-hymn{font-style:italic;font-size:9px;color:rgba(255,255,255,.4);margin-top:7px;display:block}
+.login-wrap{margin:14px 16px 0;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px 16px}
+.login-title{font-family:'Playfair Display',serif;font-size:16px;margin-bottom:4px}
+.login-sub{font-size:12px;color:rgba(255,255,255,.45);margin-bottom:14px}
+.login-row{display:flex;gap:8px}
+.pw-input{flex:1;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.12);border-radius:9px;padding:11px 14px;font-size:14px;color:white;font-family:'Open Sans',sans-serif;outline:none}
+.pw-input:focus{border-color:#C4972A}
+.pw-input::placeholder{color:rgba(255,255,255,.25)}
+.login-btn{background:#6B2D8B;color:white;border:none;border-radius:9px;padding:11px 18px;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap}
+.login-err{font-size:12px;color:#ff8a7a;margin-top:7px;display:none}
+.login-err.show{display:block}
+.tabs{display:flex;gap:4px;padding:4px;background:rgba(255,255,255,.05);border-radius:11px;margin-bottom:14px}
+.tab-btn{flex:1;padding:9px 6px;border:none;border-radius:7px;background:transparent;color:rgba(255,255,255,.45);font-size:11px;font-weight:600;cursor:pointer;font-family:'Open Sans',sans-serif;transition:all .2s}
+.tab-btn.on{background:rgba(107,45,139,.6);color:white}
+.tab-pane{display:none}.tab-pane.on{display:block}
+.dv{display:none;margin:14px 16px 0}.dv.on{display:block}
+.dv-head{background:linear-gradient(135deg,#3a1750,#6B2D8B);border-radius:12px 12px 0 0;padding:18px;border-bottom:3px solid #C4972A}
+.dv-title{font-family:'Playfair Display',serif;font-size:18px;margin-bottom:3px}
+.dv-pe{font-size:11px;color:#d4b8f0}
+.dv-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-top:none}
+.dv-s{text-align:center;background:rgba(107,45,139,.25);border-radius:9px;padding:11px 6px}
+.dv-snum{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#C4972A}
+.dv-slabel{font-size:9px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.church-list-wrap{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-top:none;padding:10px}
+.ci{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:8px;margin-bottom:5px}
+.ci.done{background:rgba(26,122,74,.15);border:1px solid rgba(26,122,74,.2);cursor:pointer}
+.ci.resub{background:rgba(196,151,42,.1);border:1px solid rgba(196,151,42,.2);cursor:pointer}
+.ci.pending{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05)}
+.ci-name{font-size:13px}
+.ci-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:12px}
+.ci.done .ci-badge{background:rgba(26,122,74,.3);color:#4caf50}
+.ci.resub .ci-badge{background:rgba(196,151,42,.3);color:#e8c97a}
+.ci.pending .ci-badge{background:rgba(255,255,255,.07);color:rgba(255,255,255,.4)}
+.ci-tap{font-size:10px;color:rgba(255,255,255,.3);font-style:italic;margin-right:4px}
+.av{display:none;margin:14px 16px 0}.av.on{display:block}
+.admin-banner{background:linear-gradient(135deg,rgba(196,151,42,.15),rgba(196,151,42,.05));border:1px solid rgba(196,151,42,.3);border-radius:11px;padding:13px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px}
+.admin-name{font-family:'Playfair Display',serif;font-size:14px;color:white;font-weight:600}
+.admin-role{font-size:10px;color:rgba(255,255,255,.45);margin-top:2px}
+.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.admin-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px;cursor:pointer;transition:all .2s}
+.admin-card:hover{background:rgba(255,255,255,.08)}
+.ac-dist{font-size:11px;font-weight:700;color:#e8c97a;text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px}
+.ac-pe{font-size:10px;color:rgba(255,255,255,.4);margin-bottom:9px;line-height:1.3}
+.ac-frac{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#C4972A}
+.ac-bar{height:4px;background:rgba(255,255,255,.1);border-radius:2px;margin-top:8px;overflow:hidden}
+.ac-fill{height:100%;border-radius:2px;transition:width 1.5s ease}
+.pe-block{margin-bottom:22px}
+.pe-block-head{background:linear-gradient(135deg,#3a1750,#6B2D8B);border-radius:11px 11px 0 0;padding:14px 16px;border-bottom:3px solid #C4972A}
+.pe-block-title{font-family:'Playfair Display',serif;font-size:16px;margin-bottom:2px}
+.pe-block-sub{font-size:11px;color:#d4b8f0}
+.pe-mini-stats{display:flex;gap:12px;margin-top:10px}
+.pe-mini-s{background:rgba(255,255,255,.08);border-radius:7px;padding:6px 12px;text-align:center}
+.pe-mini-num{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:#C4972A}
+.pe-mini-label{font-size:8px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.4px;display:block;margin-top:1px}
+.tbl-wrap{overflow-x:auto;border-radius:0 0 11px 11px;border:1px solid rgba(255,255,255,.08);border-top:none}
+.pe-tbl{width:100%;border-collapse:collapse;font-size:12px;min-width:550px}
+.pe-tbl thead th{background:rgba(107,45,139,.5);color:#e8c97a;padding:9px 11px;text-align:left;font-size:11px;font-weight:700;white-space:nowrap}
+.pe-tbl tbody tr{border-bottom:1px solid rgba(255,255,255,.05)}
+.pe-tbl tbody tr:hover{background:rgba(107,45,139,.15)}
+.pe-tbl tbody td{padding:9px 11px;color:rgba(255,255,255,.85);font-size:12px}
+.pe-tbl td.r{text-align:right;font-weight:700;color:#C4972A}
+.pe-tbl td.ps{font-size:11px;color:rgba(255,255,255,.45)}
+.tot-tr td{background:rgba(196,151,42,.15)!important;color:#e8c97a!important;font-weight:700;border-top:1px solid rgba(196,151,42,.3)}
+.no-data{padding:20px;text-align:center;color:rgba(255,255,255,.3);font-size:13px}
+.book-wrap{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:11px;padding:16px;margin-bottom:12px}
+.book-step{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.book-step:last-child{border:none}
+.book-num{width:26px;height:26px;border-radius:50%;background:#6B2D8B;color:white;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px}
+.book-text{font-size:13px;color:rgba(255,255,255,.8);line-height:1.6}
+.gen-btn{width:100%;background:linear-gradient(135deg,#C4972A,#d4a830);color:white;border:none;border-radius:11px;padding:15px;font-size:14px;font-weight:700;cursor:pointer;margin-top:14px;box-shadow:0 4px 16px rgba(196,151,42,.35)}
+.print-btn2{width:100%;background:rgba(255,255,255,.07);color:white;border:1px solid rgba(255,255,255,.15);border-radius:11px;padding:12px;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;font-family:'Open Sans',sans-serif}
+.modal{position:fixed;inset:0;background:rgba(10,4,20,.97);z-index:9999;display:none;flex-direction:column;overflow-y:auto}
+.modal.on{display:flex}
+.modal-bar{background:linear-gradient(135deg,#3a1750,#6B2D8B);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #C4972A;position:sticky;top:0;z-index:10;flex-shrink:0}
+.modal-church{font-family:'Playfair Display',serif;font-size:15px;color:white}
+.modal-pastor{font-size:11px;color:#d4b8f0;margin-top:2px}
+.modal-close{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:white;border-radius:7px;padding:7px 13px;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0}
+.modal-body{padding:18px 16px 36px;flex:1}
+.r-sec{margin-bottom:18px}
+.r-title{font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:#C4972A;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid rgba(196,151,42,.25)}
+.r-grid{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.r-row{padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.r-label{font-size:9px;font-weight:700;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.r-value{font-size:13px;font-weight:600;color:white;line-height:1.3}
+.del-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.del-box{background:rgba(107,45,139,.2);border-radius:8px;padding:8px 10px;text-align:center}
+.del-type{font-size:9px;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.del-name{font-size:12px;font-weight:600;color:white}
+.stat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+.stat-box{background:rgba(107,45,139,.25);border-radius:7px;padding:9px 5px;text-align:center;border:1px solid rgba(107,45,139,.4)}
+.stat-num{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#C4972A;display:block}
+.stat-label{font-size:8px;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.3px;margin-top:2px;display:block;line-height:1.2}
+.fin-tbl{width:100%;border-collapse:collapse}
+.fin-tbl tr{border-bottom:1px solid rgba(255,255,255,.06)}
+.fin-tbl tr:last-child{border:none;background:rgba(196,151,42,.08)}
+.fin-tbl td{padding:7px 4px;font-size:12px}
+.fin-tbl td:first-child{color:rgba(255,255,255,.55)}
+.fin-tbl td:last-child{font-weight:700;color:#C4972A;text-align:right;font-size:13px}
+.min-tbl{width:100%;border-collapse:collapse}
+.min-tbl thead th{background:rgba(107,45,139,.4);color:#e8c97a;padding:7px 9px;font-size:11px;text-align:left}
+.min-tbl tbody tr:nth-child(even){background:rgba(255,255,255,.03)}
+.min-tbl tbody td{padding:7px 9px;border-bottom:1px solid rgba(255,255,255,.05);font-size:12px}
+.yes-badge{display:inline-block;background:rgba(26,122,74,.3);color:#4caf50;border-radius:10px;padding:2px 9px;font-size:11px}
+.no-badge{display:inline-block;background:rgba(192,57,43,.2);color:#ff8a7a;border-radius:10px;padding:2px 9px;font-size:11px}
+.r-box{background:rgba(255,255,255,.04);border-left:3px solid #C4972A;border-radius:0 7px 7px 0;padding:10px 12px;margin-bottom:7px}
+.r-box-label{font-size:9px;font-weight:700;color:#C4972A;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.r-box-text{font-size:12px;color:rgba(255,255,255,.8);line-height:1.6}
+.comp-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.comp-item{background:rgba(255,255,255,.04);border-radius:7px;padding:9px 11px;border:1px solid rgba(255,255,255,.07)}
+.comp-label{font-size:9px;color:rgba(255,255,255,.35);margin-bottom:3px;font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+.comp-val{font-size:13px;font-weight:600;color:white}
+.back-btn{background:rgba(255,255,255,.07);color:rgba(255,255,255,.65);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:9px 18px;font-size:12px;cursor:pointer;width:100%;margin-top:12px;font-family:'Open Sans',sans-serif}
+.footer-bar{text-align:center;padding:22px 20px;color:rgba(255,255,255,.22);font-size:10px;margin-top:14px;border-top:1px solid rgba(255,255,255,.05)}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <img src="ame19th-logo-white.png" alt="19th Episcopal District">
+  <div class="eyebrow">African Methodist Episcopal Church &middot; 19th Episcopal District</div>
+  <div class="hero-title">M.M. Mokone Memorial Annual Conference 2026</div>
+  <div class="hero-sub">Pastor's Summary Report &middot; Submission Portal</div>
+</div>
+
+<div class="submit-wrap">
+  <a href="form.html" class="submit-btn">&#9997;&nbsp; Submit Your Report</a>
+  <div class="submit-note">Tap above to fill in your church's 2026 summary report</div>
+</div>
+
+<div class="ring-section">
+  <div class="ring-label">Reports Submitted &mdash; Live Count</div>
+  <div class="ring-wrap">
+    <svg class="ring-svg" width="148" height="148" viewBox="0 0 148 148">
+      <circle class="ring-bg" cx="74" cy="74" r="67"/>
+      <circle class="ring-fill" id="ring" cx="74" cy="74" r="67"/>
+    </svg>
+    <div class="ring-inner">
+      <span class="ring-num" id="rnum">&mdash;</span>
+      <span class="ring-of" id="rof">of 68</span>
+    </div>
+  </div>
+  <div class="ring-cap" id="rcap">Loading&hellip;</div>
+  <div class="live-badge"><div class="live-dot"></div> Live from Google Sheets</div>
+  <div class="mini-grid">
+    <div class="mini"><div class="mini-name">Capital</div><div class="mini-frac" id="m0">&mdash;</div><div class="mini-bar"><div class="mini-fill" id="mb0"></div></div></div>
+    <div class="mini"><div class="mini-name">Ga-Rankuwa</div><div class="mini-frac" id="m1">&mdash;</div><div class="mini-bar"><div class="mini-fill" id="mb1"></div></div></div>
+    <div class="mini"><div class="mini-name">Bela-Bela</div><div class="mini-frac" id="m2">&mdash;</div><div class="mini-bar"><div class="mini-fill" id="mb2"></div></div></div>
+    <div class="mini"><div class="mini-name">Polokwane</div><div class="mini-frac" id="m3">&mdash;</div><div class="mini-bar"><div class="mini-fill" id="mb3"></div></div></div>
+    <div class="mini"><div class="mini-name">North End</div><div class="mini-frac" id="m4">&mdash;</div><div class="mini-bar"><div class="mini-fill" id="mb4"></div></div></div>
+    <div class="mini"><div class="mini-name">Vhembe</div><div class="mini-frac" id="m5">&mdash;</div><div class="mini-bar"><div class="mini-fill" id="mb5"></div></div></div>
+  </div>
+</div>
+
+<div class="cds">
+  <div class="cd cd-urgent">
+    <div class="cd-title">Closing Date<br>15 September 2026</div>
+    <div class="cd-grid">
+      <div class="cd-box"><span class="cd-num" id="c1d">--</span><span class="cd-unit">Days</span></div>
+      <div class="cd-box"><span class="cd-num" id="c1h">--</span><span class="cd-unit">Hrs</span></div>
+      <div class="cd-box"><span class="cd-num" id="c1m">--</span><span class="cd-unit">Min</span></div>
+      <div class="cd-box"><span class="cd-num" id="c1s">--</span><span class="cd-unit">Sec</span></div>
+    </div>
+  </div>
+  <div class="cd">
+    <div class="cd-title">Annual Conference<br>08 October 2026</div>
+    <div class="cd-grid">
+      <div class="cd-box"><span class="cd-num" id="c2d">--</span><span class="cd-unit">Days</span></div>
+      <div class="cd-box"><span class="cd-num" id="c2h">--</span><span class="cd-unit">Hrs</span></div>
+      <div class="cd-box"><span class="cd-num" id="c2m">--</span><span class="cd-unit">Min</span></div>
+      <div class="cd-box"><span class="cd-num" id="c2s">--</span><span class="cd-unit">Sec</span></div>
+    </div>
+    <span class="cd-hymn">"Are we yet alive to see each other's face?"</span>
+  </div>
+</div>
+
+<div class="login-wrap" id="loginWrap">
+  <div class="login-title">Presiding Elder Access</div>
+  <div class="login-sub">Enter your district password to view submissions</div>
+  <div class="login-row">
+    <input type="password" class="pw-input" id="pwInput" placeholder="Enter your password&hellip;" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">Enter &rarr;</button>
+  </div>
+  <div class="login-err" id="loginErr">Incorrect password. Please try again.</div>
+</div>
+
+<div class="dv" id="dvWrap">
+  <div class="dv-head">
+    <div class="dv-title" id="dvTitle"></div>
+    <div class="dv-pe" id="dvPE"></div>
+  </div>
+  <div class="dv-stats">
+    <div class="dv-s"><div class="dv-snum" id="dvSub">0</div><div class="dv-slabel">Submitted</div></div>
+    <div class="dv-s"><div class="dv-snum" id="dvPend">0</div><div class="dv-slabel">Pending</div></div>
+    <div class="dv-s"><div class="dv-snum" id="dvPct">0%</div><div class="dv-slabel">Complete</div></div>
+  </div>
+  <div class="church-list-wrap">
+    <div class="tabs" id="dvTabs">
+      <button class="tab-btn on" onclick="dvTab('list',0)">&#128203; Church List</button>
+      <button class="tab-btn" onclick="dvTab('sum',1)">&#128202; District Summary</button>
+    </div>
+    <div class="tab-pane on" id="dvList"></div>
+    <div class="tab-pane" id="dvSum"></div>
+  </div>
+  <button class="back-btn" onclick="goBack()">&#8592; Sign Out</button>
+</div>
+
+<div class="av" id="avWrap">
+  <div class="admin-banner">
+    <div style="font-size:22px">&#11088;</div>
+    <div>
+      <div class="admin-name">The Rev. Mohale Daniel Thabo Makhene</div>
+      <div class="admin-role">Presiding Elder, Polokwane District &middot; Administrator for M.M. Mokone Pastor's Report</div>
+    </div>
+  </div>
+  <div class="tabs" id="avTabs">
+    <button class="tab-btn on" onclick="avTab('ov',0)">&#128202; Overview</button>
+    <button class="tab-btn" onclick="avTab('pe',1)">&#128203; PE Summary</button>
+    <button class="tab-btn" onclick="avTab('bk',2)">&#128214; Booklet</button>
+  </div>
+  <div class="tab-pane on" id="avOv"><div class="admin-grid" id="avGrid"></div></div>
+  <div class="tab-pane" id="avPE"><div id="peSumBody"><div class="no-data">Loading&hellip;</div></div></div>
+  <div class="tab-pane" id="avBk">
+    <div class="book-wrap">
+      <div class="book-step"><div class="book-num">1</div><div class="book-text">All pastors submit. Reports land in Google Sheet automatically.</div></div>
+      <div class="book-step"><div class="book-num">2</div><div class="book-text">Click Generate — system builds cover page, all PE Summary tables, every individual pastor report.</div></div>
+      <div class="book-step"><div class="book-num">3</div><div class="book-text">Press Ctrl+P &rarr; Save as PDF. Your annual booklet is ready.</div></div>
+    </div>
+    <button class="gen-btn" onclick="genBooklet()">&#128214; Generate Full Conference Booklet</button>
+    <button class="print-btn2" onclick="printPE()">&#128424; Print PE Summary Only</button>
+  </div>
+  <button class="back-btn" onclick="goBack()">&#8592; Sign Out</button>
+</div>
+
+<div class="modal" id="modal">
+  <div class="modal-bar">
+    <div>
+      <div class="modal-church" id="mChurch"></div>
+      <div class="modal-pastor" id="mPastor"></div>
+    </div>
+    <button class="modal-close" onclick="closeModal()">&#10005; Close</button>
+  </div>
+  <div class="modal-body" id="mBody"></div>
+</div>
+
+<div class="footer-bar">
+  African Methodist Episcopal Church &middot; 19th Episcopal District<br>
+  M.M. Mokone Memorial Annual Conference 2026 &middot; Senior Bishop Wilfred Jacobus Messiah, Presiding Prelate
+</div>
+
+<script src="dashboard.js"></script>
+</body>
+</html>
