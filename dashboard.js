@@ -167,47 +167,47 @@ function buildDistrictSummary(){
   var rows = Object.values(latest);
   var el = document.getElementById("dvSum");
   if(!rows.length){ el.innerHTML = "<div class='no-data'>No reports submitted yet for this district.</div>"; return; }
+  function g(s,k1,k2){ return parseFloat(s[k1]||s[k2]||0)||0; }
   var t={c:0,a:0,b:0,m:0,f:0,pp:0,pe:0,pc:0};
   rows.forEach(function(s){
-    t.c+=parseInt(s["Conversions"]||0)||0; t.a+=parseInt(s["Accessions"]||0)||0;
-    t.b+=parseInt(s["Baptisms"]||0)||0; t.m+=parseInt(s["Total Members"]||0)||0;
-    t.f+=parseFloat(s["Funds Raised"]||0)||0; t.pp+=parseFloat(s["Paid to Pastor"]||0)||0;
-    t.pe+=parseFloat(s["Paid to PE"]||0)||0; t.pc+=parseFloat(s["Brought to Conf"]||0)||0;
+    t.c+=g(s,"Conversions Curr","conversionsC");
+    t.a+=g(s,"Accessions Curr","accessionsC");
+    t.b+=g(s,"Baptisms Curr","baptismsC");
+    t.m+=g(s,"Total Curr","totalMembC");
+    t.f+=g(s,"Funds Raised","fundsRaised");
+    t.pp+=g(s,"Paid to Pastor","paidPastor");
+    t.pe+=g(s,"PAN Paid","panPaid");
+    t.pc+=g(s,"TAC Paid","tacPaid");
   });
-  var tbody = document.createElement("tbody");
-  rows.forEach(function(s, i){
-    var tr = document.createElement("tr");
-    tr.style.cursor = "pointer";
-    tr.innerHTML = "<td>"+fV(s["Church"])+"</td><td class='ps'>"+fV(s["Pastor"])+"</td>"+
-      "<td class='r'>"+fN(s["Conversions"])+"</td><td class='r'>"+fN(s["Accessions"])+"</td>"+
-      "<td class='r'>"+fN(s["Baptisms"])+"</td><td class='r'>"+fN(s["Total Members"])+"</td>"+
-      "<td class='r'>"+fR(s["Funds Raised"])+"</td><td class='r'>"+fR(s["Paid to Pastor"])+"</td>"+
-      "<td class='r'>"+fR(s["Paid to PE"])+"</td><td class='r'>"+fR(s["Brought to Conf"])+"</td>";
-    (function(row){ tr.onclick = function(){ openReport(row["Church"], dName, row["Church"]); }; })(s);
-    tbody.appendChild(tr);
+  var html = "<div style='overflow-x:auto'><table class='sum-table'><thead><tr>"+
+    "<th>Church</th><th>Pastor</th><th class='r'>Conv</th><th class='r'>Acc</th>"+
+    "<th class='r'>Bapt</th><th class='r'>Members</th>"+
+    "<th class='r'>Funds Raised</th><th class='r'>Paid to Pastor</th>"+
+    "<th class='r'>PE Annuity</th><th class='r'>Brought to Conf</th></tr></thead><tbody>";
+  rows.forEach(function(s,i){
+    var bg = i%2===0?"rgba(255,255,255,.04)":"rgba(255,255,255,.08)";
+    html += "<tr style='background:"+bg+"'>";
+    html += "<td>"+fV(s["Church"])+"</td>";
+    html += "<td class='ps'>"+fV(s["Pastor"])+"</td>";
+    html += "<td class='r'>"+fN(g(s,"Conversions Curr","conversionsC"))+"</td>";
+    html += "<td class='r'>"+fN(g(s,"Accessions Curr","accessionsC"))+"</td>";
+    html += "<td class='r'>"+fN(g(s,"Baptisms Curr","baptismsC"))+"</td>";
+    html += "<td class='r'>"+fN(g(s,"Total Curr","totalMembC"))+"</td>";
+    html += "<td class='r'>"+fR(g(s,"Funds Raised","fundsRaised"))+"</td>";
+    html += "<td class='r'>"+fR(g(s,"Paid to Pastor","paidPastor"))+"</td>";
+    html += "<td class='r'>"+fR(g(s,"PAN Paid","panPaid"))+"</td>";
+    html += "<td class='r'>"+fR(g(s,"TAC Paid","tacPaid"))+"</td>";
+    html += "</tr>";
   });
-  var totRow = document.createElement("tr");
-  totRow.className = "tot-tr";
-  totRow.innerHTML = "<td colspan='2'><strong>TOTALS</strong></td>"+
-    "<td>"+t.c+"</td><td>"+t.a+"</td><td>"+t.b+"</td><td>"+t.m+"</td>"+
-    "<td>"+fR(t.f)+"</td><td>"+fR(t.pp)+"</td><td>"+fR(t.pe)+"</td><td>"+fR(t.pc)+"</td>";
-  tbody.appendChild(totRow);
-  var table = document.createElement("table");
-  table.className = "pe-tbl";
-  table.innerHTML = "<thead><tr><th>Church</th><th>Pastor</th><th>Conv.</th><th>Acc.</th><th>Bap.</th><th>Members</th><th>Funds Raised</th><th>Paid to Pastor</th><th>Paid to PE</th><th>Brought to Conf.</th></tr></thead>";
-  table.appendChild(tbody);
-  var wrap = document.createElement("div");
-  wrap.className = "tbl-wrap";
-  wrap.appendChild(table);
-  el.innerHTML = "";
-  el.appendChild(wrap);
-  var btn = document.createElement("button");
-  btn.className = "print-btn2";
-  btn.style.marginTop = "10px";
-  btn.textContent = "Print District Summary";
-  btn.onclick = function(){ window.print(); };
-  el.appendChild(btn);
+  html += "<tr class='tot-r'><td colspan='2'>TOTALS</td>"+
+    "<td class='r'>"+fN(t.c)+"</td><td class='r'>"+fN(t.a)+"</td>"+
+    "<td class='r'>"+fN(t.b)+"</td><td class='r'>"+fN(t.m)+"</td>"+
+    "<td class='r'>"+fR(t.f)+"</td><td class='r'>"+fR(t.pp)+"</td>"+
+    "<td class='r'>"+fR(t.pe)+"</td><td class='r'>"+fR(t.pc)+"</td></tr>";
+  html += "</tbody></table></div>";
+  el.innerHTML = html;
 }
+
 
 function showAdmin(){
   var grid = document.getElementById("avGrid");

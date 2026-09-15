@@ -577,7 +577,7 @@ function submitForm(){
     n('cqr').textContent=q.role;
     try{var lk='sub_'+(data.church+data.district).replace(/[^a-z0-9]/gi,'').toLowerCase();localStorage.setItem(lk,new Date().toLocaleString('en-ZA'));}catch(e){}
     // Store for printing
-    try{sessionStorage.setItem('lastReport',JSON.stringify(data));}catch(e){}
+    try{localStorage.setItem('lastReport',JSON.stringify(data));}catch(e){}
     // Add print button to confirmation
     var pBtn=document.createElement('button');
     pBtn.textContent='Print / Download My Report';
