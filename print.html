@@ -14,24 +14,24 @@ body{font-family:"Times New Roman",Times,serif;font-size:11pt;color:#000;backgro
 .doc-header{text-align:center;padding-bottom:10px;margin-bottom:14px;border-bottom:2.5px solid #000}
 .doc-title{font-size:13pt;font-weight:bold;text-transform:uppercase;letter-spacing:.5px}
 .doc-sub{font-size:10.5pt;margin-top:4px}
-.doc-note{font-size:9pt;font-style:italic;margin-top:6px;color:#333}
+.doc-note{font-size:11pt;font-style:italic;margin-top:6px;color:#333}
 .section{margin-bottom:14px;break-inside:avoid}
 .section-head{background:#3a1750;color:white;padding:5px 9px;font-size:10pt;font-weight:bold;text-transform:uppercase;letter-spacing:.5px;margin-bottom:0;border-left:4px solid #C4972A}
 table{width:100%;border-collapse:collapse;font-size:10pt}
 td,th{border:1px solid #555;padding:4px 7px;vertical-align:middle}
-th{background:#ddd8e8;font-weight:bold;font-size:9pt;text-align:left;color:#3a1750}
+th{background:#ddd8e8;font-weight:bold;font-size:11pt;text-align:left;color:#3a1750}
 .label{background:#ede8f5;font-weight:bold;color:#3a1750}
 .label2{background:#ede8f5;font-weight:bold;color:#3a1750}
 .val{min-height:18px}
 .tot-row{background:#ddd8e8;font-weight:bold;color:#3a1750}
 .sig-row{height:42px;vertical-align:bottom;padding-bottom:4px}
 .sig-line{border-bottom:1.5px solid #000;margin-bottom:3px;min-height:30px}
-.sig-label{font-size:8.5pt;color:#555;margin-top:2px}
-.footer{text-align:center;font-size:8.5pt;color:#555;margin-top:16px;border-top:1.5px solid #000;padding-top:8px}
-.ref{text-align:right;font-size:8.5pt;color:#6B2D8B;margin-bottom:10px;font-style:italic}
+.sig-label{font-size:10pt;color:#555;margin-top:2px}
+.footer{text-align:center;font-size:10pt;color:#555;margin-top:16px;border-top:1.5px solid #000;padding-top:8px}
+.ref{text-align:right;font-size:10pt;color:#6B2D8B;margin-bottom:10px;font-style:italic}
 @media print{
   .no-print{display:none!important}
-  body{font-size:10pt}
+  body{font-size:11pt}
   .page{padding:8mm 10mm 15mm}
   .section{page-break-inside:avoid}
 }
@@ -184,7 +184,7 @@ if (!d) {
 
   // SECTION H
   html += "<div class='section'><div class='section-head'>Section H &mdash; Certification</div>";
-  html += "<p style='font-style:italic;font-size:9pt;padding:8px 10px;border:1px solid #ccc;margin-bottom:10px;color:#333;line-height:1.6'>I certify that, to the best of my knowledge and belief, the above is a true and accurate statement of the numerical, financial and material condition of the above-named charge for this conference year.</p>";
+  html += "<p style='font-style:italic;font-size:11pt;padding:8px 10px;border:1px solid #ccc;margin-bottom:10px;color:#333;line-height:1.6'>I certify that, to the best of my knowledge and belief, the above is a true and accurate statement of the numerical, financial and material condition of the above-named charge for this conference year.</p>";
   html += "<table>";
   html += "<tr><td class='label' style='width:28%'>Pastor</td><td style='width:30%'>"+v(d.pastor)+"</td><td class='label' style='width:12%'>Date</td><td class='sig-row'><div class='sig-line'></div><div class='sig-label'>Signature &amp; Date</div></td></tr>";
   html += "<tr><td class='label'>Chairperson — Steward Board</td><td>"+v(d.stewardBoardChair)+"</td><td class='label'>Date</td><td class='sig-row'><div class='sig-line'></div><div class='sig-label'>Signature &amp; Date</div></td></tr>";

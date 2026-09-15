@@ -3,183 +3,200 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Presiding Elder District Summary Report 2026</title>
+<title>Presiding Elder Annual Summary Report 2026</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:"Times New Roman",serif;font-size:10pt;color:#000;background:white}
-.no-print{background:#3a1750;color:white;padding:12px 20px;display:flex;align-items:center;justify-content:space-between}
-.no-print button{padding:8px 16px;background:#C4972A;color:white;border:none;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer}
-.page{max-width:297mm;margin:0 auto;padding:12mm 10mm 15mm}
-.doc-header{text-align:center;border-bottom:2px solid #000;padding-bottom:8px;margin-bottom:12px}
-.doc-title{font-size:12pt;font-weight:bold;text-transform:uppercase}
-.doc-sub{font-size:10pt;margin-top:3px}
-.section-title{background:#000;color:#fff;padding:3px 7px;font-size:9pt;font-weight:bold;text-transform:uppercase;margin-bottom:0}
-table{width:100%;border-collapse:collapse;font-size:8.5pt;margin-bottom:12px}
-td,th{border:1px solid #555;padding:3px 5px;vertical-align:middle}
-th{background:#d0d0d0;font-weight:bold;text-align:center}
-.label{background:#e8e8e8;font-weight:bold}
-.right{text-align:right}
-.center{text-align:center}
-.total-row{background:#c8c8c8;font-weight:bold}
-.footer{text-align:center;font-size:8pt;color:#333;margin-top:12px;border-top:1px solid #000;padding-top:6px}
-@media print{.no-print{display:none!important}.page{padding:8mm 8mm 12mm}}
+body{font-family:Arial,Helvetica,sans-serif;font-size:11pt;color:#000;background:white}
+.no-print{background:linear-gradient(135deg,#3a1750,#6B2D8B);color:white;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #C4972A}
+.no-print button{padding:9px 20px;background:#C4972A;color:white;border:none;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;font-family:Arial,sans-serif}
+.no-print span{font-size:13px}
+.page{max-width:210mm;margin:0 auto;padding:12mm 12mm 20mm}
+.doc-header{text-align:center;margin-bottom:14px}
+.doc-title1{font-size:13pt;font-weight:bold;color:#5a1a8a;text-transform:uppercase}
+.doc-title2{font-size:11pt;font-weight:bold;color:#5a1a8a;text-transform:uppercase}
+.doc-box{border:2px solid #5a1a8a;padding:8px 16px;margin:10px auto;max-width:420px}
+.doc-box-title{font-size:12pt;font-weight:bold;text-transform:uppercase;text-align:center}
+.doc-note{font-size:10pt;font-style:italic;color:#333;margin-top:5px}
+.section{margin-bottom:12px}
+.sh{background:#5a1a8a;color:white;padding:5px 9px;font-size:10pt;font-weight:bold;text-transform:uppercase;letter-spacing:.3px}
+table{width:100%;border-collapse:collapse;font-size:11pt}
+td{border:1px solid #999;padding:4px 7px;vertical-align:middle;min-height:20px}
+.lbl{font-weight:normal;width:30%}
+.val{background:#fffde7;min-width:80px}
+.val2{background:#fffde7}
+.tot{background:#e8e0f0;font-weight:bold}
+.sig-box{border:1px solid #999;min-height:36px;background:#fffde7}
+.cert-note{font-size:10pt;font-style:italic;color:#333;padding:5px 0;line-height:1.5}
+.roster th{background:#5a1a8a;color:white;padding:5px 4px;text-align:center;font-size:10pt;font-weight:bold;border:1px solid #3a0a6a}
+.roster td{font-size:10pt;padding:3px 4px;text-align:center}
+.roster td:nth-child(2),.roster td:nth-child(3){text-align:left}
+.roster .tot-r{background:#e8e0f0;font-weight:bold}
+@media print{
+  .no-print{display:none!important}
+  body{font-size:11pt}
+  .page{padding:8mm 10mm 12mm}
+  .section{page-break-inside:avoid}
+}
 </style>
 </head>
 <body>
 <div class="no-print">
-  <span style="font-size:13px">Presiding Elder District Summary Report 2026</span>
+  <span>&#9432; Presiding Elder's Annual Summary Report 2026 &mdash; <span id="dist-label">Loading...</span></span>
   <button onclick="window.print()">&#128438; Print / Save as PDF</button>
 </div>
 <div class="page">
   <div class="doc-header">
-    <div class="doc-title">African Methodist Episcopal Church &mdash; Nineteenth Episcopal District</div>
-    <div class="doc-sub">Presiding Elder's Annual Summary Report &mdash; M.M. Mokone Memorial Annual Conference 2026</div>
-    <div class="doc-sub" id="pe-district-header" style="font-weight:bold;margin-top:4px"></div>
+    <div class="doc-title1">African Methodist Episcopal Church</div>
+    <div class="doc-title1">Nineteenth Episcopal District</div>
+    <div class="doc-box" style="margin-top:10px">
+      <div class="doc-box-title">Presiding Elder's Annual Summary Report</div>
+    </div>
+    <div class="doc-note">To be completed by the Presiding Elder and lodged with the Episcopal Office before the opening of the Annual Conference. Shaded cells are for completion.</div>
   </div>
-  <div id="pe-report-content"><p style="text-align:center;padding:30px;color:#666">Loading PE Summary&#8230;</p></div>
-  <div class="footer">African Methodist Episcopal Church &middot; 19th Episcopal District &middot; M.M. Mokone Memorial Annual Conference 2026<br>Senior Bishop Wilfred Jacobus Messiah, Presiding Prelate</div>
+
+  <div id="report-body"><p style="text-align:center;padding:30px;color:#666">Loading report data&hellip;</p></div>
 </div>
 <script>
 var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzuLLT1P3bypTDws-lwex8Ieq_svIeXJpjN3a5yX5R-GSLWH4t9C8T3zyMRXT5WWac78Q/exec";
-
-// Get district from URL param or sessionStorage
 var params = new URLSearchParams(window.location.search);
-var district = params.get("district") || "";
+var district = params.get("district")||"";
+document.getElementById("dist-label").textContent = district||"All Districts";
 
-function fmt(n) { return n > 0 ? n.toLocaleString("en-ZA") : ""; }
-function fmtR(n) { return n > 0 ? "R " + Math.round(n).toLocaleString("en-ZA") : ""; }
-function n(v) { return parseFloat(v||"0")||0; }
+var PE_NAMES = {
+  "Capital District":"The Rev. Mandisi Albert Mexico",
+  "Ga-Rankuwa District":"The Rev. Lekubela Simon Moobi",
+  "Bela-Bela District":"The Rev. George Olehile Motabogi",
+  "Polokwane District":"The Rev. Mohale Daniel Thabo Makhene",
+  "North End District":"The Rev. Dibetu Onica Leepo",
+  "Vhembe District":"The Rev. Ndinannyi Martin Tshivhase"
+};
 
-function buildReport(churches, district) {
-  document.getElementById("pe-district-header").textContent = district;
-  
-  var tot = {membP:0,membC:0,att:0,conv:0,acc:0,bap:0,cfm:0,dth:0,tith:0,cs:0,
-    funds:0,tithes:0,acbA:0,acbP:0,adv:0,ost:0,pan:0,pas:0,ret:0,erp:0,tac:0,
-    pledged:0};
-  
+function n(v){return parseFloat(v||"0")||0;}
+function fmt(v){return v>0?v.toLocaleString("en-ZA"):"";}
+function fmtR(v){return v>0?"R "+Math.round(v).toLocaleString("en-ZA"):"";}
+function get(s,k1,k2){return s[k1]||s[k2]||"";}
+function gn(s,k1,k2){return n(s[k1])||n(s[k2]);}
+
+function buildReport(churches, district){
+  var peName = PE_NAMES[district]||"";
+  var tot = {};
+  var keys = ["adultsC","youthC","childrenC","totalMembC","attendanceC","tithersC",
+    "churchSchoolC","conversionsC","accessionsC","baptismsC","fundsRaised",
+    "acbAssessed","acbPaid","advPaid","ostPaid","panPaid","pasPaid","retPaid",
+    "erpPledged","erpPaidYear","erpCumulative","tacPaid","totalTithes"];
+  var altKeys = {"adultsC":"Adults Curr","youthC":"Youth Curr","childrenC":"Children Curr",
+    "totalMembC":"Total Curr","attendanceC":"Attendance Curr","tithersC":"Tithers Curr",
+    "churchSchoolC":"Church School Curr","conversionsC":"Conversions Curr",
+    "accessionsC":"Accessions Curr","baptismsC":"Baptisms Curr",
+    "fundsRaised":"Funds Raised","acbAssessed":"ACB Assessed","acbPaid":"ACB Paid",
+    "advPaid":"ADV Paid","ostPaid":"OST Paid","panPaid":"PAN Paid","pasPaid":"PAS Paid",
+    "retPaid":"RET Paid","erpPledged":"ERP Pledged","erpPaidYear":"ERP Paid Year",
+    "erpCumulative":"ERP Cumulative","tacPaid":"TAC Paid","totalTithes":"Total Tithes"};
+  keys.forEach(function(k){tot[k]=0;});
   churches.forEach(function(s){
-    tot.membP += n(s["Total Prev"]||s["totalMembP"]);
-    tot.membC += n(s["Total Curr"]||s["totalMembC"]);
-    tot.att += n(s["Attendance Curr"]||s["attendanceC"]);
-    tot.conv += n(s["Conversions Curr"]||s["conversionsC"]);
-    tot.acc += n(s["Accessions Curr"]||s["accessionsC"]);
-    tot.bap += n(s["Baptisms Curr"]||s["baptismsC"]);
-    tot.cfm += n(s["Confirmations Curr"]||s["confirmationsC"]);
-    tot.dth += n(s["Deaths Curr"]||s["deathsC"]);
-    tot.tith += n(s["Tithers Curr"]||s["tithersC"]);
-    tot.cs += n(s["Church School Curr"]||s["churchSchoolC"]);
-    tot.funds += n(s["Funds Raised"]||s["fundsRaised"]);
-    tot.tithes += n(s["Total Tithes"]||s["totalTithes"]);
-    tot.acbA += n(s["ACB Assessed"]||s["acbAssessed"]);
-    tot.acbP += n(s["ACB Paid"]||s["acbPaid"]);
-    tot.adv += n(s["ADV Paid"]||s["advPaid"]);
-    tot.ost += n(s["OST Paid"]||s["ostPaid"]);
-    tot.pan += n(s["PAN Paid"]||s["panPaid"]);
-    tot.pas += n(s["PAS Paid"]||s["pasPaid"]);
-    tot.ret += n(s["RET Paid"]||s["retPaid"]);
-    tot.erp += n(s["ERP Paid"]||s["erpPaid"]);
-    tot.tac += n(s["TAC Paid"]||s["tacPaid"]);
-    tot.pledged += n(s["ERP Pledged"]||s["erpPledged"]);
+    keys.forEach(function(k){ tot[k]+=gn(s,altKeys[k],k); });
   });
 
-  var peNames = {
-    "Capital District":"The Rev. Mandisi Albert Mexico",
-    "Ga-Rankuwa District":"The Rev. Lekubela Simon Moobi",
-    "Bela-Bela District":"The Rev. George Olehile Motabogi",
-    "Polokwane District":"The Rev. Mohale Daniel Thabo Makhene",
-    "North End District":"The Rev. Dibetu Onica Leepo",
-    "Vhembe District":"The Rev. Ndinannyi Martin Tshivhase"
-  };
-  var peName = peNames[district] || "";
-  
   var html = "";
-  
+
   // IDENTIFICATION
-  html += "<div class='section-title'>Identification</div><table>";
-  html += "<tr><td class='label' style='width:30%'>Annual Conference</td><td>M.M. Mokone Memorial Annual Conference</td><td class='label' style='width:20%'>Conference Year</td><td>2026</td></tr>";
-  html += "<tr><td class='label'>Name of Presiding Elder</td><td>"+peName+"</td><td class='label'>Presiding Elder District</td><td>"+district+"</td></tr>";
-  html += "<tr><td class='label'>Presiding Bishop</td><td>Senior Bishop Wilfred Jacobus Messiah</td><td class='label'>Number of Charges</td><td>"+churches.length+" submitted</td></tr>";
-  html += "</table>";
+  html += "<div class='section'><div class='sh'>Identification</div><table>";
+  html += "<tr><td class='lbl'>Annual Conference</td><td class='val'>M.M. Mokone Memorial Annual Conference</td><td class='lbl'>Presiding Bishop</td><td class='val'>Senior Bishop Wilfred Jacobus Messiah</td></tr>";
+  html += "<tr><td class='lbl'>Conference opening date</td><td class='val'>08 October 2026</td><td class='lbl'>Conference year</td><td class='val'>2026</td></tr>";
+  html += "<tr><td class='lbl'>Name of Presiding Elder</td><td class='val'>"+peName+"</td><td class='lbl'>Presiding Elder's contact number</td><td class='val'></td></tr>";
+  html += "<tr><td class='lbl'>Name of Presiding Elder District</td><td class='val'>"+district+"</td><td class='lbl'>Presiding Elder's e-mail address</td><td class='val'></td></tr>";
+  html += "<tr><td class='lbl'>SARS tax number</td><td class='val'></td><td class='lbl'>District Treasurer</td><td class='val'></td></tr>";
+  html += "</table></div>";
 
   // NUMERICALS
-  html += "<div class='section-title'>Numericals</div><table>";
-  html += "<tr><td class='label' style='width:35%'>Full members &mdash; Adults (this year)</td><td style='width:15%' class='right'>"+fmt(n(churches.reduce(function(a,s){return a+n(s["Adults Curr"]||s["adultsC"]);},0)))+"</td>";
-  html += "<td class='label' style='width:35%'>Full members &mdash; Youth (this year)</td><td class='right'>"+fmt(n(churches.reduce(function(a,s){return a+n(s["Youth Curr"]||s["youthC"]);},0)))+"</td></tr>";
-  html += "<tr><td class='label'>Full members &mdash; Children (this year)</td><td class='right'>"+fmt(n(churches.reduce(function(a,s){return a+n(s["Children Curr"]||s["childrenC"]);},0)))+"</td>";
-  html += "<td class='label'>Total Membership (this year)</td><td class='right'>"+fmt(tot.membC)+"</td></tr>";
-  html += "<tr><td class='label'>Average Sunday Attendance</td><td class='right'>"+fmt(tot.att)+"</td>";
-  html += "<td class='label'>Number of Tithers</td><td class='right'>"+fmt(tot.tith)+"</td></tr>";
-  html += "<tr><td class='label'>Church School Enrolment</td><td class='right'>"+fmt(tot.cs)+"</td>";
-  html += "<td class='label'>Number of Conversions</td><td class='right'>"+fmt(tot.conv)+"</td></tr>";
-  html += "<tr><td class='label'>Number of Accessions</td><td class='right'>"+fmt(tot.acc)+"</td>";
-  html += "<td class='label'>Number of Baptisms</td><td class='right'>"+fmt(tot.bap)+"</td></tr>";
-  html += "</table>";
+  html += "<div class='section'><div class='sh'>Numericals</div><table>";
+  html += "<tr><td class='lbl'>Number of charges or circuits</td><td class='val'>"+churches.length+"</td><td class='lbl'>Full members &mdash; adults</td><td class='val'>"+fmt(tot.adultsC)+"</td></tr>";
+  html += "<tr><td class='lbl'>If circuits, total number of preaching points</td><td class='val'></td><td class='lbl'>Full members &mdash; youth</td><td class='val'>"+fmt(tot.youthC)+"</td></tr>";
+  html += "<tr><td class='lbl'>Number of Pastors</td><td class='val'>"+churches.length+"</td><td class='lbl'>Full members &mdash; children</td><td class='val'>"+fmt(tot.childrenC)+"</td></tr>";
+  html += "<tr><td class='lbl'>Number of licensed local preachers</td><td class='val'></td><td class='lbl'>Total membership</td><td class='val' style='font-weight:bold'>"+fmt(tot.totalMembC)+"</td></tr>";
+  html += "<tr><td class='lbl'>Number of title deeds held</td><td class='val'></td><td class='lbl'>Average Sunday attendance across the District</td><td class='val'>"+fmt(tot.attendanceC)+"</td></tr>";
+  html += "<tr><td class='lbl'>Number of adult delegates</td><td class='val'></td><td class='lbl'>Number of tithers in the District</td><td class='val'>"+fmt(tot.tithersC)+"</td></tr>";
+  html += "<tr><td class='lbl'>Number of youth delegates</td><td class='val'></td><td class='lbl'>Church School enrolment</td><td class='val'>"+fmt(tot.churchSchoolC)+"</td></tr>";
+  html += "<tr><td class='lbl'>Number of conversions</td><td class='val'>"+fmt(tot.conversionsC)+"</td><td class='lbl'>Number of charges without a title deed</td><td class='val'></td></tr>";
+  html += "<tr><td class='lbl'>Number of accessions</td><td class='val'>"+fmt(tot.accessionsC)+"</td><td class='lbl'>Number of vacant charges</td><td class='val'></td></tr>";
+  html += "<tr><td class='lbl'>Number of baptisms</td><td class='val'>"+fmt(tot.baptismsC)+"</td><td class='lbl'>Number of new churches planted this year</td><td class='val'></td></tr>";
+  html += "</table></div>";
 
   // FINANCIALS
-  html += "<div class='section-title'>Financials (South African Rand)</div><table>";
-  html += "<tr><td class='label' style='width:35%'>Annual Conference Budget assessed</td><td class='right' style='width:15%'>"+fmtR(tot.acbA)+"</td><td class='label' style='width:35%'>Annual Conference Budget paid</td><td class='right'>"+fmtR(tot.acbP)+"</td></tr>";
-  html += "<tr><td class='label'>Advance Offering paid</td><td class='right'>"+fmtR(tot.adv)+"</td><td class='label'>Office Staff paid</td><td class='right'>"+fmtR(tot.ost)+"</td></tr>";
-  html += "<tr><td class='label'>Presiding Elder's Annuity received</td><td class='right'>"+fmtR(tot.pan)+"</td><td class='label'>Pastor's Annuity paid</td><td class='right'>"+fmtR(tot.pas)+"</td></tr>";
-  html += "<tr><td class='label'>Retirement/Provident Fund paid</td><td class='right'>"+fmtR(tot.ret)+"</td><td class='label'>Total Funds Raised by Local Churches</td><td class='right'>"+fmtR(tot.funds)+"</td></tr>";
-  html += "<tr><td class='label'>Episcopal Residence Project pledged</td><td class='right'>"+fmtR(tot.pledged)+"</td><td class='label'>Episcopal Residence Project paid (this year)</td><td class='right'>"+fmtR(tot.erp)+"</td></tr>";
-  html += "<tr class='total-row'><td><strong>TOTAL BROUGHT TO ANNUAL CONFERENCE</strong></td><td class='right'>"+fmtR(tot.tac)+"</td><td></td><td></td></tr>";
-  html += "</table>";
+  html += "<div class='section'><div class='sh'>Financials (South African Rand)</div><table>";
+  html += "<tr><td class='lbl'>Mid-Year Budget</td><td class='val'></td><td class='lbl'>Episcopal Residence Project &mdash; pledged by the District</td><td class='val'>"+fmtR(tot.erpPledged)+"</td></tr>";
+  html += "<tr><td class='lbl'>Annual Conference Budget</td><td class='val'>"+fmtR(tot.acbPaid)+"</td><td class='lbl'>Episcopal Residence Project &mdash; paid this conference year</td><td class='val'>"+fmtR(tot.erpPaidYear)+"</td></tr>";
+  html += "<tr><td class='lbl'>Advance Offering</td><td class='val'>"+fmtR(tot.advPaid)+"</td><td class='lbl'>Episcopal Residence Project &mdash; cumulative paid to date</td><td class='val'>"+fmtR(tot.erpCumulative)+"</td></tr>";
+  html += "<tr><td class='lbl'>Office Staff / Staffing</td><td class='val'>"+fmtR(tot.ostPaid)+"</td><td class='lbl'>Total funds raised by local churches</td><td class='val'>"+fmtR(tot.fundsRaised)+"</td></tr>";
+  html += "<tr><td class='lbl'>Presiding Elder's Annuity received</td><td class='val'>"+fmtR(tot.panPaid)+"</td><td class='lbl'>Total tithes received across the District</td><td class='val'>"+fmtR(tot.totalTithes)+"</td></tr>";
+  html += "<tr><td class='lbl'>Pastor's Annuity</td><td class='val'>"+fmtR(tot.pasPaid)+"</td><td class='lbl'>ACB assessed (total)</td><td class='val'>"+fmtR(tot.acbAssessed)+"</td></tr>";
+  html += "<tr><td class='lbl'>Retirement/Provident Fund</td><td class='val'>"+fmtR(tot.retPaid)+"</td><td></td><td></td></tr>";
+  html += "<tr><td class='tot' colspan='2'>TOTAL BROUGHT TO ANNUAL CONFERENCE</td><td class='val tot' colspan='2' style='font-weight:bold'>"+fmtR(tot.tacPaid)+"</td></tr>";
+  html += "</table></div>";
 
   // CHARGE ROSTER
-  html += "<div class='section-title'>Charge Roster Summary</div><table style='font-size:8pt'>";
-  html += "<tr style='background:#d0d0d0'><th class='center' style='width:4%'>No.</th><th style='width:20%'>Charge / Circuit</th><th style='width:16%'>Pastor</th><th class='right' style='width:5%'>Mbr<br>Prev</th><th class='right' style='width:5%'>Mbr<br>This</th><th class='right' style='width:4%'>Att</th><th class='right' style='width:4%'>Conv</th><th class='right' style='width:4%'>Acc</th><th class='right' style='width:4%'>Bapt</th><th class='right' style='width:4%'>Tith</th><th class='right' style='width:7%'>Funds Raised</th><th class='right' style='width:5%'>ACB Assd</th><th class='right' style='width:5%'>ACB Paid</th><th class='right' style='width:5%'>Adv Off</th><th class='right' style='width:4%'>PE Ann</th><th class='right' style='width:4%'>Pas Ann</th><th class='right' style='width:5%'>Epis Res</th><th class='right' style='width:5%'>Total to Conf</th></tr>";
-  
-  var chtot = {mp:0,mc:0,at:0,cv:0,ac:0,bp:0,ti:0,fu:0,aa:0,ap:0,ad:0,pa:0,ps:0,er:0,tc:0};
+  html += "<div class='section'><div class='sh'>Charge Roster Summary</div>";
+  html += "<div style='overflow-x:auto'><table class='roster'>";
+  html += "<thead><tr><th>No.</th><th>Charge / Circuit</th><th>Pastor</th>";
+  html += "<th>Mbr<br>Prev</th><th>Mbr<br>This</th><th>Att</th><th>Conv</th><th>Acc</th><th>Bapt</th><th>Tith</th>";
+  html += "<th>Funds Raised</th><th>ACB<br>Assd</th><th>ACB<br>Paid</th><th>Adv Off</th>";
+  html += "<th>PE<br>Ann</th><th>Pas<br>Ann</th><th>Epis<br>Res</th><th>Total<br>to Conf</th></tr></thead><tbody>";
+
+  var rt={mp:0,mc:0,at:0,cv:0,ac:0,bp:0,ti:0,fu:0,aa:0,ap:0,ad:0,pa:0,ps:0,er:0,tc:0};
   churches.forEach(function(s,i){
-    var mp=n(s["Total Prev"]||s["totalMembP"]),mc=n(s["Total Curr"]||s["totalMembC"]);
-    var at=n(s["Attendance Curr"]||s["attendanceC"]);
-    var cv=n(s["Conversions Curr"]||s["conversionsC"]),ac=n(s["Accessions Curr"]||s["accessionsC"]);
-    var bp=n(s["Baptisms Curr"]||s["baptismsC"]),ti=n(s["Tithers Curr"]||s["tithersC"]);
-    var fu=n(s["Funds Raised"]||s["fundsRaised"]);
-    var aa=n(s["ACB Assessed"]||s["acbAssessed"]),ap2=n(s["ACB Paid"]||s["acbPaid"]);
-    var ad=n(s["ADV Paid"]||s["advPaid"]),pa=n(s["PAN Paid"]||s["panPaid"]);
-    var ps=n(s["PAS Paid"]||s["pasPaid"]),er=n(s["ERP Paid"]||s["erpPaid"]);
-    var tc=n(s["TAC Paid"]||s["tacPaid"]);
-    chtot.mp+=mp;chtot.mc+=mc;chtot.at+=at;chtot.cv+=cv;chtot.ac+=ac;chtot.bp+=bp;chtot.ti+=ti;
-    chtot.fu+=fu;chtot.aa+=aa;chtot.ap+=ap2;chtot.ad+=ad;chtot.pa+=pa;chtot.ps+=ps;chtot.er+=er;chtot.tc+=tc;
-    var bg = i%2===0?"background:#f9f9f9":"";
-    html += "<tr style='"+bg+"'><td class='center'>"+(i+1)+"</td><td>"+(s["Church"]||"")+"</td><td>"+(s["Pastor"]||"")+"</td>";
-    html += "<td class='right'>"+fmt(mp)+"</td><td class='right'>"+fmt(mc)+"</td><td class='right'>"+fmt(at)+"</td>";
-    html += "<td class='right'>"+fmt(cv)+"</td><td class='right'>"+fmt(ac)+"</td><td class='right'>"+fmt(bp)+"</td><td class='right'>"+fmt(ti)+"</td>";
-    html += "<td class='right'>"+fmtR(fu)+"</td><td class='right'>"+fmtR(aa)+"</td><td class='right'>"+fmtR(ap2)+"</td>";
-    html += "<td class='right'>"+fmtR(ad)+"</td><td class='right'>"+fmtR(pa)+"</td><td class='right'>"+fmtR(ps)+"</td>";
-    html += "<td class='right'>"+fmtR(er)+"</td><td class='right'>"+fmtR(tc)+"</td></tr>";
+    var mp=gn(s,"Adults Prev","adultsP")+gn(s,"Youth Prev","youthP")+gn(s,"Children Prev","childrenP")||gn(s,"Total Prev","totalMembP");
+    var mc=gn(s,"Total Curr","totalMembC");
+    var at=gn(s,"Attendance Curr","attendanceC"),cv=gn(s,"Conversions Curr","conversionsC");
+    var ac=gn(s,"Accessions Curr","accessionsC"),bp=gn(s,"Baptisms Curr","baptismsC");
+    var ti=gn(s,"Tithers Curr","tithersC"),fu=gn(s,"Funds Raised","fundsRaised");
+    var aa=gn(s,"ACB Assessed","acbAssessed"),ap2=gn(s,"ACB Paid","acbPaid");
+    var ad=gn(s,"ADV Paid","advPaid"),pa=gn(s,"PAN Paid","panPaid");
+    var ps=gn(s,"PAS Paid","pasPaid"),er=gn(s,"ERP Paid","erpPaidYear");
+    var tc=gn(s,"TAC Paid","tacPaid");
+    rt.mp+=mp;rt.mc+=mc;rt.at+=at;rt.cv+=cv;rt.ac+=ac;rt.bp+=bp;rt.ti+=ti;
+    rt.fu+=fu;rt.aa+=aa;rt.ap+=ap2;rt.ad+=ad;rt.pa+=pa;rt.ps+=ps;rt.er+=er;rt.tc+=tc;
+    var bg=i%2===0?"":"background:#fafafa";
+    html += "<tr style='"+bg+"'><td>"+(i+1)+"</td><td>"+(s["Church"]||"")+"</td><td>"+(s["Pastor"]||"")+"</td>";
+    html += "<td>"+fmt(mp)+"</td><td>"+fmt(mc)+"</td><td>"+fmt(at)+"</td>";
+    html += "<td>"+fmt(cv)+"</td><td>"+fmt(ac)+"</td><td>"+fmt(bp)+"</td><td>"+fmt(ti)+"</td>";
+    html += "<td>"+fmtR(fu)+"</td><td>"+fmtR(aa)+"</td><td>"+fmtR(ap2)+"</td><td>"+fmtR(ad)+"</td>";
+    html += "<td>"+fmtR(pa)+"</td><td>"+fmtR(ps)+"</td><td>"+fmtR(er)+"</td><td>"+fmtR(tc)+"</td></tr>";
   });
-  html += "<tr class='total-row'><td colspan='3' style='text-align:center'>TOTALS</td>";
-  html += "<td class='right'>"+fmt(chtot.mp)+"</td><td class='right'>"+fmt(chtot.mc)+"</td><td class='right'>"+fmt(chtot.at)+"</td>";
-  html += "<td class='right'>"+fmt(chtot.cv)+"</td><td class='right'>"+fmt(chtot.ac)+"</td><td class='right'>"+fmt(chtot.bp)+"</td><td class='right'>"+fmt(chtot.ti)+"</td>";
-  html += "<td class='right'>"+fmtR(chtot.fu)+"</td><td class='right'>"+fmtR(chtot.aa)+"</td><td class='right'>"+fmtR(chtot.ap)+"</td>";
-  html += "<td class='right'>"+fmtR(chtot.ad)+"</td><td class='right'>"+fmtR(chtot.pa)+"</td><td class='right'>"+fmtR(chtot.ps)+"</td>";
-  html += "<td class='right'>"+fmtR(chtot.er)+"</td><td class='right'>"+fmtR(chtot.tc)+"</td></tr>";
-  html += "</table>";
+  html += "<tr class='tot-r'><td colspan='3' style='text-align:center;font-weight:bold'>TOTALS</td>";
+  html += "<td>"+fmt(rt.mp)+"</td><td>"+fmt(rt.mc)+"</td><td>"+fmt(rt.at)+"</td>";
+  html += "<td>"+fmt(rt.cv)+"</td><td>"+fmt(rt.ac)+"</td><td>"+fmt(rt.bp)+"</td><td>"+fmt(rt.ti)+"</td>";
+  html += "<td>"+fmtR(rt.fu)+"</td><td>"+fmtR(rt.aa)+"</td><td>"+fmtR(rt.ap)+"</td><td>"+fmtR(rt.ad)+"</td>";
+  html += "<td>"+fmtR(rt.pa)+"</td><td>"+fmtR(rt.ps)+"</td><td>"+fmtR(rt.er)+"</td><td>"+fmtR(rt.tc)+"</td></tr>";
+  html += "</tbody></table></div></div>";
+
+  // MATTERS FOR BISHOP
+  html += "<div class='section'><div class='sh'>Matters for the Attention of the Bishop</div>";
+  html += "<table><tr><td class='val' style='height:30px'>&nbsp;</td></tr><tr><td class='val' style='height:30px'>&nbsp;</td></tr><tr><td class='val' style='height:30px'>&nbsp;</td></tr><tr><td class='val' style='height:30px'>&nbsp;</td></tr></table></div>";
 
   // CERTIFICATION
-  html += "<div class='section-title'>Certification</div><table>";
-  html += "<tr><td class='label' style='width:40%'>Signature of the Presiding Elder</td><td style='min-height:30px'>&nbsp;</td><td class='label' style='width:15%'>Date</td><td>&nbsp;</td></tr>";
-  html += "<tr><td class='label'>Received by the Episcopal Office</td><td>&nbsp;</td><td class='label'>Date</td><td>&nbsp;</td></tr>";
-  html += "</table>";
-  
-  document.getElementById("pe-report-content").innerHTML = html;
+  html += "<div class='section'><div class='sh'>Certification</div>";
+  html += "<p class='cert-note'>I hereby certify that, to the best of my knowledge and belief, the above is a true and accurate statement of the numerical and financial condition of the above-named Presiding Elder District for this conference year.</p>";
+  html += "<table style='margin-top:8px'>";
+  html += "<tr><td class='lbl' style='width:35%'>Signature of the Presiding Elder</td><td class='sig-box' style='width:30%'>&nbsp;</td><td class='lbl' style='width:15%'>Date</td><td class='sig-box'>&nbsp;</td></tr>";
+  html += "<tr><td class='lbl'>Received by the Episcopal Office</td><td class='sig-box'>&nbsp;</td><td class='lbl'>Date</td><td class='sig-box'>&nbsp;</td></tr>";
+  html += "</table></div>";
+
+  html += "<div style='text-align:center;font-size:10pt;color:#555;margin-top:16px;border-top:1px solid #999;padding-top:8px'>African Methodist Episcopal Church &middot; 19th Episcopal District &middot; M.M. Mokone Memorial Annual Conference 2026<br>Senior Bishop Wilfred Jacobus Messiah, Presiding Prelate</div>";
+
+  document.getElementById("report-body").innerHTML = html;
 }
 
-// Load data
 fetch(SCRIPT_URL)
   .then(function(r){return r.json();})
   .then(function(data){
     var subs = data.submissions||[];
-    var distSubs = subs.filter(function(s){ return (s["District"]||"").trim()===district.trim(); });
-    // Unique by church
-    var map = {};
-    distSubs.forEach(function(s){ var c=s["Church"]; if(!map[c]||s["Timestamp"]>map[c]["Timestamp"]) map[c]=s; });
+    var distSubs = district ? subs.filter(function(s){return (s["District"]||"").trim()===district.trim();}) : subs;
+    var map={};
+    distSubs.forEach(function(s){var c=s["Church"];if(!map[c]||s["Timestamp"]>map[c]["Timestamp"])map[c]=s;});
     buildReport(Object.values(map), district);
   })
   .catch(function(){
-    document.getElementById("pe-report-content").innerHTML = "<p style='color:#c0392b;text-align:center;padding:30px'>Could not load report data. Please check your connection.</p>";
+    document.getElementById("report-body").innerHTML = "<p style='color:#c0392b;text-align:center;padding:30px'>Could not load data. Check your connection.</p>";
   });
 </script>
 </body>
