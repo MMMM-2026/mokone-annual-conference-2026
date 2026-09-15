@@ -451,31 +451,74 @@ function goStep(ns){
 
 function validate(s){
   if(s===1){
-    if(!v('district')){showErr('err1','Please select your district.');return false;}
-    if(v('church')===''){showErr('err1','Please select your church.');return false;}
-    if(!v('station')){showErr('err1','Please select Station or Circuit.');return false;}
-    if(n('resub').classList.contains('show')){showErr('err1','Please respond to the resubmission notice above.');return false;}
-    hideErr('err1');return true;
+    if(!v('district')){showErr("err1",'Please select your district.');return false;}
+    if(v('church')===''){showErr("err1",'Please select your church.');return false;}
+    if(!v('station')){showErr("err1",'Please select Station or Circuit.');return false;}
+    if(!v('pastor-tel')){showErr("err1",'Please enter the Pastor contact number.');return false;}
+    if(!v('pastor-email')){showErr("err1",'Please enter the Pastor e-mail address.');return false;}
+    if(n("resub").classList.contains("show")){showErr("err1","Please respond to the resubmission notice above.");return false;}
+    hideErr("err1");return true;
   }
   if(s===2){
     var tc=parseFloat(n('tot-c').value)||0;
-    if(!tc){showErr('err2','Please enter this year\'s membership figures (Adults, Youth or Children).');return false;}
-    var attc=n('att-c').value;
-    if(!attc){showErr('err2','Please enter the Average Sunday Attendance for this year.');return false;}
-    hideErr('err2');return true;
+    if(!tc&&!n('adl-c').value&&!n('yth-c').value&&!n('chd-c').value){showErr("err2",'Please enter this year membership figures — enter 0 if nil.');return false;}
+    if(n('att-c').value===''){showErr("err2",'Please enter Average Sunday Attendance — enter 0 if nil.');return false;}
+    if(n('tit-c').value===''){showErr("err2",'Please enter Number of Tithers — enter 0 if nil.');return false;}
+    if(n('cs-c').value===''){showErr("err2",'Please enter Church School Enrolment — enter 0 if nil.');return false;}
+    hideErr("err2");return true;
   }
   if(s===3){
-    if(!v('funds-raised')){showErr('err3','Please enter the Total Funds Raised by the church.');return false;}
-    if(!v('tac-p')){showErr('err3','Please enter the Total Brought to Annual Conference.');return false;}
-    hideErr('err3');return true;
+    var finFields=[
+      ['acb-a','Annual Conference Budget (Assessed)'],
+      ['acb-p','Annual Conference Budget (Paid)'],
+      ['adv-p','Advance Offering (Paid)'],
+      ['pan-p',"Presiding Elder Annuity (Paid)"],
+      ['tac-p','Total Brought to Annual Conference'],
+      ['funds-raised','Total Funds Raised']
+    ];
+    for(var i=0;i<finFields.length;i++){
+      if(n(finFields[i][0]).value===''){
+        showErr("err3",'Please enter '+finFields[i][1]+' — enter 0 if nil.');
+        n(finFields[i][0]).focus();
+        return false;
+      }
+    }
+    hideErr("err3");return true;
   }
-  if(s===4){return true;}
+  if(s===4){
+    // Section D - Episcopal Residence - all fields compulsory (enter 0 if nil)
+    var erpFields=[
+      ['erp-pledged','Amount pledged by the charge'],
+      ['erp-paid-yr','Paid during this conference year'],
+      ['erp-cumulative','Cumulative amount paid to date'],
+      ['erp-outstanding','Outstanding balance on pledge']
+    ];
+    for(var j=0;j<erpFields.length;j++){
+      if(n(erpFields[j][0]).value===''){
+        showErr("err4",'Please enter '+erpFields[j][1]+' — enter 0 if nil (Section D: Episcopal Residence Project).');
+        n(erpFields[j][0]).focus();
+        return false;
+      }
+    }
+    hideErr("err4");return true;
+  }
   if(s===5){return true;}
-  if(s===6){return true;}
+  if(s===6){
+    if(!v('f-deed')){showErr("err6",'Please indicate whether the title deed is held (Section F).');return false;}
+    if(!v('f-ame')){showErr("err6",'Please indicate whether property is registered in name of A.M.E. Church (Section F).');return false;}
+    if(!v('f-ins')){showErr("err6",'Please indicate whether the church property is insured (Section F).');return false;}
+    if(!v('f-bank')){showErr("err6",'Please indicate whether the bank account is in the name of the A.M.E. Church (Section F).');return false;}
+    if(!v('f-fin')){showErr("err6",'Please indicate whether annual financial statements were prepared (Section F).');return false;}
+    if(!v('f-board')){showErr("err6",'Please indicate whether the Steward/Trustee Board is fully constituted (Section F).');return false;}
+    hideErr("err6");return true;
+  }
   if(s===7){
-    if(!n('g-acc1').value.trim()){showErr('err7','Please describe at least one major accomplishment (Section G).');return false;}
-    if(!n('g-ch1').value.trim()){showErr('err7','Please describe at least one major challenge (Section G).');return false;}
-    hideErr('err7');return true;
+    if(!n('g-acc1').value.trim()){showErr("err7",'Please describe your first major accomplishment (Section G).');return false;}
+    if(!n('g-acc2').value.trim()){showErr("err7",'Please describe your second major accomplishment (Section G).');return false;}
+    if(!n('g-ch1').value.trim()){showErr("err7",'Please describe your first major challenge (Section G).');return false;}
+    if(!n('g-ch2').value.trim()){showErr("err7",'Please describe your second major challenge (Section G).');return false;}
+    if(!n('g-out').value.trim()){showErr("err7",'Please describe ministry and outreach undertaken (Section G).');return false;}
+    hideErr("err7");return true;
   }
   return true;
 }
