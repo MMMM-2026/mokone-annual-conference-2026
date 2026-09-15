@@ -8,8 +8,10 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,Helvetica,sans-serif;font-size:11pt;color:#000;background:white}
 .no-print{background:linear-gradient(135deg,#3a1750,#6B2D8B);color:white;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #C4972A}
-.no-print button{padding:9px 20px;background:#C4972A;color:white;border:none;border-radius:6px;font-size:13px;font-weight:bold;cursor:pointer;font-family:Arial,sans-serif}
+.no-print button{padding:9px 20px;background:#C4972A;color:white;border:none;border-radius:6px;font-size:13px;font-weight:bold;cursor:pointer;font-family:Arial,sans-serif;display:none}
+.no-print button.ready{display:inline-block}
 .no-print span{font-size:13px;font-family:Arial,sans-serif}
+.loading-msg{text-align:center;padding:60px 20px;font-size:14px;color:#666;font-family:Arial,sans-serif}
 .page{max-width:210mm;margin:0 auto;padding:14mm 14mm 20mm}
 .doc-header{text-align:center;margin-bottom:14px}
 .doc-title{font-size:13pt;font-weight:bold;text-transform:uppercase;color:#4B1076}
@@ -44,7 +46,7 @@ th{border:1px solid #666;padding:5px 8px;background:#9C8FAF;font-weight:bold;col
 <body>
 <div class="no-print">
   <span>&#9432; Review your report below then click Print. This is your official submission record.</span>
-  <button onclick="window.print()">&#128438; Print / Save as PDF</button>
+  <button id="print-btn" onclick="window.print()" class="">&#128438; Print / Save as PDF</button>
 </div>
 <div class="page" id="page">
   <div class="doc-header">
@@ -58,7 +60,7 @@ th{border:1px solid #666;padding:5px 8px;background:#9C8FAF;font-weight:bold;col
     </div>
     <div class="doc-note">To be completed by every Pastor and submitted to the Presiding Elder before the opening of the Annual Conference. Shaded cells are for completion.</div>
   </div>
-  <div id="report-content"><p style="text-align:center;padding:40px;color:#666">Loading your report&hellip;</p></div>
+  <div id="report-content"><div class="loading-msg">&#9203; Loading your report&hellip;</div></div>
   <div class="footer">African Methodist Episcopal Church &middot; 19th Episcopal District &middot; M.M. Mokone Memorial Annual Conference 2026<br>Senior Bishop Wilfred Jacobus Messiah, Presiding Prelate</div>
 </div>
 <script>
@@ -203,6 +205,11 @@ if(!d){
   html+="</table></div>";
 
   document.getElementById("report-content").innerHTML=html;
+  // Show print button only after content is fully built
+  setTimeout(function(){
+    var btn = document.getElementById("print-btn");
+    if(btn) btn.className = "ready";
+  }, 300);
 }
 </script>
 </body>
@@ -347,6 +354,11 @@ if(!d){
   html+="</table></div>";
 
   document.getElementById("report-content").innerHTML=html;
+  // Show print button only after content is fully built
+  setTimeout(function(){
+    var btn = document.getElementById("print-btn");
+    if(btn) btn.className = "ready";
+  }, 300);
 }
 </script>
 </body>
