@@ -197,8 +197,152 @@ if(!d){
   html+="<table>";
   html+="<tr><td class='lbl' style='width:20%'><strong>Pastor</strong></td><td style='width:30%'>"+v(d.pastor)+"</td><td class='lbl' style='width:10%'><strong>Date</strong></td><td class='sig-space' style='width:40%'>&nbsp;</td></tr>";
   html+="<tr><td class='lbl'><strong>Steward Board Chair</strong></td><td>"+v(d.stewardBoardChair)+"</td><td class='lbl'><strong>Date</strong></td><td class='sig-space'>&nbsp;</td></tr>";
-  html+="<tr><td class='lbl'><strong>Adult Delegate</strong></td><td>"+v(d.adultDelegate)+"</td><td class='lbl'><strong>Signature</strong></td><td class='sig-space'>"+(v(d.adultDelegateSig)||"&nbsp;")+"</td></tr>";
-  html+="<tr><td class='lbl'><strong>Youth Delegate</strong></td><td>"+v(d.youthDelegate)+"</td><td class='lbl'><strong>Signature</strong></td><td class='sig-space'>"+(v(d.youthDelegateSig)||"&nbsp;")+"</td></tr>";
+  html+="<tr><td class='lbl'><strong>Adult Delegate</strong></td><td>"+v(d.adultDelegate)+"</td><td class='lbl'><strong>Signature</strong></td><td class='sig-space'>&nbsp;</td></tr>";
+  html+="<tr><td class='lbl'><strong>Youth Delegate</strong></td><td>"+v(d.youthDelegate)+"</td><td class='lbl'><strong>Signature</strong></td><td class='sig-space'>&nbsp;</td></tr>";
+  html+="<tr><td class='lbl' style='background:#9C8FAF'><strong>Presiding Elder</strong></td><td style='background:#9C8FAF'>&nbsp;</td><td class='lbl' style='background:#9C8FAF'><strong>Date</strong></td><td style='background:#9C8FAF;min-height:40px'>&nbsp;</td></tr>";
+  html+="</table></div>";
+
+  document.getElementById("report-content").innerHTML=html;
+}
+</script>
+</body>
+</html  // SECTION H
+  html+="<div class='section'><div class='sh'>Section H &mdash; Certification</div>";
+  html+="<p class='cert-text'>I certify that, to the best of my knowledge and belief, the above is a true and accurate statement of the numerical, financial and material condition of the above-named charge for this conference year.</p>";
+  html+="<table>";
+  html+="<tr><td class='lbl' style='width:20%'><strong>Pastor</strong></td><td style='width:30%'>"+v(d.pastor)+"</td><td class='lbl' style='width:10%'><strong>Date</strong></td><td class='sig-space' style='width:40%'>&nbsp;</td></tr>";
+  html+="<tr><td class='lbl'><strong>Steward Board Chair</strong></td><td>"+v(d.stewardBoardChair)+"</td><td class='lbl'><strong>Date</strong></td><td class='sig-space'>&nbsp;</td></tr>";
+  html+="<tr><td class='lbl'><strong>Adult Delegate</strong></td><td>"+v(d.adultDelegate)+"</td><td class='lbl'><strong>Signature</strong></td><td class='sig-space'>&nbsp;</td></tr>";
+  html+="<tr><td class='lbl'><strong>Youth Delegate</strong></td><td>"+v(d.youthDelegate)+"</td><td class='lbl'><strong>Signature</strong></td><td class='sig-space'>&nbsp;</td></tr>";
+  html+="<tr><td class='lbl' style='background:#9C8FAF'><strong>Presiding Elder</strong></td><td style='background:#9C8FAF'>&nbsp;</td><td class='lbl' style='background:#9C8FAF'><strong>Date</strong></td><td style='background:#9C8FAF;min-height:40px'>&nbsp;</td></tr>";
+  html+="</table></div>";
+
+  ){
+  document.getElementById("report-content").innerHTML="<div style='text-align:center;padding:40px;color:#c0392b'><p style='font-size:14px;margin-bottom:12px'>&#9888; No report data found</p><p>Please return to the form, submit your report, then click <strong>Print / Download My Report</strong> on the confirmation screen.</p></div>";
+} else {
+  var html="";
+  html+="<div class='ref-line'>Reference: RPT-"+(Date.now().toString(36).toUpperCase())+" &middot; Submitted: "+new Date(d.timestamp).toLocaleDateString("en-ZA",{year:"numeric",month:"long",day:"numeric",hour:"2-digit",minute:"2-digit"})+"</div>";
+
+  // SECTION A
+  html+="<div class='section'><div class='sh'>Section A &mdash; Identification</div><table>";
+  html+="<tr><td class='lbl' style='width:26%'>Annual Conference</td><td class='shaded' style='width:24%;white-space:nowrap'>M.M. Mokone Memorial Annual Conference</td><td class='lbl' style='width:26%'>Conference year</td><td class='shaded' style='width:24%'>2026</td></tr>";
+  html+=r2("Presiding Elder District",v(d.district),"Name of Presiding Elder",v(d.presidingElder));
+  html+=r2("Name of Church / Charge",v(d.church),"Station or Circuit",v(d.stationCircuit));
+  html+=r2("If a Circuit, number of preaching points",v(d.numPreachingPoints),"Physical address of the church",v(d.churchAddress));
+  html+=r2("Name of Pastor",v(d.pastor),"Ministerial status (Itinerant / Local · Deacon / Elder)",v(d.ministerialStatus));
+  html+=r2("Date of appointment to this charge",v(d.dateAppointment),"Years served at this charge",v(d.yearsServed));
+  html+=r2("Pastor's contact number",v(d.pastorContact),"Pastor's e-mail address",v(d.pastorEmail));
+  html+=r2("Adult Delegate",v(d.adultDelegate),"Youth Delegate",v(d.youthDelegate));
+  html+="</table></div>";
+
+  // SECTION B
+  html+="<div class='section'><div class='sh'>Section B &mdash; Membership, Growth and Discipleship</div><table>";
+  html+="<tr><th style='width:40%'>Item</th><th style='width:15%'>Previous Year (2025)</th><th style='width:15%'>This Year (2026)</th><th style='width:10%'>Variance</th><th>Notes</th></tr>";
+  function bRow(lbl,pk,ck){
+    var p=v(d[pk]),c=v(d[ck]);
+    var vr=(p||c)?(parseInt(c||0)-parseInt(p||0)):"";
+    return "<tr><td>"+lbl+"</td><td class='shaded' style='text-align:right'>"+p+"</td><td class='shaded' style='text-align:right'>"+c+"</td><td style='text-align:right'>"+(vr!=""?vr:"")+"</td><td class='shaded'>&nbsp;</td></tr>";
+  }
+  html+=bRow("Full members — adults","adultsP","adultsC");
+  html+=bRow("Full members — youth","youthP","youthC");
+  html+=bRow("Full members — children","childrenP","childrenC");
+  var tP=parseInt(d.adultsP||0)+parseInt(d.youthP||0)+parseInt(d.childrenP||0);
+  var tC=parseInt(d.adultsC||0)+parseInt(d.youthC||0)+parseInt(d.childrenC||0);
+  html+="<tr><td class='tot'><strong>TOTAL MEMBERSHIP</strong></td><td class='tot' style='text-align:right'>"+(tP||"")+"</td><td class='tot' style='text-align:right'>"+(tC||"")+"</td><td class='tot' style='text-align:right'>"+(tP||tC?tC-tP:"")+"</td><td class='shaded'>&nbsp;</td></tr>";
+  html+=bRow("Average Sunday attendance","attendanceP","attendanceC");
+  html+=bRow("Church School enrolment","churchSchoolP","churchSchoolC");
+  html+=bRow("Number of tithers","tithersP","tithersC");
+  html+=bRow("Conversions","conversionsP","conversionsC");
+  html+=bRow("Accessions","accessionsP","accessionsC");
+  html+=bRow("Baptisms","baptismsP","baptismsC");
+  html+=bRow("Confirmations","confirmationsP","confirmationsC");
+  html+=bRow("Deaths during the year","deathsP","deathsC");
+  html+=bRow("Transfers out and removals","transfersP","transfersC");
+  html+="</table></div>";
+
+  // SECTION C
+  html+="<div class='section'><div class='sh'>Section C &mdash; Financial Report (South African Rand)</div><table>";
+  html+="<tr><th style='width:40%'>Item</th><th style='width:14%'>Assessed / Due</th><th style='width:14%'>Paid</th><th style='width:14%'>Outstanding</th><th>Date paid / reference</th></tr>";
+  function cRow(lbl,pk,bold){
+    var a=v(d[pk+"Assessed"]),p2=v(d[pk+"Paid"]),dt=v(d[pk+"Date"]);
+    var out=(a&&p2)?Math.max(0,(parseFloat(a)||0)-(parseFloat(p2)||0)):"";
+    var cls=bold?"tot":"";
+    return "<tr><td"+(cls?" class='"+cls+"'":"")+">"+lbl+"</td><td class='shaded' style='text-align:right'>"+a+"</td><td class='shaded' style='text-align:right'>"+p2+"</td><td style='text-align:right'>"+(out!==""?out:"")+"</td><td class='shaded'>"+dt+"</td></tr>";
+  }
+  html+=cRow("Annual Conference Budget","acb");
+  html+=cRow("Mid-Year Budget","myb");
+  html+=cRow("Advance Offering","adv");
+  html+=cRow("Office Staff / Staffing","ost");
+  html+=cRow("Presiding Elder — Apportionment","pea");
+  html+=cRow("Presiding Elder — District","ped");
+  html+=cRow("Presiding Elder — Church School","pec");
+  html+=cRow("Presiding Elder's Annuity","pan");
+  html+=cRow("Pastor's Annuity","pas");
+  html+=cRow("Retirement Benefits and Risk (AMEC Plans)","ret");
+  html+=cRow("EPISCOPAL RESIDENCE PROJECT","erp",true);
+  html+=cRow("TOTAL BROUGHT TO ANNUAL CONFERENCE","tac",true);
+  html+="<tr><td colspan='5' style='padding:0'><table style='width:100%;border:none'><tr>";
+  html+="<td style='border:none;border-right:1px solid #666;padding:5px 8px'>Total funds raised by the church this conference year &nbsp;&nbsp; <strong>R "+v(d.fundsRaised)+"</strong></td>";
+  html+="<td style='border:none;border-right:1px solid #666;padding:5px 8px'>Total paid to the Pastor (all compensation) &nbsp;&nbsp; <strong>R "+v(d.paidPastor)+"</strong></td>";
+  html+="<td style='border:none;padding:5px 8px'>Total tithes received &nbsp;&nbsp; <strong>R "+v(d.totalTithes)+"</strong></td>";
+  html+="</tr></table></td></tr>";
+  html+="</table></div>";
+
+  // SECTION D
+  html+="<div class='section'><div class='sh'>Section D &mdash; Episcopal Residence Project</div>";
+  html+="<p style='font-size:9pt;font-style:italic;padding:5px 0;color:#333'>Every charge is to account separately for its participation in the Episcopal Residence Project. The amount entered as 'Paid during this conference year' must agree with the figure recorded in Section C.</p>";
+  html+="<table>";
+  html+=r2("Amount pledged by the charge","R "+v(d.erpPledged),"Date / proof of payment reference",v(d.erpPledgedRef));
+  html+=r2("Paid during this conference year","R "+v(d.erpPaidYear),"Date / proof of payment reference",v(d.erpPaidYearRef));
+  html+=r2("Cumulative amount paid to date","R "+v(d.erpCumulative),"Date / proof of payment reference",v(d.erpCumRef));
+  html+="<tr><td class='tot'><strong>OUTSTANDING BALANCE ON PLEDGE</strong></td><td class='shaded tot' style='font-weight:bold'>R "+v(d.erpOutstanding)+"</td><td class='lbl'>Expected date of settlement</td><td class='shaded'>"+v(d.erpSettleDate)+"</td></tr>";
+  html+="</table></div>";
+
+  // SECTION E
+  html+="<div class='section'><div class='sh'>Section E &mdash; Organised Ministries and Components</div><table>";
+  html+="<tr><th style='width:40%'>Component / Ministry</th><th style='width:12%'>Active? Y/N</th><th style='width:12%'>Membership</th><th style='width:14%'>Meetings held</th><th>Name of the leader</th></tr>";
+  var mList=["Women's Missionary Society","Lay Organisation","Young People's and Children's Division","Sons of Allen","Allen Christian Evangelical League","Richard Allen Young Adult Council","Charlotte Maxeke Ladies Fellowship","Women in Ministry","MSWAWO + PK's","Church School","Music Ministry","Evangelism and Outreach Ministry"];
+  var mins={};
+  try{mins=JSON.parse(d.ministries||"{}");}catch(e){}
+  mList.forEach(function(m,i){
+    var info=mins[m]||{};
+    var bg=i%2===0?"":"background:#F1F2F1";
+    html+="<tr style='"+bg+"'><td>"+m+"</td><td class='shaded' style='text-align:center'>"+v(info.active)+"</td><td class='shaded' style='text-align:center'>"+v(info.members)+"</td><td class='shaded' style='text-align:center'>"+v(info.meetings)+"</td><td class='shaded'>"+v(info.leader)+"</td></tr>";
+  });
+  html+="</table></div>";
+
+  // SECTION F
+  html+="<div class='section'><div class='sh'>Section F &mdash; Property, Governance and Compliance</div><table>";
+  html+=r2("Is the title deed of the church property held? (Y/N)",v(d.titleDeed),"If yes, in whose name is it registered?",v(d.titleDeedName));
+  html+=r2("Is the property registered in the name of the A.M.E. Church? (Y/N)",v(d.ameRegistered),"Title deed / erf number",v(d.erfNumber));
+  html+=r2("Is the church property insured? (Y/N)",v(d.insured),"Insurer and policy number",v(d.insurerPolicy));
+  html+=r2("Does the charge provide a parsonage? (Y/N)",v(d.parsonage),"Condition of the parsonage",v(d.parsonageCond));
+  html+=r2("NPO registration number",v(d.npoNumber),"SARS PBO / tax exemption number",v(d.sarsNumber));
+  html+=r2("Is the bank account in the name of the A.M.E. Church? (Y/N)",v(d.bankAME),"Number of authorised signatories",v(d.numSignatories));
+  html+=r2("Were annual financial statements prepared for the year? (Y/N)",v(d.finStatements),"Date submitted to the Presiding Elder",v(d.finStatementsDate));
+  html+=r2("Is the Steward Board / Trustee Board fully constituted? (Y/N)",v(d.boardConstituted),"Date of the last Church Conference held",v(d.lastChurchConf));
+  html+="</table></div>";
+
+  // SECTION G
+  html+="<div class='section'><div class='sh'>Section G &mdash; Narrative Report</div><table>";
+  html+="<tr><td class='tot' colspan='2'><strong>Two major accomplishments of this charge during the conference year</strong></td></tr>";
+  html+="<tr><td style='width:50%;vertical-align:top;padding:8px;border-right:1px solid #666'>1.&nbsp;"+v(d.accomplishment1)+"</td><td style='vertical-align:top;padding:8px'>2.&nbsp;"+v(d.accomplishment2)+"</td></tr>";
+  html+="<tr><td class='tot' colspan='2'><strong>Two major challenges faced by this charge during the conference year</strong></td></tr>";
+  html+="<tr><td style='vertical-align:top;padding:8px;border-right:1px solid #666'>1.&nbsp;"+v(d.challenge1)+"</td><td style='vertical-align:top;padding:8px'>2.&nbsp;"+v(d.challenge2)+"</td></tr>";
+  html+="<tr><td class='tot' colspan='2'><strong>Ministry and outreach undertaken in the community</strong></td></tr>";
+  html+="<tr><td colspan='2' style='padding:8px;min-height:50px'>"+v(d.outreach)+"&nbsp;</td></tr>";
+  html+="<tr><td class='tot' colspan='2'><strong>Matters requiring the attention of the Presiding Elder or the Bishop</strong></td></tr>";
+  html+="<tr><td colspan='2' style='padding:8px;min-height:50px'>"+v(d.mattersForPE)+"&nbsp;</td></tr>";
+  html+="</table></div>";
+
+  // SECTION H
+  html+="<div class='section'><div class='sh'>Section H &mdash; Certification</div>";
+  html+="<p class='cert-text'>I certify that, to the best of my knowledge and belief, the above is a true and accurate statement of the numerical, financial and material condition of the above-named charge for this conference year.</p>";
+  html+="<table>";
+  html+="<tr><td class='lbl' style='width:20%'><strong>Pastor</strong></td><td style='width:30%'>"+v(d.pastor)+"</td><td class='lbl' style='width:10%'><strong>Date</strong></td><td class='sig-space' style='width:40%'>&nbsp;</td></tr>";
+  html+="<tr><td class='lbl'><strong>Steward Board Chair</strong></td><td>"+v(d.stewardBoardChair)+"</td><td class='lbl'><strong>Date</strong></td><td class='sig-space'>&nbsp;</td></tr>";
+  html+="<tr><td class='lbl'><strong>Adult Delegate</strong></td><td>"+v(d.adultDelegate)+"</td><td class='lbl'><strong>Signature</strong></td><td class='sig-space'>&nbsp;</td></tr>";
+  html+="<tr><td class='lbl'><strong>Youth Delegate</strong></td><td>"+v(d.youthDelegate)+"</td><td class='lbl'><strong>Signature</strong></td><td class='sig-space'>&nbsp;</td></tr>";
   html+="<tr><td class='lbl' style='background:#9C8FAF'><strong>Presiding Elder</strong></td><td style='background:#9C8FAF'>&nbsp;</td><td class='lbl' style='background:#9C8FAF'><strong>Date</strong></td><td style='background:#9C8FAF;min-height:40px'>&nbsp;</td></tr>";
   html+="</table></div>";
 
