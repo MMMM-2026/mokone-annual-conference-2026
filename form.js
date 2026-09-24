@@ -361,7 +361,25 @@ function checkResub(churchName, districtName){
   var lk='sub_'+(churchName+districtName).replace(/[^a-z0-9]/gi,'').toLowerCase();
   var lp=null;
   try{lp=localStorage.getItem(lk);}catch(e){}
-  if(lp){showResub(churchName,lp,null);return;}
+  if(lp){
+    // localStorage shows previous submission — fetch sheet data for Load & Edit button
+    n('chk').classList.add('show');
+    fetch(SCRIPT_URL,{method:'GET'})
+      .then(function(r){return r.json();})
+      .then(function(data){
+        n('chk').classList.remove('show');
+        var ex=(data.submissions||[]).filter(function(s){
+          return nm(s['Church']||'')===nm(churchName);
+        });
+        var subData = ex.length>0 ? ex[ex.length-1] : null;
+        showResub(churchName,lp,subData?subData['Pastor']:null,subData);
+      })
+      .catch(function(){
+        n('chk').classList.remove('show');
+        showResub(churchName,lp,null,null);
+      });
+    return;
+  }
   n('chk').classList.add('show');
   var ctrl=new AbortController();
   var t=setTimeout(function(){ctrl.abort();},8000);
