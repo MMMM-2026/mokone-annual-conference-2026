@@ -869,55 +869,52 @@ function submitForm(){
     window.scrollTo(0,0);
   };
 
-  // Reliable submission with retry
-  var attempts = 0;
-  var maxAttempts = 3;
-  
+  // Reliable submission: count this church's rows BEFORE sending, then confirm a NEW row arrived.
+  // (Old check only asked "does this church exist?" - always true for resubmissions, so failures looked like success.)
+  var attempts = 0, maxAttempts = 3, baseline = null;
+  function countRows(result){
+    return (result.submissions||[]).filter(function(s){
+      return (s['Church']||'').trim().toLowerCase()===data.church.trim().toLowerCase() &&
+             (s['District']||'').trim().toLowerCase()===data.district.trim().toLowerCase();
+    }).length;
+  }
+  function failed(){
+    n('ov').classList.remove('show');
+    alert('We could not confirm that your report reached the system.\n\n'+
+          'Nothing is lost - your answers are still on this page.\n\n'+
+          'Please wait one minute and press Submit again. If it still fails, '+
+          'contact your Presiding Elder or the Conference Administrator.');
+  }
+  function verify(){
+    fetch(SCRIPT_URL,{method:'GET'})
+      .then(function(r){return r.json();})
+      .then(function(result){
+        if(countRows(result) > baseline){ show(); }
+        else if(attempts < maxAttempts){ setTimeout(trySubmit, 2000); }
+        else { failed(); }
+      })
+      .catch(function(){ if(attempts < maxAttempts){ setTimeout(verify, 3000); attempts++; } else { failed(); } });
+  }
   function trySubmit(){
     attempts++;
-    var stillWaiting = null;
-    if(attempts > 1){
-      var spt = document.getElementById('spt');
-      if(spt) spt.textContent = 'Retrying submission (attempt '+attempts+' of '+maxAttempts+')...';
-    }
-    stillWaiting = setTimeout(function(){
-      var spt = document.getElementById('spt');
-      if(spt) spt.textContent = 'Still sending — please keep this page open...';
+    var spt = document.getElementById('spt');
+    if(attempts > 1 && spt) spt.textContent = 'Retrying submission (attempt '+attempts+' of '+maxAttempts+')...';
+    var stillWaiting = setTimeout(function(){
+      var spt2 = document.getElementById('spt');
+      if(spt2) spt2.textContent = 'Still sending — please keep this page open...';
     }, 6000);
-    
     fetch(SCRIPT_URL, {method:'POST', mode:'no-cors', body:JSON.stringify(data)})
-      .then(function(){
-        clearTimeout(stillWaiting);
-        // Verify it landed in the sheet
-        setTimeout(function(){
-          fetch(SCRIPT_URL, {method:'GET'})
-            .then(function(r){return r.json();})
-            .then(function(result){
-              var found = (result.submissions||[]).some(function(s){
-                return (s['Church']||'').trim().toLowerCase() === data.church.trim().toLowerCase() &&
-                       (s['District']||'').trim().toLowerCase() === data.district.trim().toLowerCase();
-              });
-              if(found || attempts >= maxAttempts){
-                show();
-              } else if(attempts < maxAttempts){
-                setTimeout(trySubmit, 2000);
-              } else {
-                show();
-              }
-            })
-            .catch(function(){ show(); });
-        }, 3000);
-      })
+      .then(function(){ clearTimeout(stillWaiting); setTimeout(verify, 3000); })
       .catch(function(){
         clearTimeout(stillWaiting);
-        if(attempts < maxAttempts){
-          setTimeout(trySubmit, 3000);
-        } else {
-          show();
-        }
+        if(attempts < maxAttempts){ setTimeout(trySubmit, 3000); } else { failed(); }
       });
   }
-  trySubmit();
+  // Take the baseline count first, then send
+  fetch(SCRIPT_URL,{method:'GET'})
+    .then(function(r){return r.json();})
+    .then(function(result){ baseline = countRows(result); trySubmit(); })
+    .catch(function(){ baseline = 0; trySubmit(); });
 }
 
 
