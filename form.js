@@ -270,6 +270,8 @@ const MINISTRIES = [
 var step = 1;
 var isResub = false;
 var canProceed = false;
+var editMode = false;
+var _loadedSub = null;
 
 function n(id){return document.getElementById(id);}
 function v(id){var e=n(id);return e?e.value:'';}
@@ -375,7 +377,7 @@ function checkResub(churchName, districtName){
       if(ex.length>0){
         var last=ex[ex.length-1];
         var ts=last['Timestamp']?new Date(last['Timestamp']).toLocaleString('en-ZA',{year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'}):'Unknown date';
-        showResub(churchName,ts,last['Pastor']);
+        showResub(churchName,ts,last['Pastor'],last);
       }
     })
     .catch(function(){
@@ -384,10 +386,22 @@ function checkResub(churchName, districtName){
     });
 }
 
-function showResub(churchName,ts,pastor){
+function showResub(churchName,ts,pastor,subData){
   var prev=n('resub-prev');
   prev.innerHTML='<strong>Previous submission received:</strong> '+ts+(pastor?'<br>Pastor: '+pastor:'');
   n('rerr').classList.remove('show');
+  _loadedSub = subData || null;
+  // Add Load & Edit button
+  var existing = document.getElementById('load-edit-btn');
+  if(existing) existing.parentNode.removeChild(existing);
+  if(subData){
+    var loadBtn = document.createElement('button');
+    loadBtn.id = 'load-edit-btn';
+    loadBtn.textContent = '📋 Load & Edit My Previous Report';
+    loadBtn.style.cssText = 'width:100%;padding:12px;background:#1a7a4a;color:white;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:"Open Sans",sans-serif;margin-bottom:10px';
+    loadBtn.onclick = loadAndEdit;
+    n('resub').insertBefore(loadBtn, n('resub').querySelector('.rl'));
+  }
   n('resub').classList.add('show');
   isResub=true;
 }
@@ -435,8 +449,148 @@ function co(pfx){
 }
 
 // STEP NAVIGATION
+
+function loadAndEdit(){
+  if(!_loadedSub){return;}
+  var s = _loadedSub;
+  editMode = true;
+  isResub = true;
+  canProceed = true;
+  n('resub').classList.remove('show');
+  var loadBtn = document.getElementById('load-edit-btn');
+  if(loadBtn) loadBtn.parentNode.removeChild(loadBtn);
+
+  // Helper
+  function set(id, val){ var el=n(id); if(el&&val!==undefined&&val!=='') el.value=val; }
+  function g(k1,k2){ return s[k1]||s[k2]||''; }
+
+  // SECTION A
+  set('min-status', g('Ministerial Status','ministerialStatus'));
+  set('date-appt',  g('Date Appointment','dateAppointment'));
+  set('yrs-served', g('Years Served','yearsServed'));
+  set('pastor-tel', g('Pastor Contact','pastorContact'));
+  set('pastor-email',g('Pastor Email','pastorEmail'));
+  set('station',    g('Station/Circuit','stationCircuit'));
+  set('num-pts',    g('Preaching Points','numPreachingPoints'));
+  set('church-addr',g('Church Address','churchAddress'));
+  // Override locked pastor/delegate if different
+  if(g('Pastor','pastor')) n('pastor').value = g('Pastor','pastor');
+  if(g('Adult Delegate','adultDelegate')) n('adult').value = g('Adult Delegate','adultDelegate');
+  if(g('Youth Delegate','youthDelegate')) n('youth').value = g('Youth Delegate','youthDelegate');
+
+  // SECTION B
+  var bMap={
+    'Adults Prev':'adl-p','Adults Curr':'adl-c',
+    'Youth Prev':'yth-p','Youth Curr':'yth-c',
+    'Children Prev':'chd-p','Children Curr':'chd-c',
+    'Attendance Prev':'att-p','Attendance Curr':'att-c',
+    'Church School Prev':'cs-p','Church School Curr':'cs-c',
+    'Tithers Prev':'tit-p','Tithers Curr':'tit-c',
+    'Conversions Prev':'con-p','Conversions Curr':'con-c',
+    'Accessions Prev':'acc-p','Accessions Curr':'acc-c',
+    'Baptisms Prev':'bap-p','Baptisms Curr':'bap-c',
+    'Confirmations Prev':'cfm-p','Confirmations Curr':'cfm-c',
+    'Deaths Prev':'dth-p','Deaths Curr':'dth-c',
+    'Transfers Prev':'trf-p','Transfers Curr':'trf-c'
+  };
+  Object.keys(bMap).forEach(function(k){ set(bMap[k], s[k]); });
+  ct(); // recalculate totals
+
+  // SECTION C
+  var cMap={
+    'ACB Assessed':'acb-a','ACB Paid':'acb-p','ACB Date':'acb-d',
+    'MYB Assessed':'myb-a','MYB Paid':'myb-p','MYB Date':'myb-d',
+    'ADV Assessed':'adv-a','ADV Paid':'adv-p','ADV Date':'adv-d',
+    'OST Assessed':'ost-a','OST Paid':'ost-p','OST Date':'ost-d',
+    'PEA Assessed':'pea-a','PEA Paid':'pea-p','PEA Date':'pea-d',
+    'PED Assessed':'ped-a','PED Paid':'ped-p','PED Date':'ped-d',
+    'PEC Assessed':'pec-a','PEC Paid':'pec-p','PEC Date':'pec-d',
+    'PAN Assessed':'pan-a','PAN Paid':'pan-p','PAN Date':'pan-d',
+    'PAS Assessed':'pas-a','PAS Paid':'pas-p','PAS Date':'pas-d',
+    'RET Assessed':'ret-a','RET Paid':'ret-p','RET Date':'ret-d',
+    'ERP Assessed':'erp-a','ERP Paid':'erp-p','ERP Date':'erp-d',
+    'TAC Assessed':'tac-a','TAC Paid':'tac-p','TAC Date':'tac-d'
+  };
+  Object.keys(cMap).forEach(function(k){ set(cMap[k], s[k]); });
+  set('funds-raised', g('Funds Raised','fundsRaised'));
+  set('paid-pastor',  g('Paid to Pastor','paidPastor'));
+  set('total-tithes', g('Total Tithes','totalTithes'));
+
+  // SECTION D
+  set('erp-pledged',    g('ERP Pledged','erpPledged'));
+  set('erp-pledged-ref',g('ERP Pledged Ref','erpPledgedRef'));
+  set('erp-paid-yr',    g('ERP Paid Year','erpPaidYear'));
+  set('erp-paid-yr-ref',g('ERP Paid Year Ref','erpPaidYearRef'));
+  set('erp-cumulative', g('ERP Cumulative','erpCumulative'));
+  set('erp-cum-ref',    g('ERP Cum Ref','erpCumRef'));
+  set('erp-outstanding',g('ERP Outstanding','erpOutstanding'));
+  set('erp-settle',     g('ERP Settle Date','erpSettleDate'));
+
+  // SECTION E - Ministries JSON
+  var mins={};
+  try{mins=JSON.parse(s['Ministries JSON']||s['ministries']||'{}');}catch(e){}
+  MINISTRIES.forEach(function(m,i){
+    var id='min'+i, info=mins[m]||{};
+    set(id+'-a', info.active);
+    set(id+'-m', info.members);
+    set(id+'-mt',info.meetings);
+    set(id+'-l', info.leader);
+  });
+
+  // SECTION F
+  set('f-deed',      g('Title Deed','titleDeed'));
+  set('f-deed-name', g('Title Deed Name','titleDeedName'));
+  set('f-ame',       g('AME Registered','ameRegistered'));
+  set('f-erf',       g('ERF Number','erfNumber'));
+  set('f-ins',       g('Insured','insured'));
+  set('f-ins-no',    g('Insurer Policy','insurerPolicy'));
+  set('f-pars',      g('Parsonage','parsonage'));
+  set('f-pars-cond', g('Parsonage Cond','parsonageCond'));
+  set('f-npo',       g('NPO Number','npoNumber'));
+  set('f-sars',      g('SARS Number','sarsNumber'));
+  set('f-bank',      g('Bank AME','bankAME'));
+  set('f-sigs',      g('Num Signatories','numSignatories'));
+  set('f-fin',       g('Fin Statements','finStatements'));
+  set('f-fin-date',  g('Fin Statements Date','finStatementsDate'));
+  set('f-board',     g('Board Constituted','boardConstituted'));
+  set('f-cc-date',   g('Last Church Conf','lastChurchConf'));
+
+  // SECTION G
+  set('g-acc1', g('Accomplishment 1','accomplishment1'));
+  set('g-acc2', g('Accomplishment 2','accomplishment2'));
+  set('g-ch1',  g('Challenge 1','challenge1'));
+  set('g-ch2',  g('Challenge 2','challenge2'));
+  set('g-out',  g('Outreach','outreach'));
+  set('g-mat',  g('Matters for PE','mattersForPE'));
+
+  // SECTION H
+  set('h-pastor-date',  g('Cert Pastor Date','certPastorDate'));
+  set('h-steward',      g('Steward Chair','stewardBoardChair'));
+  set('h-steward-date', g('Steward Date','stewardBoardDate'));
+
+  // Make ALL step dots clickable and show edit mode banner
+  var banner = document.createElement('div');
+  banner.style.cssText = 'background:#1a7a4a;color:white;padding:10px 16px;text-align:center;font-size:13px;font-weight:700;font-family:"Open Sans",sans-serif;margin-bottom:10px;border-radius:10px';
+  banner.innerHTML = '✅ Report loaded — click any section (A–H) to jump directly to what you want to edit';
+  var fw = document.getElementById('fw');
+  if(fw) fw.insertBefore(banner, fw.firstChild);
+
+  // Make progress dots clickable
+  for(var i=1;i<=8;i++){
+    (function(step_num){
+      var dot = document.getElementById('d'+step_num);
+      if(dot){ dot.style.cursor='pointer'; dot.onclick=function(){goStep(step_num);} }
+    })(i);
+  }
+
+  // Show next button on step 1
+  n('s1btns').style.display='flex';
+  window.scrollTo(0,0);
+}
+
+
 function goStep(ns){
-  if(ns>step&&!validate(step))return;
+  if(ns>step&&!editMode&&!validate(step))return;
   document.querySelectorAll('.sc').forEach(function(s){s.style.display='none';});
   n('s'+ns).style.display='block';
   for(var i=1;i<=8;i++){
@@ -630,6 +784,53 @@ function submitForm(){
     window.scrollTo(0,0);
   };
 
-  fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(data)})
-    .then(show).catch(show);
+  // Reliable submission with retry
+  var attempts = 0;
+  var maxAttempts = 3;
+  
+  function trySubmit(){
+    attempts++;
+    var stillWaiting = null;
+    if(attempts > 1){
+      var spt = document.getElementById('spt');
+      if(spt) spt.textContent = 'Retrying submission (attempt '+attempts+' of '+maxAttempts+')...';
+    }
+    stillWaiting = setTimeout(function(){
+      var spt = document.getElementById('spt');
+      if(spt) spt.textContent = 'Still sending — please keep this page open...';
+    }, 6000);
+    
+    fetch(SCRIPT_URL, {method:'POST', mode:'no-cors', body:JSON.stringify(data)})
+      .then(function(){
+        clearTimeout(stillWaiting);
+        // Verify it landed in the sheet
+        setTimeout(function(){
+          fetch(SCRIPT_URL, {method:'GET'})
+            .then(function(r){return r.json();})
+            .then(function(result){
+              var found = (result.submissions||[]).some(function(s){
+                return (s['Church']||'').trim().toLowerCase() === data.church.trim().toLowerCase() &&
+                       (s['District']||'').trim().toLowerCase() === data.district.trim().toLowerCase();
+              });
+              if(found || attempts >= maxAttempts){
+                show();
+              } else if(attempts < maxAttempts){
+                setTimeout(trySubmit, 2000);
+              } else {
+                show();
+              }
+            })
+            .catch(function(){ show(); });
+        }, 3000);
+      })
+      .catch(function(){
+        clearTimeout(stillWaiting);
+        if(attempts < maxAttempts){
+          setTimeout(trySubmit, 3000);
+        } else {
+          show();
+        }
+      });
+  }
+  trySubmit();
 }
