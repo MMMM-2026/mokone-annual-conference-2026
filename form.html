@@ -127,6 +127,20 @@ textarea{min-height:90px;resize:vertical;line-height:1.6}
 .qrole{font-size:10px;color:#d4b8f0;margin-top:2px;line-height:1.4}
 .warn{background:rgba(196,151,42,.08);border:1px solid rgba(196,151,42,.3);border-radius:8px;padding:10px 14px;font-size:12px;color:#7a5c00;margin-bottom:14px}
 @media(max-width:600px){.g2,.g3{grid-template-columns:1fr}.cr{grid-template-columns:1fr}.cor{display:none}.ft{font-size:12px}.prog-inner{min-width:500px}}
+
+.sg-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;background:transparent;border:1.5px solid #6B2D8B;color:#6B2D8B;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;margin-top:5px;transition:all .2s;font-family:"Open Sans",sans-serif}
+.sg-btn:hover{background:#6B2D8B;color:white}
+.sg-btn.loading{opacity:.6;cursor:wait}
+.sg-modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;padding:16px}
+.sg-modal.show{display:flex}
+.sg-box{background:white;border-radius:16px;padding:20px;max-width:500px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,.3)}
+.sg-title{font-size:13px;font-weight:700;color:#4A0F76;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+.sg-orig{background:#f5f5f5;border-radius:8px;padding:10px 12px;font-size:12px;color:#666;margin-bottom:10px;font-style:italic}
+.sg-sugg{background:#ECE7F4;border-radius:8px;padding:12px;font-size:13px;color:#000;margin-bottom:14px;line-height:1.6;border-left:3px solid #6B2D8B}
+.sg-btns{display:flex;gap:10px}
+.sg-use{flex:1;padding:10px;background:#6B2D8B;color:white;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer}
+.sg-keep{flex:1;padding:10px;background:#f0f0f0;color:#333;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer}
+
 </style>
 </head>
 <body>
@@ -387,17 +401,23 @@ textarea{min-height:90px;resize:vertical;line-height:1.6}
 <div class="card"><div class="ch"><div class="cl">Section G</div><div class="ct">Narrative Report</div></div><div class="cb">
   <div class="nb"><div class="nl">Two major accomplishments of this charge during the conference year</div>
     <textarea id="g-acc1" placeholder="1. Describe your first major accomplishment&#8230;" style="margin-bottom:8px;min-height:80px"></textarea>
+    <button class="sg-btn" onclick="suggestText('g-acc1')" type="button">✨ Suggest better wording</button>
     <textarea id="g-acc2" placeholder="2. Describe your second major accomplishment&#8230;" style="min-height:80px"></textarea>
+    <button class="sg-btn" onclick="suggestText('g-acc2')" type="button">✨ Suggest better wording</button>
   </div>
   <div class="nb"><div class="nl">Two major challenges faced by this charge during the conference year</div>
     <textarea id="g-ch1" placeholder="1. Describe your first major challenge&#8230;" style="margin-bottom:8px;min-height:80px"></textarea>
+    <button class="sg-btn" onclick="suggestText('g-ch1')" type="button">✨ Suggest better wording</button>
     <textarea id="g-ch2" placeholder="2. Describe your second major challenge&#8230;" style="min-height:80px"></textarea>
+    <button class="sg-btn" onclick="suggestText('g-ch2')" type="button">✨ Suggest better wording</button>
   </div>
   <div class="nb"><div class="nl">Ministry and outreach undertaken in the community</div>
     <textarea id="g-out" placeholder="Describe evangelism, community service, feeding schemes, hospital visitation, prison ministry and any other outreach&#8230;" style="min-height:100px"></textarea>
+    <button class="sg-btn" onclick="suggestText('g-out')" type="button">✨ Suggest better wording</button>
   </div>
   <div class="nb"><div class="nl">Matters requiring the attention of the Presiding Elder or the Bishop</div>
     <textarea id="g-mat" placeholder="List any matters &#8212; property, pastoral, financial, constitutional or otherwise &#8212; requiring the Presiding Elder's or Bishop's attention&#8230;" style="min-height:80px"></textarea>
+    <button class="sg-btn" onclick="suggestText('g-mat')" type="button">✨ Suggest better wording</button>
   </div>
 </div></div>
 <div class="errb" id="err7"></div>
@@ -466,4 +486,17 @@ textarea{min-height:90px;resize:vertical;line-height:1.6}
   African Methodist Episcopal Church &middot; 19th Episcopal District &middot; M.M. Mokone Memorial Annual Conference 2026
 </div>
 <script src="form.js"></script>
+
+<div class="sg-modal" id="sg-modal">
+  <div class="sg-box">
+    <div class="sg-title">✨ AI Writing Suggestion</div>
+    <div class="sg-orig" id="sg-orig"></div>
+    <div class="sg-sugg" id="sg-sugg">Generating suggestion...</div>
+    <div class="sg-btns">
+      <button class="sg-use" onclick="useSuggestion()">✓ Use this</button>
+      <button class="sg-keep" onclick="closeSuggestion()">Keep mine</button>
+    </div>
+  </div>
+</div>
+
 </body></html>

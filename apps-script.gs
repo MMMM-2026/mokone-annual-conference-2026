@@ -116,3 +116,45 @@ function doGet(e) {
     return ContentService.createTextOutput(JSON.stringify({total:0,totalChurches:68,districts:{},submissions:[],error:err.toString()})).setMimeType(ContentService.MimeType.JSON);
   }
 }
+
+
+function handleGrammar(text) {
+  try {
+    var apiKey = PropertiesService.getScriptProperties().getProperty('ANTHROPIC_API_KEY');
+    if (!apiKey) {
+      return ContentService.createTextOutput(JSON.stringify({error: 'API key not configured'}))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+    
+    var payload = {
+      model: 'claude-sonnet-4-6',
+      max_tokens: 500,
+      messages: [{
+        role: 'user',
+        content: 'You are a quiet editorial assistant helping an African Methodist Episcopal Church pastor in South Africa polish their annual conference report. Follow these rules strictly:\n\n1. Fix spelling, grammar and punctuation errors quietly.\n2. Keep the pastor's own words, voice and style — do not make it sound formal, corporate or like AI wrote it.\n3. Do not add new ideas, sentences or information that were not already there.\n4. If a sentence is incomplete but the pastor's intended meaning is clear, complete it as closely as possible to what they were trying to say — using simple, natural church language. Do not over-expand.\n5. If the text is already correct, return it unchanged.\n6. Return only the corrected or completed text. No explanations, no comments, nothing else.\n\nExample of how to handle an incomplete sentence:\nPastor wrote: "A number of tithers on monthly basis."\nYou return: "A number of members tithe on a monthly basis."\n\nExample of how to handle an outreach sentence:\nPastor wrote: "We outreached to members our Church members who took long without attending the Church"\nYou return: "We reached out to church members who had not attended church for a long time."\n\nThis is from an AME church annual conference report — Section G Narrative. The context is African church ministry in South Africa.\n\nText to correct:\n\n' + text
+      }]
+    };
+    
+    var options = {
+      method: 'post',
+      contentType: 'application/json',
+      headers: {
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01'
+      },
+      payload: JSON.stringify(payload),
+      muteHttpExceptions: true
+    };
+    
+    var response = UrlFetchApp.fetch('https://api.anthropic.com/v1/messages', options);
+    var result = JSON.parse(response.getContentText());
+    var improved = result.content && result.content[0] ? result.content[0].text : text;
+    
+    return ContentService.createTextOutput(JSON.stringify({improved: improved}))
+      .setMimeType(ContentService.MimeType.JSON);
+      
+  } catch(err) {
+    return ContentService.createTextOutput(JSON.stringify({error: err.toString()}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}

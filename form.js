@@ -391,7 +391,6 @@ function showResub(churchName,ts,pastor,subData){
   prev.innerHTML='<strong>Previous submission received:</strong> '+ts+(pastor?'<br>Pastor: '+pastor:'');
   n('rerr').classList.remove('show');
   _loadedSub = subData || null;
-  // Add Load & Edit button
   var existing = document.getElementById('load-edit-btn');
   if(existing) existing.parentNode.removeChild(existing);
   if(subData){
@@ -833,4 +832,68 @@ function submitForm(){
       });
   }
   trySubmit();
+}
+
+
+// ===== GRAMMAR SUGGESTION FEATURE =====
+var _sgTarget = null;
+var _sgSuggestion = "";
+
+function suggestText(fieldId) {
+  var el = document.getElementById(fieldId);
+  if (!el) return;
+  var text = el.value.trim();
+  if (!text) {
+    alert("Please type something in the field first before requesting a suggestion.");
+    return;
+  }
+  if (text.length < 10) {
+    alert("Please write more detail before requesting a suggestion.");
+    return;
+  }
+  
+  _sgTarget = fieldId;
+  _sgSuggestion = "";
+  
+  // Show modal with loading state
+  document.getElementById("sg-orig").textContent = '"' + text.substring(0, 120) + (text.length > 120 ? '...' : '') + '"';
+  document.getElementById("sg-sugg").innerHTML = '<em style="color:#999">✨ Generating suggestion... please wait...</em>';
+  document.getElementById("sg-modal").classList.add("show");
+  
+  // Get the button and show loading
+  var btn = document.querySelector('[onclick="suggestText(\''+fieldId+'\')"]');
+  if (btn) { btn.classList.add("loading"); btn.textContent = "⏳ Generating..."; }
+  
+  // Call Apps Script grammar endpoint
+  var url = SCRIPT_URL + "?action=grammar&text=" + encodeURIComponent(text);
+  
+  fetch(url, {method: "GET"})
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (btn) { btn.classList.remove("loading"); btn.textContent = "✨ Suggest better wording"; }
+      if (data.improved) {
+        _sgSuggestion = data.improved;
+        document.getElementById("sg-sugg").textContent = data.improved;
+      } else {
+        document.getElementById("sg-sugg").innerHTML = '<em style="color:#c0392b">Could not generate suggestion. Please check your connection and try again.</em>';
+      }
+    })
+    .catch(function() {
+      if (btn) { btn.classList.remove("loading"); btn.textContent = "✨ Suggest better wording"; }
+      document.getElementById("sg-sugg").innerHTML = '<em style="color:#c0392b">Connection error. Please try again.</em>';
+    });
+}
+
+function useSuggestion() {
+  if (_sgTarget && _sgSuggestion) {
+    var el = document.getElementById(_sgTarget);
+    if (el) el.value = _sgSuggestion;
+  }
+  closeSuggestion();
+}
+
+function closeSuggestion() {
+  document.getElementById("sg-modal").classList.remove("show");
+  _sgTarget = null;
+  _sgSuggestion = "";
 }
