@@ -479,7 +479,20 @@ function loadAndEdit(){
   if(loadBtn) loadBtn.parentNode.removeChild(loadBtn);
 
   // Helper
-  function set(id, val){ var el=n(id); if(el&&val!==undefined&&val!=='') el.value=val; }
+  function set(id, val){
+    var el=n(id);
+    if(!el||val===undefined||val===null||val==='') return;
+    val=String(val);
+    // Date boxes need yyyy-mm-dd; the Sheet sends long dates like "Sun Aug 30 2026 00:00:00 GMT+0200"
+    if(el.type==='date' && !/^\d{4}-\d{2}-\d{2}$/.test(val)){
+      var d=new Date(val);
+      if(isNaN(d.getTime())) return;
+      val=d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);
+    }
+    // The Sheet drops the leading 0 from phone numbers (e.g. 766860138)
+    if(id==='pastor-tel' && /^\d{9}$/.test(val)) val='0'+val;
+    el.value=val;
+  }
   function g(k1,k2){ return s[k1]||s[k2]||''; }
 
   // SECTION A
