@@ -1,5 +1,5 @@
 var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzuLLT1P3bypTDws-lwex8Ieq_svIeXJpjN3a5yX5R-GSLWH4t9C8T3zyMRXT5WWac78Q/exec";
-var TOTAL = 68;
+var TOTAL = 66;
 var LD = {total:0, districts:{}, submissions:[]};
 
 var DC = [
