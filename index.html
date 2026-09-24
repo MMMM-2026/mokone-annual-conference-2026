@@ -183,6 +183,112 @@ body{font-family:'Open Sans',sans-serif;background:#1a0a2e;color:white;min-heigh
 </div>
 
 <div class="submit-wrap">
+  <!-- CLOSING BANNER: switches automatically at 08h00 and 11h00, Friday 25 September 2026 (SAST) -->
+  <style>
+    #close-banner{max-width:720px;margin:0 auto 24px;padding:28px 22px 22px;border-radius:20px;text-align:center;
+      background:radial-gradient(120% 90% at 50% 0%,rgba(196,151,42,.18),transparent 60%),linear-gradient(145deg,rgba(107,45,139,.55),rgba(26,10,46,.92));
+      border:1.5px solid #C4972A;box-shadow:0 0 0 5px rgba(196,151,42,.07),0 14px 44px rgba(0,0,0,.4)}
+    .cb-rule{width:64px;height:2px;background:#C4972A;margin:18px auto 14px;border-radius:2px}
+    .pe-sign{font-size:10.5px;letter-spacing:2.6px;color:#C4972A;font-weight:700;margin-bottom:12px}
+    .pe-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;text-align:left}
+    .pe-card{padding:11px 12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);transition:all .6s}
+    .pe-card.done{border-color:#C4972A;background:rgba(196,151,42,.12);box-shadow:0 0 18px rgba(196,151,42,.18)}
+    .pe-n{font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:#fff;line-height:1.3}
+    .pe-d{font-size:10px;letter-spacing:1.6px;color:rgba(255,255,255,.5);margin-top:3px;text-transform:uppercase}
+    .pe-s{font-size:12px;margin-top:6px;color:rgba(255,255,255,.6)}
+    .pe-card.done .pe-s{color:#E3C06A;font-weight:700}
+  </style>
+  <div id="close-banner">
+    <div id="cb-eye" style="font-size:11px;letter-spacing:3px;color:#C4972A;font-weight:700;margin-bottom:10px">WITH THANKSGIVING</div>
+    <div id="cb-head" style="font-family:'Playfair Display',serif;font-size:27px;font-weight:700;line-height:1.25;margin-bottom:10px">Thank you, faithful shepherds.</div>
+    <div id="cb-body" style="font-size:14px;line-height:1.6;color:rgba(255,255,255,.82);max-width:500px;margin:0 auto">
+      Faithful shepherds, thank you for giving account. The report link closes at <strong style="color:#fff">08h00 on Friday, 25 September 2026</strong>.</div>
+    <div id="cb-count" style="margin:16px auto 0;display:inline-block;padding:9px 18px;border-radius:30px;background:rgba(196,151,42,.15);
+         border:1px solid rgba(196,151,42,.5);font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:#C4972A"></div>
+    <div class="cb-rule"></div>
+    <div class="pe-sign">WITH GRATITUDE, FROM YOUR PRESIDING ELDERS</div>
+    <div class="pe-grid" id="pe-grid"></div>
+    <div id="cb-verse" style="margin-top:18px;font-style:italic;font-size:13px;color:rgba(255,255,255,.55)">
+      &ldquo;Let all things be done decently and in order.&rdquo; &mdash; 1 Corinthians 14:40</div>
+    <div style="margin:18px auto 0;max-width:460px;padding:14px 16px;border-top:1px solid rgba(196,151,42,.35)">
+      <div style="font-size:10.5px;letter-spacing:2.4px;color:#C4972A;font-weight:700;margin-bottom:8px">UNTIL WE MEET ON 8 OCTOBER 2026</div>
+      <div style="font-family:'Playfair Display',serif;font-style:italic;font-size:16px;line-height:1.55;color:#fff">
+        And are we yet alive,<br>and see each other&rsquo;s face?<br>Glory and praise to Jesus give<br>for His redeeming grace!</div>
+      <div style="font-size:11.5px;color:rgba(255,255,255,.5);margin-top:8px">Charles Wesley &middot; sung at the opening of every Annual Conference</div>
+    </div>
+  </div>
+  <script>
+  (function(){
+    var CLOSE = Date.parse('2026-09-25T06:00:00Z'); // 08h00 South African time
+    var PES = [
+      ['The Rev. Mandisi Albert Mexico','Capital District',18],
+      ['The Rev. George Olehile Motabogi','Bela-Bela District',10],
+      ['The Rev. Lekubela Simon Moobi','Ga-Rankuwa District',10],
+      ['The Rev. Mohale Daniel Thabo Makhene','Polokwane District',11],
+      ['The Rev. Dibetu Onica Leepo','North End District',9],
+      ['The Rev. Ndinannyi Martin Tshivhase','Vhembe District',8]
+    ];
+    var grid = document.getElementById('pe-grid');
+    PES.forEach(function(p,i){
+      grid.innerHTML += '<div class="pe-card" id="pe'+i+'"><div class="pe-n">'+p[0]+'</div><div class="pe-d">'+p[1]+'</div><div class="pe-s" id="pes'+i+'">&nbsp;</div></div>';
+    });
+    function fill(districts){
+      PES.forEach(function(p,i){
+        var got = Math.min(districts[p[1]]||0, p[2]);
+        var card = document.getElementById('pe'+i), st = document.getElementById('pes'+i);
+        if(got >= p[2]){ card.className='pe-card done'; st.innerHTML='&#10003; All '+p[2]+' reports in'; }
+        else { card.className='pe-card'; st.textContent = got+' of '+p[2]+' reports in'; }
+      });
+    }
+    function load(){
+      if(typeof SCRIPT_URL==='undefined') return;
+      fetch(SCRIPT_URL).then(function(r){return r.json();}).then(function(d){ fill(d.districts||{}); }).catch(function(){});
+    }
+    window.addEventListener('load', function(){ load(); setInterval(load, 120000); });
+
+    var GRACE = Date.parse('2026-09-25T09:00:00Z'); // 11h00 South African time
+    var stage = '';
+    function setText(eye, head, body, verse){
+      document.getElementById('cb-eye').textContent = eye;
+      document.getElementById('cb-head').textContent = head;
+      document.getElementById('cb-body').innerHTML = body;
+      document.getElementById('cb-verse').innerHTML = verse;
+    }
+    function pad(x){return (x<10?'0':'')+x;}
+    function tick(){
+      var now = Date.now(), cnt = document.getElementById('cb-count');
+      if(now < CLOSE){
+        // STAGE 1 - until 08h00: thank you + closing time + countdown
+        if(stage!=='thanks'){ stage='thanks';
+          setText('WITH THANKSGIVING', 'Thank you, faithful shepherds.',
+            'Your reports are the story of God\u2019s work in our churches this year. The report link closes at <strong style="color:#fff">08h00 on Friday, 25 September 2026</strong>.',
+            '&ldquo;Let all things be done decently and in order.&rdquo; &mdash; 1 Corinthians 14:40');
+          cnt.style.display='inline-block';
+        }
+        var left = CLOSE - now, h=Math.floor(left/3600000), m=Math.floor(left%3600000/60000), s=Math.floor(left%60000/1000);
+        cnt.textContent = 'Closes in ' + pad(h) + 'h ' + pad(m) + 'm ' + pad(s) + 's';
+      } else if(now < GRACE){
+        // STAGE 2 - 08h00 to 11h00: closed, thank you
+        if(stage!=='closed'){ stage='closed';
+          setText('SUBMISSIONS CLOSED', 'The harvest is gathered.',
+            'The report link closed at <strong style="color:#fff">08h00 on Friday, 25 September 2026</strong>. Thank you, faithful shepherds, for giving account with faithfulness.',
+            '&ldquo;Well done, good and faithful servant.&rdquo; &mdash; Matthew 25:21');
+          cnt.style.display='none';
+        }
+      } else {
+        // STAGE 3 - from 11h00: grace & correction window
+        if(stage!=='grace'){ stage='grace';
+          setText('GRACE & CORRECTION WINDOW', 'The harvest is gathered.',
+            'Thank you, faithful shepherds. If your church has already submitted, select it in the form and use <strong style="color:#fff">Load &amp; Edit</strong> to make corrections. If your church has not yet submitted, the form remains open to you by grace.',
+            '&ldquo;Well done, good and faithful servant.&rdquo; &mdash; Matthew 25:21');
+          cnt.style.display='none';
+          clearInterval(timer);
+        }
+      }
+    }
+    var timer = setInterval(tick, 1000); tick();
+  })();
+  </script>
   <a href="form.html" class="submit-btn">&#9997;&nbsp; Submit Your Report</a>
   <div class="submit-note">Tap above to fill in your church's 2026 summary report</div>
 </div>
