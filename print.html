@@ -59,6 +59,13 @@ th{border:1px solid #666;padding:5px 8px;background:#9C8FAF;font-weight:bold;col
   try { d = JSON.parse(localStorage.getItem('lastReport')); } catch(e){}
 
   function v(x){ return x || ''; }
+  // Rand format: R 880 275,31
+  function R(x){
+    if(x===undefined||x===null||String(x).trim()==='') return '';
+    var num=parseFloat(String(x).replace(/[^\d.\-]/g,''));
+    if(isNaN(num)) return String(x);
+    return 'R&nbsp;'+num.toLocaleString('en-ZA',{minimumFractionDigits:2,maximumFractionDigits:2});
+  }
 
   function row2(l1,v1,l2,v2){
     return '<tr><td class="lbl" style="width:26%">'+l1+'</td><td class="dat" style="width:24%">'+v(v1)+'</td><td class="lbl" style="width:26%">'+l2+'</td><td class="dat" style="width:24%">'+v(v2)+'</td></tr>';
@@ -119,7 +126,7 @@ th{border:1px solid #666;padding:5px 8px;background:#9C8FAF;font-weight:bold;col
     var a=v(d[pk+'Assessed']), p=v(d[pk+'Paid']), dt=v(d[pk+'Date']);
     var out=(a&&p)?Math.max(0,(parseFloat(a)||0)-(parseFloat(p)||0)):'';
     var cls=isTot?' class="tot"':'';
-    return '<tr><td'+cls+'>'+lbl+'</td><td class="dat" style="text-align:right">'+a+'</td><td class="dat" style="text-align:right">'+p+'</td><td style="text-align:right">'+(out!==''?out:'')+'</td><td class="dat">'+dt+'</td></tr>';
+    return '<tr><td'+cls+'>'+lbl+'</td><td class="dat" style="text-align:right">'+R(a)+'</td><td class="dat" style="text-align:right">'+R(p)+'</td><td style="text-align:right">'+(out!==''?R(out):'')+'</td><td class="dat">'+dt+'</td></tr>';
   }
   html += cRow('Annual Conference Budget','acb');
   html += cRow('Mid-Year Budget','myb');
@@ -134,9 +141,9 @@ th{border:1px solid #666;padding:5px 8px;background:#9C8FAF;font-weight:bold;col
   html += cRow('EPISCOPAL RESIDENCE PROJECT','erp',true);
   html += cRow('TOTAL BROUGHT TO ANNUAL CONFERENCE','tac',true);
   html += '<tr><td colspan="5" style="padding:0"><table style="width:100%;border:none"><tr>';
-  html += '<td style="border:none;border-right:1px solid #666;padding:5px 8px">Total funds raised by the church &nbsp; <strong>R '+v(d.fundsRaised)+'</strong></td>';
-  html += '<td style="border:none;border-right:1px solid #666;padding:5px 8px">Total paid to the Pastor &nbsp; <strong>R '+v(d.paidPastor)+'</strong></td>';
-  html += '<td style="border:none;padding:5px 8px">Total tithes received &nbsp; <strong>R '+v(d.totalTithes)+'</strong></td>';
+  html += '<td style="border:none;border-right:1px solid #666;padding:5px 8px">Total funds raised by the church &nbsp; <strong>'+R(d.fundsRaised)+'</strong></td>';
+  html += '<td style="border:none;border-right:1px solid #666;padding:5px 8px">Total paid to the Pastor &nbsp; <strong>'+R(d.paidPastor)+'</strong></td>';
+  html += '<td style="border:none;padding:5px 8px">Total tithes received &nbsp; <strong>'+R(d.totalTithes)+'</strong></td>';
   html += '</tr></table></td></tr>';
   html += '</table></div>';
 
@@ -144,10 +151,10 @@ th{border:1px solid #666;padding:5px 8px;background:#9C8FAF;font-weight:bold;col
   html += '<div class="sec"><div class="sh">Section D &mdash; Episcopal Residence Project</div>';
   html += '<p style="font-size:9pt;font-style:italic;padding:5px 0;color:#555">Every charge is to account separately for its participation in the Episcopal Residence Project.</p>';
   html += '<table>';
-  html += row2('Amount pledged by the charge','R '+v(d.erpPledged),'Date / proof of payment reference',v(d.erpPledgedRef));
-  html += row2('Paid during this conference year','R '+v(d.erpPaidYear),'Date / proof of payment reference',v(d.erpPaidYearRef));
-  html += row2('Cumulative amount paid to date','R '+v(d.erpCumulative),'Date / proof of payment reference',v(d.erpCumRef));
-  html += '<tr><td class="tot"><strong>OUTSTANDING BALANCE ON PLEDGE</strong></td><td class="tot"><strong>R '+v(d.erpOutstanding)+'</strong></td><td class="lbl">Expected date of settlement</td><td class="dat">'+v(d.erpSettleDate)+'</td></tr>';
+  html += row2('Amount pledged by the charge',R(d.erpPledged),'Date / proof of payment reference',v(d.erpPledgedRef));
+  html += row2('Paid during this conference year',R(d.erpPaidYear),'Date / proof of payment reference',v(d.erpPaidYearRef));
+  html += row2('Cumulative amount paid to date',R(d.erpCumulative),'Date / proof of payment reference',v(d.erpCumRef));
+  html += '<tr><td class="tot"><strong>OUTSTANDING BALANCE ON PLEDGE</strong></td><td class="tot"><strong>'+R(d.erpOutstanding)+'</strong></td><td class="lbl">Expected date of settlement</td><td class="dat">'+v(d.erpSettleDate)+'</td></tr>';
   html += '</table></div>';
 
   // SECTION E
@@ -192,7 +199,7 @@ th{border:1px solid #666;padding:5px 8px;background:#9C8FAF;font-weight:bold;col
   html += '<p class="cert-txt">I certify that, to the best of my knowledge and belief, the above is a true and accurate statement of the numerical, financial and material condition of the above-named charge for this conference year.</p>';
   html += '<table>';
   html += '<tr><td class="lbl" style="width:20%"><strong>Pastor</strong></td><td style="width:30%">'+v(d.pastor)+'</td><td class="lbl" style="width:10%"><strong>Date</strong></td><td class="sig" style="width:40%">&nbsp;</td></tr>';
-  html += '<tr><td class="lbl"><strong>Steward Board Chair</strong></td><td>'+v(d.stewardBoardChair)+'</td><td class="lbl"><strong>Date</strong></td><td class="sig">&nbsp;</td></tr>';
+  html += '<tr><td class="lbl"><strong>Member of the Steward Board</strong></td><td>'+v(d.stewardBoardChair)+'</td><td class="lbl"><strong>Date</strong></td><td class="sig">&nbsp;</td></tr>';
   html += '<tr><td class="lbl"><strong>Adult Delegate</strong></td><td>'+v(d.adultDelegate)+'</td><td class="lbl"><strong>Signature</strong></td><td class="sig">&nbsp;</td></tr>';
   html += '<tr><td class="lbl"><strong>Youth Delegate</strong></td><td>'+v(d.youthDelegate)+'</td><td class="lbl"><strong>Signature</strong></td><td class="sig">&nbsp;</td></tr>';
   html += '<tr><td class="tot"><strong>Presiding Elder</strong></td><td style="background:#9C8FAF">&nbsp;</td><td class="tot"><strong>Date</strong></td><td style="background:#9C8FAF;min-height:40px">&nbsp;</td></tr>';
