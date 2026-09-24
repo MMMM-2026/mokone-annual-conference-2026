@@ -332,7 +332,7 @@ document.getElementById("roster-pe").textContent = peName;
 
 function n(v){return parseFloat(v||"0")||0;}
 function fmt(v){return v>0?v.toLocaleString("en-ZA"):"";}
-function fmtR(v){return v>0?"R "+Math.round(v).toLocaleString("en-ZA"):"";}
+function fmtR(v){return v>0?"R "+v.toLocaleString("en-ZA",{minimumFractionDigits:2,maximumFractionDigits:2}):"";}
 function gn(s,k1,k2){return n(s[k1])||n(s[k2]);}
 
 function buildSummary(churches, submissions){
@@ -444,7 +444,7 @@ function buildRoster(allChurches, subMap, district){
       totals.ad+=ad;totals.ost+=ost;totals.pan+=pan;totals.pas+=pas;
       totals.ret+=ret;totals.erp+=erp;totals.tac+=tac;
       var f=function(v){return v>0?v.toLocaleString("en-ZA"):"";};
-      var r=function(v){return v>0?"R "+Math.round(v).toLocaleString("en-ZA"):"";};
+      var r=function(v){return v>0?"R "+v.toLocaleString("en-ZA",{minimumFractionDigits:2,maximumFractionDigits:2}):"";};
       tr.innerHTML = "<td style='text-align:center'>"+(i+1)+"</td><td>"+ch.n+"</td><td>"+ch.p+"</td>"+
         "<td style='text-align:right'>"+f(mp)+"</td><td style='text-align:right'>"+f(mc)+"</td>"+
         "<td style='text-align:right'>"+f(at)+"</td><td style='text-align:right'>"+f(cv)+"</td>"+
@@ -461,7 +461,7 @@ function buildRoster(allChurches, subMap, district){
 
   // TOTALS ROW
   var f=function(v){return v>0?"<strong>"+v.toLocaleString("en-ZA")+"</strong>":"";};
-  var r=function(v){return v>0?"<strong>R "+Math.round(v).toLocaleString("en-ZA")+"</strong>":"";};
+  var r=function(v){return v>0?"<strong>R "+v.toLocaleString("en-ZA",{minimumFractionDigits:2,maximumFractionDigits:2})+"</strong>":"";};
   var ttr = document.createElement("tr");
   ttr.style.background = "#9C8FAF";
   ttr.style.fontWeight = "bold";
