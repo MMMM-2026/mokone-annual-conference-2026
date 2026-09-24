@@ -412,17 +412,44 @@ function showResub(churchName,ts,pastor,subData){
   _loadedSub = subData || null;
   var existing = document.getElementById('load-edit-btn');
   if(existing) existing.parentNode.removeChild(existing);
+  var loadBtn=null;
   if(subData){
-    var loadBtn = document.createElement('button');
+    loadBtn = document.createElement('button');
     loadBtn.id = 'load-edit-btn';
     loadBtn.textContent = '📋 Load & Edit My Previous Report';
     loadBtn.style.cssText = 'width:100%;padding:12px;background:#1a7a4a;color:white;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:"Open Sans",sans-serif;margin-bottom:10px';
     loadBtn.onclick = loadAndEdit;
-    n('resub').insertBefore(loadBtn, n('resub').querySelector('.rl'));
+  }
+  buildResubReasons();
+  if(loadBtn){
+    var ta=n('resub-reason');
+    ta.parentNode.insertBefore(loadBtn, ta.nextSibling);
+    loadBtn.style.marginTop='10px';
   }
   n('resub').classList.add('show');
   isResub=true;
 }
+
+
+// RESUBMISSION REASON: one short required sentence
+function buildResubReasons(){
+  var ta=n('resub-reason'); if(!ta) return;
+  ta.value='';
+  ta.placeholder='e.g. "Correcting number of tithers" or "Adding date of appointment"';
+}
+function checkResubReason(){
+  if(!n('resub-reason').value.trim()){
+    var e=n('rerr');
+    e.textContent='Please write a short reason for the correction, then continue.';
+    e.classList.add('show');
+    e.scrollIntoView({behavior:'smooth',block:'center'});
+    n('resub-reason').focus();
+    return false;
+  }
+  n('rerr').classList.remove('show');
+  return true;
+}
+function getResubReason(){ return v('resub-reason').trim(); }
 
 function cancelResub(){
   n('resub').classList.remove('show');
@@ -434,9 +461,7 @@ function cancelResub(){
 }
 
 function proceedResub(){
-  var reason=n('resub-reason').value.trim();
-  if(!reason){n('rerr').classList.add('show');return;}
-  n('rerr').classList.remove('show');
+  if(!checkResubReason()) return;
   n('resub').classList.remove('show');
 }
 
@@ -470,6 +495,7 @@ function co(pfx){
 
 function loadAndEdit(){
   if(!_loadedSub){return;}
+  if(!checkResubReason()) return;
   var s = _loadedSub;
   editMode = true;
   isResub = true;
@@ -653,6 +679,7 @@ function validate(s){
     hideErr("err2");return true;
   }
   if(s===3){
+    if(!checkRands(RAND_C,'err3')) return false;
     var finFields=[
       ['acb-a','Annual Conference Budget (Assessed)'],
       ['acb-p','Annual Conference Budget (Paid)'],
@@ -671,6 +698,7 @@ function validate(s){
     hideErr("err3");return true;
   }
   if(s===4){
+    if(!checkRands(RAND_D,'err4')) return false;
     // Section D - Episcopal Residence - all fields compulsory (enter 0 if nil)
     var erpFields=[
       ['erp-pledged','Amount pledged by the charge'],
@@ -707,6 +735,27 @@ function validate(s){
   }
   return true;
 }
+
+
+// RAND CHECK: a dot or comma is only for cents (max 2 digits after it).
+// Catches entries like 32.3871 where a dot was used for thousands.
+function checkRands(ids, errId){
+  for(var i=0;i<ids.length;i++){
+    var el=n(ids[i]); if(!el) continue;
+    var val=String(el.value||'').trim();
+    if(val==='') continue;
+    if(/[.,]\d{3,}$/.test(val) || /[.,].*[.,]/.test(val) || /\s/.test(val)){
+      showErr(errId,'Please check the Rand amount "'+val+'". Use a dot only for cents, e.g. 32387.50 \u2014 no dots, commas or spaces for thousands.');
+      el.style.borderColor='#c0392b'; el.focus();
+      return false;
+    }
+    el.style.borderColor='';
+  }
+  return true;
+}
+var RAND_C=['acb','myb','adv','ost','pea','ped','pec','pan','pas','ret','erp','tac']
+  .reduce(function(a,k){return a.concat([k+'-a',k+'-p']);},[]).concat(['funds-raised','paid-pastor','total-tithes']);
+var RAND_D=['erp-pledged','erp-paid-yr','erp-cumulative','erp-outstanding'];
 
 function showErr(id,msg){var e=n(id);if(e){e.textContent=msg;e.classList.add('show');}}
 function hideErr(id){var e=n(id);if(e)e.classList.remove('show');}
@@ -792,7 +841,7 @@ function submitForm(){
     stewardBoardChair:v('h-steward'),stewardBoardDate:v('h-steward-date'),
     adultDelegateSig:v('h-adult-sig'),youthDelegateSig:v('h-youth-sig'),
     isResubmission:isResub?'Yes':'No',
-    resubmissionReason:isResub?v('resub-reason'):''
+    resubmissionReason:isResub?getResubReason():''
   };
 
   var show = function(){
