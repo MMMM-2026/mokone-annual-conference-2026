@@ -757,6 +757,26 @@ var RAND_C=['acb','myb','adv','ost','pea','ped','pec','pan','pas','ret','erp','t
   .reduce(function(a,k){return a.concat([k+'-a',k+'-p']);},[]).concat(['funds-raised','paid-pastor','total-tithes']);
 var RAND_D=['erp-pledged','erp-paid-yr','erp-cumulative','erp-outstanding'];
 
+// Show a small "R" inside every money box (label only - pastors still type just the number)
+function addRandPrefixes(){
+  var ids=RAND_C.concat(RAND_D);
+  ['acb','myb','adv','ost','pea','ped','pec','pan','pas','ret','erp','tac'].forEach(function(k){ids.push(k+'-o');});
+  ids.forEach(function(id){
+    var el=document.getElementById(id);
+    if(!el||el.getAttribute('data-r')) return;
+    el.setAttribute('data-r','1');
+    var wrap=document.createElement('span');
+    wrap.style.cssText='position:relative;display:block;width:100%';
+    el.parentNode.insertBefore(wrap,el); wrap.appendChild(el);
+    var tag=document.createElement('span');
+    tag.textContent='R';
+    tag.style.cssText='position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#6b2d8b;font-weight:700;font-size:13px;pointer-events:none';
+    wrap.appendChild(tag);
+    el.style.paddingLeft='24px';
+  });
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',addRandPrefixes); else addRandPrefixes();
+
 function showErr(id,msg){var e=n(id);if(e){e.textContent=msg;e.classList.add('show');}}
 function hideErr(id){var e=n(id);if(e)e.classList.remove('show');}
 
