@@ -35,6 +35,217 @@ function fV(v){ return (!v||v==="undefined"||v===""||v==="—")?"—":v; }
 function fR(v){ var n=parseFloat(v); return (!v||isNaN(n))?"—":"R"+n.toLocaleString("en-ZA",{minimumFractionDigits:2,maximumFractionDigits:2}); }
 function fN(v){ return (!v||v==="0"||v==="")?"0":v; }
 
+
+function buildFullReports(){
+  var dName = document.getElementById("dvTitle").textContent;
+  var subs = (LD.submissions||[]).filter(function(s){ return nm(s["District"])===nm(dName); });
+  var latest = {};
+  subs.forEach(function(s){ 
+    var k = nm(s["Church"]||"");
+    if(!latest[k]||s["Timestamp"]>latest[k]["Timestamp"]) latest[k]=s;
+  });
+  var rows = Object.values(latest);
+  var el = document.getElementById("dvReports");
+  
+  if(!rows.length){
+    el.innerHTML = "<div class='no-data'>No reports submitted yet for this district.</div>";
+    return;
+  }
+
+  var html = "<div style='font-size:13px;color:#ECE7F4;margin-bottom:14px;opacity:.8'>Click on any church to view the full pastor report.</div>";
+  
+  rows.forEach(function(s, i){
+    var churchName = s["Church"]||"Unknown";
+    var pastorName = s["Pastor"]||"";
+    html += "<div class='report-card' id='rc"+i+"'>";
+    html += "<div class='report-card-hdr' onclick='toggleReport("+i+")'>";
+    html += "<div><div style='font-weight:700;font-size:14px'>"+churchName+"</div>";
+    html += "<div style='font-size:12px;opacity:.8;margin-top:2px'>"+pastorName+"</div></div>";
+    html += "<div class='report-toggle' id='rt"+i+"'>&#9660; View Report</div>";
+    html += "</div>";
+    html += "<div class='report-body' id='rb"+i+"' style='display:none'>";
+    html += renderPastorReport(s);
+    html += "<button onclick='printReport("+i+")' style='margin:16px auto;display:block;padding:10px 24px;background:#C4972A;color:white;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer'>&#128438; Print This Report</button>";
+    html += "</div></div>";
+  });
+  
+  el.innerHTML = html;
+}
+
+function toggleReport(i){
+  var rb = document.getElementById("rb"+i);
+  var rt = document.getElementById("rt"+i);
+  if(rb.style.display==="none"){
+    rb.style.display="block";
+    rt.innerHTML="&#9650; Hide Report";
+  } else {
+    rb.style.display="none";
+    rt.innerHTML="&#9660; View Report";
+  }
+}
+
+function printReport(i){
+  var rb = document.getElementById("rb"+i);
+  var win = window.open("","_blank");
+  win.document.write("<html><head><title>Pastor Report</title>");
+  win.document.write("<style>");
+  win.document.write("body{font-family:Arial,sans-serif;font-size:10.5pt;color:#000;padding:14mm}");
+  win.document.write(".rsh{background:#4A0F76;color:#fff;padding:5px 9px;font-size:10.5pt;font-weight:bold;text-transform:uppercase}");
+  win.document.write("table{width:100%;border-collapse:collapse;font-size:10pt;margin-bottom:14px}");
+  win.document.write("td{border:1px solid #666;padding:5px 8px;vertical-align:middle}");
+  win.document.write(".lbl{background:#ECE7F4;font-weight:bold;width:26%}");
+  win.document.write(".dat{background:#FFF8DF}");
+  win.document.write(".tot{background:#9C8FAF;font-weight:bold}");
+  win.document.write("th{background:#9C8FAF;font-weight:bold;padding:5px 8px;border:1px solid #666;text-align:left}");
+  win.document.write("</style></head><body>");
+  win.document.write(rb.innerHTML);
+  win.document.write("</body></html>");
+  win.document.close();
+  win.print();
+}
+
+function renderPastorReport(s){
+  function v(k1,k2){ return s[k1]||s[k2]||""; }
+  function r2(l1,v1,l2,v2){
+    return "<tr><td class='lbl' style='width:26%'>"+l1+"</td><td class='dat' style='width:24%'>"+(v1||"&nbsp;")+"</td><td class='lbl' style='width:26%'>"+l2+"</td><td class='dat' style='width:24%'>"+(v2||"&nbsp;")+"</td></tr>";
+  }
+  
+  var html = "<div style='background:white;padding:16px;border-radius:8px;margin-top:10px'>";
+  
+  // Header
+  html += "<div style='text-align:center;margin-bottom:14px'>";
+  html += "<div style='font-size:12pt;font-weight:bold;color:#4B1076;text-transform:uppercase'>African Methodist Episcopal Church</div>";
+  html += "<div style='font-size:12pt;font-weight:bold;color:#4B1076;text-transform:uppercase'>Nineteenth Episcopal District</div>";
+  html += "<div style='border:2px solid #4A0F76;padding:6px 16px;display:inline-block;margin:8px 0'><strong>Pastor's Annual Conference Summary Report — 2026</strong></div>";
+  html += "<div style='font-size:9pt;color:#555;font-style:italic'>M.M. Mokone Memorial Annual Conference</div>";
+  if(s["Timestamp"]) html += "<div style='font-size:8.5pt;color:#4B1076;font-style:italic;margin-top:4px'>Submitted: "+new Date(s["Timestamp"]).toLocaleString("en-ZA",{year:"numeric",month:"long",day:"numeric",hour:"2-digit",minute:"2-digit"})+"</div>";
+  html += "</div>";
+
+  // SECTION A
+  html += "<div class='rsh'>Section A — Identification</div><table>";
+  html += r2("Annual Conference","M.M. Mokone Memorial Annual Conference","Conference year","2026");
+  html += r2("Presiding Elder District",v("District","district"),"Name of Presiding Elder",v("Presiding Elder","presidingElder"));
+  html += r2("Name of Church / Charge",v("Church","church"),"Station or Circuit",v("Station/Circuit","stationCircuit"));
+  html += r2("If a Circuit, number of preaching points",v("Preaching Points","numPreachingPoints"),"Physical address of the church",v("Church Address","churchAddress"));
+  html += r2("Name of Pastor",v("Pastor","pastor"),"Ministerial status",v("Ministerial Status","ministerialStatus"));
+  html += r2("Date of appointment to this charge",v("Date Appointment","dateAppointment"),"Years served at this charge",v("Years Served","yearsServed"));
+  html += r2("Pastor's contact number",v("Pastor Contact","pastorContact"),"Pastor's e-mail address",v("Pastor Email","pastorEmail"));
+  html += r2("Adult Delegate",v("Adult Delegate","adultDelegate"),"Youth Delegate",v("Youth Delegate","youthDelegate"));
+  html += "</table>";
+
+  // SECTION B
+  html += "<div class='rsh'>Section B — Membership, Growth and Discipleship</div>";
+  html += "<table><tr><th style='width:40%'>Item</th><th style='width:15%'>Prev Year (2025)</th><th style='width:15%'>This Year (2026)</th><th style='width:10%'>Variance</th></tr>";
+  function bRow(lbl,pk,ck){
+    var p=v(pk),c=v(ck);
+    var vr=(p&&c)?(parseInt(c)-parseInt(p)):"";
+    return "<tr><td>"+lbl+"</td><td class='dat' style='text-align:right'>"+p+"</td><td class='dat' style='text-align:right'>"+c+"</td><td style='text-align:right'>"+(vr!=""?vr:"")+"</td></tr>";
+  }
+  html += bRow("Full members — adults","Adults Prev","Adults Curr");
+  html += bRow("Full members — youth","Youth Prev","Youth Curr");
+  html += bRow("Full members — children","Children Prev","Children Curr");
+  var tP=(parseInt(v("Adults Prev","adultsP"))||0)+(parseInt(v("Youth Prev","youthP"))||0)+(parseInt(v("Children Prev","childrenP"))||0);
+  var tC=(parseInt(v("Adults Curr","adultsC"))||0)+(parseInt(v("Youth Curr","youthC"))||0)+(parseInt(v("Children Curr","childrenC"))||0);
+  html += "<tr><td class='tot'><strong>TOTAL MEMBERSHIP</strong></td><td class='tot' style='text-align:right'>"+(tP||v("Total Prev","totalMembP"))+"</td><td class='tot' style='text-align:right'>"+(tC||v("Total Curr","totalMembC"))+"</td><td class='tot'></td></tr>";
+  html += bRow("Average Sunday attendance","Attendance Prev","Attendance Curr");
+  html += bRow("Church School enrolment","Church School Prev","Church School Curr");
+  html += bRow("Number of tithers","Tithers Prev","Tithers Curr");
+  html += bRow("Conversions","Conversions Prev","Conversions Curr");
+  html += bRow("Accessions","Accessions Prev","Accessions Curr");
+  html += bRow("Baptisms","Baptisms Prev","Baptisms Curr");
+  html += bRow("Confirmations","Confirmations Prev","Confirmations Curr");
+  html += bRow("Deaths during the year","Deaths Prev","Deaths Curr");
+  html += bRow("Transfers out and removals","Transfers Prev","Transfers Curr");
+  html += "</table>";
+
+  // SECTION C
+  html += "<div class='rsh'>Section C — Financial Report (South African Rand)</div>";
+  html += "<table><tr><th style='width:38%'>Item</th><th>Assessed</th><th>Paid</th><th>Outstanding</th><th>Date / Reference</th></tr>";
+  function cRow(lbl,ak,pk,dk,isTot){
+    var a=v(ak),p=v(pk),d=v(dk);
+    var out=(a&&p)?Math.max(0,(parseFloat(a)||0)-(parseFloat(p)||0)):"";
+    var cls=isTot?" class='tot'":"";
+    return "<tr><td"+cls+">"+lbl+"</td><td class='dat' style='text-align:right'>"+a+"</td><td class='dat' style='text-align:right'>"+p+"</td><td style='text-align:right'>"+(out!==""?out:"")+"</td><td class='dat'>"+d+"</td></tr>";
+  }
+  html += cRow("Annual Conference Budget","ACB Assessed","ACB Paid","ACB Date");
+  html += cRow("Mid-Year Budget","MYB Assessed","MYB Paid","MYB Date");
+  html += cRow("Advance Offering","ADV Assessed","ADV Paid","ADV Date");
+  html += cRow("Office Staff / Staffing","OST Assessed","OST Paid","OST Date");
+  html += cRow("Presiding Elder — Apportionment","PEA Assessed","PEA Paid","PEA Date");
+  html += cRow("Presiding Elder — District","PED Assessed","PED Paid","PED Date");
+  html += cRow("Presiding Elder — Church School","PEC Assessed","PEC Paid","PEC Date");
+  html += cRow("Presiding Elder's Annuity","PAN Assessed","PAN Paid","PAN Date");
+  html += cRow("Pastor's Annuity","PAS Assessed","PAS Paid","PAS Date");
+  html += cRow("Retirement Benefits and Risk","RET Assessed","RET Paid","RET Date");
+  html += cRow("EPISCOPAL RESIDENCE PROJECT","ERP Assessed","ERP Paid","ERP Date",true);
+  html += cRow("TOTAL BROUGHT TO ANNUAL CONFERENCE","TAC Assessed","TAC Paid","TAC Date",true);
+  html += "<tr><td colspan='2'><strong>Total funds raised:</strong> R "+v("Funds Raised","fundsRaised")+"</td>";
+  html += "<td colspan='2'><strong>Total paid to Pastor:</strong> R "+v("Paid to Pastor","paidPastor")+"</td>";
+  html += "<td><strong>Total tithes:</strong> R "+v("Total Tithes","totalTithes")+"</td></tr>";
+  html += "</table>";
+
+  // SECTION D
+  html += "<div class='rsh'>Section D — Episcopal Residence Project</div><table>";
+  html += r2("Amount pledged by the charge","R "+v("ERP Pledged","erpPledged"),"Date / proof of payment",v("ERP Pledged Ref","erpPledgedRef"));
+  html += r2("Paid during this conference year","R "+v("ERP Paid Year","erpPaidYear"),"Date / proof of payment",v("ERP Paid Year Ref","erpPaidYearRef"));
+  html += r2("Cumulative amount paid to date","R "+v("ERP Cumulative","erpCumulative"),"Date / proof of payment",v("ERP Cum Ref","erpCumRef"));
+  html += "<tr><td class='tot'><strong>OUTSTANDING BALANCE</strong></td><td class='tot'><strong>R "+v("ERP Outstanding","erpOutstanding")+"</strong></td><td class='lbl'>Expected date of settlement</td><td class='dat'>"+v("ERP Settle Date","erpSettleDate")+"</td></tr>";
+  html += "</table>";
+
+  // SECTION E
+  html += "<div class='rsh'>Section E — Organised Ministries and Components</div>";
+  html += "<table><tr><th style='width:38%'>Ministry</th><th>Active</th><th>Members</th><th>Meetings</th><th>Leader</th></tr>";
+  var mins={};
+  try{mins=JSON.parse(s["Ministries JSON"]||s["ministries"]||"{}");}catch(e){}
+  var mList=["Women's Missionary Society","Lay Organisation","Young People's and Children's Division","Sons of Allen","Allen Christian Evangelical League","Richard Allen Young Adult Council","Charlotte Maxeke Ladies Fellowship","Women in Ministry","MSWAWO + PK's","Church School","Music Ministry","Evangelism and Outreach Ministry"];
+  mList.forEach(function(m,i){
+    var info=mins[m]||{};
+    var bg=i%2===0?"":"background:#f9f7ff";
+    html += "<tr style='"+bg+"'><td>"+m+"</td><td class='dat' style='text-align:center'>"+(info.active||"")+"</td><td class='dat' style='text-align:center'>"+(info.members||"")+"</td><td class='dat' style='text-align:center'>"+(info.meetings||"")+"</td><td class='dat'>"+(info.leader||"")+"</td></tr>";
+  });
+  html += "</table>";
+
+  // SECTION F
+  html += "<div class='rsh'>Section F — Property, Governance and Compliance</div><table>";
+  html += r2("Title deed held? (Y/N)",v("Title Deed","titleDeed"),"If yes, in whose name?",v("Title Deed Name","titleDeedName"));
+  html += r2("Registered in name of A.M.E.? (Y/N)",v("AME Registered","ameRegistered"),"Title deed / erf number",v("ERF Number","erfNumber"));
+  html += r2("Church property insured? (Y/N)",v("Insured","insured"),"Insurer and policy number",v("Insurer Policy","insurerPolicy"));
+  html += r2("Parsonage provided? (Y/N)",v("Parsonage","parsonage"),"Condition of parsonage",v("Parsonage Cond","parsonageCond"));
+  html += r2("NPO registration number",v("NPO Number","npoNumber"),"SARS PBO / tax exemption number",v("SARS Number","sarsNumber"));
+  html += r2("Bank account in name of A.M.E.? (Y/N)",v("Bank AME","bankAME"),"Number of authorised signatories",v("Num Signatories","numSignatories"));
+  html += r2("Annual financial statements prepared? (Y/N)",v("Fin Statements","finStatements"),"Date submitted to Presiding Elder",v("Fin Statements Date","finStatementsDate"));
+  html += r2("Steward/Trustee Board constituted? (Y/N)",v("Board Constituted","boardConstituted"),"Date of last Church Conference held",v("Last Church Conf","lastChurchConf"));
+  html += "</table>";
+
+  // SECTION G
+  html += "<div class='rsh'>Section G — Narrative Report</div><table>";
+  html += "<tr><td class='tot' colspan='2'><strong>Two major accomplishments of this charge during the conference year</strong></td></tr>";
+  html += "<tr><td style='width:50%;vertical-align:top;padding:8px;border:1px solid #666'>1. "+v("Accomplishment 1","accomplishment1")+"</td><td style='vertical-align:top;padding:8px;border:1px solid #666'>2. "+v("Accomplishment 2","accomplishment2")+"</td></tr>";
+  html += "<tr><td class='tot' colspan='2'><strong>Two major challenges faced by this charge during the conference year</strong></td></tr>";
+  html += "<tr><td style='vertical-align:top;padding:8px;border:1px solid #666'>1. "+v("Challenge 1","challenge1")+"</td><td style='vertical-align:top;padding:8px;border:1px solid #666'>2. "+v("Challenge 2","challenge2")+"</td></tr>";
+  html += "<tr><td class='tot' colspan='2'><strong>Ministry and outreach undertaken in the community</strong></td></tr>";
+  html += "<tr><td colspan='2' style='padding:8px;border:1px solid #666;min-height:50px'>"+v("Outreach","outreach")+"</td></tr>";
+  html += "<tr><td class='tot' colspan='2'><strong>Matters requiring the attention of the Presiding Elder or the Bishop</strong></td></tr>";
+  html += "<tr><td colspan='2' style='padding:8px;border:1px solid #666;min-height:40px'>"+v("Matters for PE","mattersForPE")+"</td></tr>";
+  html += "</table>";
+
+  // SECTION H
+  html += "<div class='rsh'>Section H — Certification</div>";
+  html += "<table>";
+  html += r2("Pastor",v("Pastor","pastor"),"Date","");
+  html += r2("Steward Board Chair",v("Steward Chair","stewardBoardChair"),"Date","");
+  html += r2("Adult Delegate",v("Adult Delegate","adultDelegate"),"Signature","");
+  html += r2("Youth Delegate",v("Youth Delegate","youthDelegate"),"Signature","");
+  html += "<tr><td class='tot'><strong>Presiding Elder</strong></td><td class='tot'>&nbsp;</td><td class='tot'><strong>Date</strong></td><td class='tot'>&nbsp;</td></tr>";
+  html += "</table>";
+
+  html += "<div style='text-align:center;font-size:8.5pt;color:#555;margin-top:14px;border-top:1px solid #ccc;padding-top:8px'>African Methodist Episcopal Church &middot; 19th Episcopal District &middot; M.M. Mokone Memorial Annual Conference 2026<br>Senior Bishop Wilfred Jacobus Messiah, Presiding Prelate</div>";
+  html += "</div>";
+  
+  return html;
+}
+
+
 function fetchLive(){
   var ctrl = new AbortController();
   setTimeout(function(){ ctrl.abort(); }, 8000);
@@ -106,8 +317,9 @@ function switchTab(tabsId, paneIds, idx){
 }
 
 function dvTab(name, idx){
-  switchTab("dvTabs", ["dvList","dvSum"], idx);
+  switchTab("dvTabs", ["dvList","dvSum","dvReports"], idx);
   if(name==="sum") buildDistrictSummary();
+  if(name==="reports") buildFullReports();
 }
 
 function avTab(name, idx){

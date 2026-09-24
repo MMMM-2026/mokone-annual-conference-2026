@@ -158,6 +158,19 @@ body{font-family:'Open Sans',sans-serif;background:#1a0a2e;color:white;min-heigh
 .comp-val{font-size:13px;font-weight:600;color:white}
 .back-btn{background:rgba(255,255,255,.07);color:rgba(255,255,255,.65);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:9px 18px;font-size:12px;cursor:pointer;width:100%;margin-top:12px;font-family:'Open Sans',sans-serif}
 .footer-bar{text-align:center;padding:22px 20px;color:rgba(255,255,255,.22);font-size:10px;margin-top:14px;border-top:1px solid rgba(255,255,255,.05)}
+
+.report-card{background:rgba(255,255,255,.06);border-radius:10px;margin-bottom:10px;overflow:hidden}
+.report-card-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;color:#ECE7F4}
+.report-card-hdr:hover{background:rgba(255,255,255,.08)}
+.report-toggle{font-size:12px;color:#C4972A;font-weight:700;white-space:nowrap;margin-left:10px}
+.report-body{padding:0 12px 12px}
+.rsh{background:#4A0F76;color:#fff;padding:5px 9px;font-size:10pt;font-weight:bold;text-transform:uppercase;margin-bottom:0}
+.report-body table{width:100%;border-collapse:collapse;font-size:10pt;margin-bottom:12px;background:white}
+.report-body td{border:1px solid #666;padding:5px 8px;vertical-align:middle;color:#000}
+.report-body th{background:#9C8FAF;font-weight:bold;padding:5px 8px;border:1px solid #666;text-align:left;color:#000}
+.report-body .lbl{background:#ECE7F4;font-weight:bold;color:#000}
+.report-body .dat{background:#FFF8DF;color:#000}
+.report-body .tot{background:#9C8FAF;font-weight:bold;color:#000}
 </style>
 </head>
 <body>
@@ -244,10 +257,11 @@ body{font-family:'Open Sans',sans-serif;background:#1a0a2e;color:white;min-heigh
     <div class="tabs" id="dvTabs">
       <button class="tab-btn on" onclick="dvTab('list',0)">&#128203; Church List</button>
       <button class="tab-btn" onclick="dvTab('sum',1)">&#128202; District Summary</button>
-      
+      <button class="tab-btn" onclick="dvTab('reports',2)">&#128196; Full Reports</button>
     </div>
     <div class="tab-pane on" id="dvList"></div>
     <div class="tab-pane" id="dvSum"></div>
+    <div class="tab-pane" id="dvReports"></div>
     
   </div>
   <button class="back-btn" onclick="goBack()">&#8592; Sign Out</button>
