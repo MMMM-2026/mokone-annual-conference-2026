@@ -369,7 +369,8 @@ function checkResub(churchName, districtName){
       .then(function(data){
         n('chk').classList.remove('show');
         var ex=(data.submissions||[]).filter(function(s){
-          return nm(s['Church']||'')===nm(churchName);
+          return (s['Church']||'').trim().toLowerCase()===churchName.trim().toLowerCase()&&
+                 (s['District']||'').trim().toLowerCase()===districtName.trim().toLowerCase();
         });
         var subData = ex.length>0 ? ex[ex.length-1] : null;
         showResub(churchName,lp,subData?subData['Pastor']:null,subData);
@@ -699,6 +700,11 @@ function hideErr(id){var e=n(id);if(e)e.classList.remove('show');}
 
 // SUBMIT
 function submitForm(){
+  // Final check before sending: every required field in Sections A-G must be filled.
+  // Protects edited reports where a box was cleared by mistake.
+  for(var sec=1;sec<=7;sec++){
+    if(!validate(sec)){ goStep(sec); validate(sec); return; }
+  }
   if(!validate(8))return;
   var dv=v('district'), cv_=v('church');
   var ch=D[dv].c[+cv_];
