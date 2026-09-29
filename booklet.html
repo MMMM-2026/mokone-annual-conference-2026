@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>43rd Session — M.M. Mokone Annual Conference 2026</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cinzel:wght@400;600;700&display=swap">
+<style>
+/* ═══════════════════════════════════════════════════
+   COLOUR PALETTE
+   ═══════════════════════════════════════════════════ */
+:root{
+  --purple:    #4A0F76;
+  --deep:      #14022e;
+  --gold:      #C4972A;
+  --lavender:  #ECE7F4;
+  --cream:     #FFF8DF;
+  --muted-pur: #9C8FAF;
+  --row-alt:   #f5f0fa;
+  --border:    #b8aac8;
+  --text:      #1a1a1a;
+  --sub-text:  #555;
+}
+
+/* ═══════════════════════════════════════════════════
+   PAGE SETUP
+   ═══════════════════════════════════════════════════ */
+@page { size: A4 portrait; margin: 0; }
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body{
+  font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  font-size: 10.5pt;
+  color: var(--text);
+  background: #dbd5cc;
+  margin: 0; padding: 0;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* ── INDIVIDUAL PAGE WRAPPER ── */
+.page{
+  width: 210mm;
+  min-height: 297mm;
+  background: white;
+  margin: 0 auto 12px;
+  padding: 0;
+  position: relative;
+  box-shadow: 0 3px 18px rgba(0,0,0,.18);
+  overflow: hidden;
+}
+
+.page-inner{
+  padding: 0 18mm 16mm;
+}
+
+@media print {
+  body{ background: white; }
+  .page{
+    width: 100%;
+    min-height: 0;
+    height: auto;
+    margin: 0;
+    box-shadow: none;
+    break-before: page;
+    page-break-before: always;
+  }
+  .page:first-of-type{
+    break-before: auto;
+    page-break-before: auto;
+  }
+  .no-print{ display: none !important; }
+}
+
+/* ═══════════════════════════════════════════════════
+   TOOLBAR (screen only)
+   ═══════════════════════════════════════════════════ */
+.toolbar{
+  background: var(--deep);
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 3px solid var(--gold);
+  font-family: Arial, sans-serif;
+  font-size: 12.5px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+.toolbar .t-title{ font-family: 'Cinzel', Georgia, serif; font-size: 13px; letter-spacing: .5px; }
+.toolbar button{
+  padding: 7px 18px;
+  background: var(--gold);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  letter-spacing: .3px;
+}
+.toolbar button:hover{ background: #a87e22; }
+
+/* ═══════════════════════════════════════════════════
+   COVER PAGE
+   ═══════════════════════════════════════════════════ */
+.cover-page{
+  background: linear-gradient(175deg, #12012a 0%, #220645 35%, #1a0338 70%, #0d0020 100%);
+  padding: 0;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.cover-page .cv-inner{
+  padding: 28mm 22mm;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+/* decorative cross watermark */
+.cover-page::before{
+  content: "+";
+  position: absolute;
+  font-size: 520px;
+  line-height: 1;
+  color: rgba(196,151,42,.045);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  pointer-events: none;
+  z-index: 1;
+  font-family: 'Cinzel', serif;
+}
+/* top + bottom gold lines */
+.cv-gold-top{
+  position: absolute; top: 0; left: 0; right: 0; height: 8px;
+  background: linear-gradient(90deg, transparent, var(--gold), var(--gold), transparent);
+  z-index: 3;
+}
+.cv-gold-bot{
+  position: absolute; bottom: 0; left: 0; right: 0; height: 8px;
+  background: linear-gradient(90deg, transparent, var(--gold), var(--gold), transparent);
+  z-index: 3;
+}
+.cv-tag{
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 8pt;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(196,151,42,.75);
+  margin-bottom: 18px;
+}
+.cv-main-title{
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 21pt;
+  font-weight: 700;
+  color: white;
+  line-height: 1.25;
+  margin-bottom: 6px;
+  text-shadow: 0 3px 28px rgba(0,0,0,.6);
+  letter-spacing: .5px;
+}
+.cv-conf-name{
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 13pt;
+  font-style: italic;
+  color: rgba(255,255,255,.72);
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+.cv-badge{
+  display: inline-block;
+  border: 1.5px solid var(--gold);
+  padding: 9px 30px;
+  margin-bottom: 22px;
+}
+.cv-session{
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 13pt;
+  color: var(--gold);
+  letter-spacing: 3px;
+}
+.cv-date{
+  font-size: 11pt;
+  color: rgba(255,255,255,.78);
+  margin-bottom: 6px;
+}
+.cv-sub-date{
+  font-size: 8.5pt;
+  color: rgba(196,151,42,.6);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 32px;
+}
+.cv-divider{
+  border: none;
+  border-top: 1px solid rgba(196,151,42,.28);
+  margin: 0 auto 22px;
+  width: 80%;
+}
+.cv-bishop{
+  font-size: 9.5pt;
+  color: rgba(255,255,255,.65);
+  line-height: 2;
+}
+.cv-bishop strong{ color: rgba(255,255,255,.85); }
+.cv-pes{
+  margin-top: 16px;
+  font-size: 8.5pt;
+  color: rgba(196,151,42,.65);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 6px;
+}
+.cv-pe-list{
+  font-size: 8.5pt;
+  color: rgba(255,255,255,.5);
+  line-height: 1.9;
+}
+
+/* ═══════════════════════════════════════════════════
+   PAGE HEADER / DISTRICT BANNER
+   ═══════════════════════════════════════════════════ */
+.dist-banner{
+  background: var(--purple);
+  color: white;
+  padding: 10px 18mm;
+  border-bottom: 3.5px solid var(--gold);
+  margin-bottom: 0;
+}
+.dist-banner-name{
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 12pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+}
+.dist-banner-sub{
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 8.5pt;
+  color: rgba(255,255,255,.72);
+  margin-top: 2px;
+  font-style: italic;
+}
+
+/* ═══════════════════════════════════════════════════
+   SECTION HEADER (inside tables / sections)
+   ═══════════════════════════════════════════════════ */
+.sh{
+  background: var(--purple);
+  color: white;
+  padding: 5px 10px;
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 9pt;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+  width: 100%;
+}
+
+/* ═══════════════════════════════════════════════════
+   TABLES
+   ═══════════════════════════════════════════════════ */
+table{ width: 100%; border-collapse: collapse; font-size: 9.5pt; }
+td, th{ border: 1px solid #c8bcd6; padding: 3.5px 7px; vertical-align: middle; }
+th{
+  background: var(--purple);
+  color: white;
+  text-align: center;
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 8pt;
+  font-weight: 600;
+  letter-spacing: .3px;
+}
+th[style*="text-align:left"], th.lft{ text-align: left; }
+.lbl{ background: var(--lavender); font-weight: 600; }
+.dat{ background: var(--cream); }
+.tot{
+  background: var(--muted-pur);
+  color: white;
+  font-weight: 700;
+}
+.alt td{ background: var(--row-alt); }
+
+/* numeric cells */
+.num{ text-align: right; }
+.pos{ color: #0a6e0a; }
+.neg{ color: #8b0000; }
+
+/* ═══════════════════════════════════════════════════
+   TOC
+   ═══════════════════════════════════════════════════ */
+.toc-intro{
+  font-size: 10pt;
+  color: var(--sub-text);
+  font-style: italic;
+  margin: 12px 0 20px;
+  line-height: 1.6;
+}
+.toc-district{
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: 14px;
+  margin-bottom: 5px;
+  padding-bottom: 4px;
+  border-bottom: 1.5px solid var(--gold);
+}
+.toc-dist-name{
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 11pt;
+  font-weight: 700;
+  color: var(--purple);
+}
+.toc-dist-pe{
+  font-size: 8.5pt;
+  color: var(--sub-text);
+  font-style: italic;
+}
+.toc-church{
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-bottom: 3px;
+  padding-left: 14px;
+  font-size: 9.5pt;
+}
+.toc-dots{ flex: 1; border-bottom: 1px dotted #ccc; height: 1em; }
+
+/* ═══════════════════════════════════════════════════
+   PE SUMMARY PAGE
+   ═══════════════════════════════════════════════════ */
+.pe-identity{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  margin-bottom: 12px;
+  border: 1px solid #c8bcd6;
+}
+.pe-identity .item{
+  padding: 8px 12px;
+  border-bottom: 1px solid #e0d8ec;
+}
+.pe-identity .item:nth-child(odd){ background: var(--lavender); }
+.pe-identity .item:nth-child(even){ background: var(--cream); }
+.pe-identity .item .lbl-sm{
+  font-size: 7.5pt;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--purple);
+  font-weight: 700;
+  display: block;
+  margin-bottom: 2px;
+}
+.pe-identity .item .val{
+  font-size: 10.5pt;
+  font-weight: 600;
+  color: var(--deep);
+}
+
+/* ═══════════════════════════════════════════════════
+   CHURCH REPORT
+   ═══════════════════════════════════════════════════ */
+.church-title-bar{
+  border-bottom: 2.5px solid var(--gold);
+  padding: 8px 0 6px;
+  margin-bottom: 9px;
+}
+.church-name{
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 14pt;
+  font-weight: 700;
+  color: var(--deep);
+  line-height: 1.2;
+}
+.church-sub{
+  font-size: 8.5pt;
+  color: var(--sub-text);
+  margin-top: 3px;
+  font-style: italic;
+}
+
+.id-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid #c8bcd6;
+  margin-bottom: 10px;
+}
+.id-grid .cell{
+  padding: 4px 8px;
+  border: 1px solid #c8bcd6;
+}
+.id-grid .cell .k{
+  font-size: 7.5pt;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  color: var(--purple);
+  font-weight: 700;
+  display: block;
+}
+.id-grid .cell .v{
+  font-size: 9.5pt;
+  color: var(--deep);
+  font-weight: 600;
+}
+.id-grid .cell:nth-child(odd){ background: var(--lavender); }
+.id-grid .cell:nth-child(even){ background: var(--cream); }
+
+.sec{ margin-bottom: 10px; }
+.sec table{ margin-top: 0; }
+
+/* narrative */
+.narr-block{
+  border: 1px solid #c8bcd6;
+  margin-bottom: 1px;
+}
+.narr-head{
+  background: var(--lavender);
+  padding: 4px 10px;
+  font-weight: 700;
+  font-size: 9pt;
+  color: var(--purple);
+  border-bottom: 1px solid #c8bcd6;
+}
+.narr-body{
+  padding: 6px 10px;
+  font-size: 9pt;
+  line-height: 1.55;
+  background: var(--cream);
+  color: var(--deep);
+}
+
+/* gold accent rule */
+.gold-rule{ border: none; border-top: 1.5px solid var(--gold); margin: 9px 0; }
+
+/* ═══════════════════════════════════════════════════
+   PAGE FOOTER
+   ═══════════════════════════════════════════════════ */
+.page-foot{
+  position: absolute;
+  bottom: 6mm;
+  left: 18mm;
+  right: 18mm;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #d0c8da;
+  padding-top: 4px;
+  font-size: 7.5pt;
+  color: #aaa;
+  font-style: italic;
+}
+
+/* ═══════════════════════════════════════════════════
+   LOADING / ERROR
+   ═══════════════════════════════════════════════════ */
+.load-msg{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  font-size: 12px;
+  font-family: Arial, sans-serif;
+  color: #9b7bb5;
+  min-height: 160px;
+}
+
+/* ═══════════════════════════════════════════════════
+   PRINT OVERRIDES
+   ═══════════════════════════════════════════════════ */
+@media print {
+  .sh, .lbl, .dat, .tot, th,
+  .dist-banner, .dist-banner *,
+  .pe-identity .item:nth-child(odd),
+  .pe-identity .item:nth-child(even),
+  .id-grid .cell:nth-child(odd),
+  .id-grid .cell:nth-child(even),
+  .narr-head, .narr-body, .narr-block,
+  .alt td, .toc-dist-name,
+  .cover-page, .cover-page *{
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .sec{ page-break-inside: avoid; }
+  .page-foot{ position: fixed; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════
+     TOOLBAR (no-print)
+════════════════════════════════════════════════ -->
+<div class="toolbar no-print">
+  <span class="t-title">&#10022; M.M. Mokone Memorial Annual Conference &mdash; 43rd Session Booklet 2026</span>
+  <button onclick="window.print()">&#128438;&ensp;Print / Save as PDF</button>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     COVER PAGE  (user may replace this section)
+════════════════════════════════════════════════ -->
+<div class="page cover-page">
+  <div class="cv-gold-top"></div>
+  <div class="cv-gold-bot"></div>
+  <div class="cv-inner">
+    <div class="cv-tag">African Methodist Episcopal Church &middot; 19th Episcopal District</div>
+
+    <div class="cv-main-title">
+      Mangena Maake Mokone<br>Memorial Annual Conference
+    </div>
+    <div class="cv-conf-name">
+      Presiding Elders&rsquo; Summaries &amp; Pastors&rsquo; Annual Reports
+    </div>
+
+    <div class="cv-badge">
+      <div class="cv-session">43rd Session &mdash; 2026</div>
+    </div>
+
+    <div class="cv-date">8 October 2026</div>
+    <div class="cv-sub-date">Annual Conference Day</div>
+
+    <hr class="cv-divider">
+
+    <div class="cv-bishop">
+      <strong>Presiding Prelate</strong><br>
+      Senior Bishop Wilfred Jacobus Messiah<br>
+      <span style="font-size:8pt;color:rgba(255,255,255,.45)">19th Episcopal District, African Methodist Episcopal Church</span><br>
+      <br>
+      <strong>Supervisor</strong> &mdash; Moth. Carol Isabella Messiah
+    </div>
+
+    <div class="cv-pes">Presiding Elders</div>
+    <div class="cv-pe-list">
+      Rev. LS Moobi &mdash; Ga-Rankuwa District<br>
+      Rev. GO Motabogi &mdash; Bela-Bela District<br>
+      Rev. MDT Makhene &mdash; Polokwane District<br>
+      Rev. NM Tshivhase &mdash; Vhembe District<br>
+      Rev. DO Leepo &mdash; North End District<br>
+      Rev. MA Mexico &mdash; Capital District
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     TABLE OF CONTENTS
+════════════════════════════════════════════════ -->
+<div class="page" id="toc-page">
+  <div class="dist-banner">
+    <div class="dist-banner-name">Table of Contents</div>
+    <div class="dist-banner-sub">43rd Session &mdash; M.M. Mokone Memorial Annual Conference 2026</div>
+  </div>
+  <div class="page-inner" style="padding-top:12px">
+    <div class="toc-intro">
+      This booklet contains the Presiding Elder&rsquo;s Summary Report for each district followed by
+      individual church reports for all congregations in the M.M. Mokone Memorial Annual Conference.
+      Reports are presented in district order, with each district&rsquo;s summary preceding its church reports.
+    </div>
+    <div id="toc-content"><div class="load-msg">&#8635;&ensp;Building table of contents&hellip;</div></div>
+  </div>
+  <div class="page-foot">
+    <span>M.M. Mokone Memorial Annual Conference 2026 &middot; 43rd Session</span>
+    <span>Senior Bishop Wilfred Jacobus Messiah, Presiding Prelate</span>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     DYNAMIC BOOKLET CONTENT
+════════════════════════════════════════════════ -->
+<div id="booklet-content">
+  <div class="page">
+    <div class="load-msg">&#8635;&ensp;Loading reports from all 68 churches&hellip; (this may take a few seconds)</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     JAVASCRIPT — BUILD THE BOOKLET
+════════════════════════════════════════════════ -->
+<script>
+(function(){
+
+/* ── CONSTANTS ── */
+var API = 'https://script.google.com/macros/s/AKfycbzuLLT1P3bypTDws-lwex8Ieq_svIeXJpjN3a5yX5R-GSLWH4t9C8T3zyMRXT5WWac78Q/exec';
+
+var DISTRICTS = [
+  { name:'Ga-Rankuwa District',  pe:'Rev. LS Moobi'     },
+  { name:'Bela-Bela District',   pe:'Rev. GO Motabogi'  },
+  { name:'Polokwane District',   pe:'Rev. MDT Makhene'  },
+  { name:'Vhembe District',      pe:'Rev. NM Tshivhase' },
+  { name:'North End District',   pe:'Rev. DO Leepo'     },
+  { name:'Capital District',     pe:'Rev. MA Mexico'    }
+];
+
+var MLIST = [
+  "Women's Missionary Society",
+  "Lay Organisation",
+  "Young People's and Children's Division",
+  "Sons of Allen",
+  "Allen Christian Evangelical League",
+  "Richard Allen Young Adult Council",
+  "Charlotte Maxeke Ladies Fellowship",
+  "Women in Ministry",
+  "MSWAWO + PK's",
+  "Church School",
+  "Music Ministry",
+  "Evangelism and Outreach Ministry"
+];
+
+/* ── FIELD HELPERS ── */
+function g(r) {
+  for (var i = 1; i < arguments.length; i++) {
+    var v = r[arguments[i]];
+    if (v !== undefined && v !== null && String(v).trim() !== '') return String(v).trim();
+  }
+  return '';
+}
+function num(r) {
+  var v = g.apply(null, arguments);
+  return parseFloat(String(v).replace(/[^\d.\-]/g, '')) || 0;
+}
+function rands(val) {
+  var v = typeof val === 'number' ? val : parseFloat(String(val || '').replace(/[^\d.\-]/g, '')) || 0;
+  if (!v && v !== 0) return '&mdash;';
+  return 'R ' + v.toLocaleString('en-ZA', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+function diff(a, b) {
+  if (!a && !b) return '';
+  var d = b - a;
+  var cls = d > 0 ? 'pos' : d < 0 ? 'neg' : '';
+  return '<span class="' + cls + '">' + (d > 0 ? '+' : '') + d + '</span>';
+}
+function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+/* ── RETRIEVE STANDARD FIELD NAMES ── */
+function cn(r) { return g(r, 'church', 'Church', 'churchName'); }
+function dn(r) { return g(r, 'district', 'District'); }
+function pn(r) { return g(r, 'pastor', 'Pastor'); }
+function ts(r) { return g(r, 'timestamp', 'Timestamp'); }
+
+/* ── PE SUMMARY PAGE ── */
+function buildPE(dist, churches) {
+  var T = {
+    adultsC:0, youthC:0, childrenC:0, membC:0,
+    attC:0, convC:0, accC:0, baptC:0,
+    funds:0, paidPastor:0, tac:0, tithes:0
+  };
+
+  churches.forEach(function(r) {
+    var aC = num(r,'adultsC');
+    var yC = num(r,'youthC');
+    var cC = num(r,'childrenC');
+    var mC = num(r,'totalMembC','Total Memb C') || (aC + yC + cC);
+    T.adultsC   += aC;
+    T.youthC    += yC;
+    T.childrenC += cC;
+    T.membC     += mC;
+    T.attC      += num(r,'attendanceC');
+    T.convC     += num(r,'conversionsC');
+    T.accC      += num(r,'accessionsC');
+    T.baptC     += num(r,'baptismsC');
+    T.funds     += num(r,'fundsRaised');
+    T.paidPastor+= num(r,'paidPastor');
+    T.tac       += num(r,'tacPaid');
+    T.tithes    += num(r,'totalTithes');
+  });
+
+  var h = '';
+  h += '<div class="page">';
+
+  // District banner
+  h += '<div class="dist-banner">';
+  h += '<div class="dist-banner-name">' + esc(dist.name) + '</div>';
+  h += '<div class="dist-banner-sub">Presiding Elder&rsquo;s Summary Report &mdash; 43rd Session, 8 October 2026</div>';
+  h += '</div>';
+
+  h += '<div class="page-inner" style="padding-top:12px">';
+
+  // PE identity block
+  h += '<div class="pe-identity" style="margin-bottom:12px">';
+  h += '<div class="item"><span class="lbl-sm">Presiding Elder</span><span class="val">' + esc(dist.pe) + '</span></div>';
+  h += '<div class="item"><span class="lbl-sm">District</span><span class="val">' + esc(dist.name) + '</span></div>';
+  h += '<div class="item"><span class="lbl-sm">Session</span><span class="val">43rd Annual Conference &mdash; 2026</span></div>';
+  h += '<div class="item"><span class="lbl-sm">Churches Reporting</span><span class="val">' + churches.length + ' churches</span></div>';
+  h += '</div>';
+
+  hr(h); h += '<hr class="gold-rule">';
+
+  // Membership aggregate
+  h += '<div class="sec">';
+  h += '<div class="sh">District Membership &amp; Growth Summary</div>';
+  h += '<table>';
+  h += '<tr><th class="lft" style="width:42%">Category</th><th style="width:22%">Total &mdash; District</th><th>Notes</th></tr>';
+  h += tr2('Full Members &mdash; Adults',      T.adultsC.toLocaleString('en-ZA'));
+  h += tr2('Full Members &mdash; Youth',       T.youthC.toLocaleString('en-ZA'));
+  h += tr2('Full Members &mdash; Children',    T.childrenC.toLocaleString('en-ZA'));
+  h += '<tr><td class="tot"><strong>TOTAL MEMBERSHIP &mdash; ' + esc(dist.name.toUpperCase()) + '</strong></td><td class="tot num"><strong style="font-size:11pt">' + T.membC.toLocaleString('en-ZA') + '</strong></td><td class="tot">&nbsp;</td></tr>';
+  h += tr2('Average Sunday Attendance (aggregated)',  T.attC.toLocaleString('en-ZA'));
+  h += tr2('Total Conversions',     T.convC);
+  h += tr2('Total Accessions',      T.accC);
+  h += tr2('Total Baptisms',        T.baptC);
+  h += '</table></div>';
+
+  // Financial aggregate
+  h += '<div class="sec">';
+  h += '<div class="sh">District Financial Summary</div>';
+  h += '<table>';
+  h += '<tr><th class="lft" style="width:55%">Item</th><th style="width:45%">Total for District</th></tr>';
+  h += '<tr><td class="lbl">Total Funds Raised (all churches)</td><td class="dat num"><strong>' + rands(T.funds) + '</strong></td></tr>';
+  h += '<tr class="alt"><td class="lbl">Total Paid to Pastors (all compensation)</td><td class="dat num">' + rands(T.paidPastor) + '</td></tr>';
+  if (T.tithes) h += '<tr><td class="lbl">Total Tithes Received</td><td class="dat num">' + rands(T.tithes) + '</td></tr>';
+  h += '<tr><td class="tot"><strong>TOTAL BROUGHT TO ANNUAL CONFERENCE</strong></td><td class="tot num"><strong style="font-size:11pt">' + rands(T.tac) + '</strong></td></tr>';
+  h += '</table></div>';
+
+  // Church listing
+  h += '<div class="sec">';
+  h += '<div class="sh">Churches in ' + esc(dist.name) + ' &mdash; Key Figures (' + churches.length + ' churches)</div>';
+  if (churches.length === 0) {
+    h += '<div style="padding:12px;font-style:italic;color:#888;font-size:9pt">No submissions received for this district.</div>';
+  } else {
+    h += '<table>';
+    h += '<tr>';
+    h += '<th class="lft" style="width:35%">Church</th>';
+    h += '<th style="width:12%">Memb.</th>';
+    h += '<th style="width:8%">Conv.</th>';
+    h += '<th style="width:8%">Acc.</th>';
+    h += '<th style="width:8%">Bapt.</th>';
+    h += '<th>Funds Raised</th>';
+    h += '<th>To Conference</th>';
+    h += '</tr>';
+    churches.forEach(function(r, idx) {
+      var mC = num(r,'totalMembC','Total Memb C') || (num(r,'adultsC') + num(r,'youthC') + num(r,'childrenC'));
+      var rowCls = idx % 2 === 0 ? '' : 'alt';
+      h += '<tr class="' + rowCls + '">';
+      h += '<td style="font-weight:600">' + esc(cn(r)) + '</td>';
+      h += '<td class="num">' + (mC || '&mdash;') + '</td>';
+      h += '<td class="num">' + (num(r,'conversionsC') || '&mdash;') + '</td>';
+      h += '<td class="num">' + (num(r,'accessionsC')  || '&mdash;') + '</td>';
+      h += '<td class="num">' + (num(r,'baptismsC')    || '&mdash;') + '</td>';
+      h += '<td class="num">' + rands(num(r,'fundsRaised')) + '</td>';
+      h += '<td class="num">' + rands(num(r,'tacPaid')) + '</td>';
+      h += '</tr>';
+    });
+    h += '</table>';
+  }
+  h += '</div>'; // sec (church listing)
+
+  h += '</div>'; // page-inner
+
+  // Footer
+  h += '<div class="page-foot">';
+  h += '<span>M.M. Mokone Annual Conference 2026 &middot; 43rd Session &middot; ' + esc(dist.name) + '</span>';
+  h += '<span>' + esc(dist.pe) + ' &middot; Presiding Elder</span>';
+  h += '</div>';
+
+  h += '</div>'; // page
+  return h;
+}
+
+/* helper for PE two-col table row */
+function tr2(label, val) {
+  return '<tr><td class="lbl">' + esc(label) + '</td><td class="dat num"><strong>' + val + '</strong></td><td class="dat">&nbsp;</td></tr>';
+}
+function hr(x) { return x; } // placeholder — not needed
+
+/* ── INDIVIDUAL CHURCH REPORT ── */
+function buildChurch(r, dist) {
+  var church   = cn(r);
+  var pastor   = pn(r);
+  var pe       = g(r,'presidingElder');
+
+  // Section A — Identity
+  var status   = g(r,'ministerialStatus');
+  var years    = g(r,'yearsServed');
+  var station  = g(r,'stationCircuit');
+  var preachPts= g(r,'numPreachingPoints');
+  var apptDate = g(r,'dateAppointment');
+  var adultDel = g(r,'adultDelegate');
+  var youthDel = g(r,'youthDelegate');
+  var contact  = g(r,'pastorContact');
+  var email    = g(r,'pastorEmail');
+  var address  = g(r,'churchAddress');
+
+  // Section B — Membership prev/curr
+  var aP = num(r,'adultsP'),    aC = num(r,'adultsC');
+  var yP = num(r,'youthP'),     yC = num(r,'youthC');
+  var cP = num(r,'childrenP'),  cC = num(r,'childrenC');
+  var tP = num(r,'totalMembP') || (aP + yP + cP);
+  var tC = num(r,'totalMembC','Total Memb C') || (aC + yC + cC);
+  var atP= num(r,'attendanceP'), atC = num(r,'attendanceC');
+  var csP= num(r,'churchSchoolP'), csC = num(r,'churchSchoolC');
+  var titP=num(r,'tithersP'), titC = num(r,'tithersC');
+  var conP=num(r,'conversionsP'), conC = num(r,'conversionsC');
+  var accP=num(r,'accessionsP'),  accC = num(r,'accessionsC');
+  var bapP=num(r,'baptismsP'),    bapC = num(r,'baptismsC');
+  var cfmP=num(r,'confirmationsP'), cfmC = num(r,'confirmationsC');
+  var dthP=num(r,'deathsP'),      dthC  = num(r,'deathsC');
+  var trfP=num(r,'transfersP'),   trfC  = num(r,'transfersC');
+
+  // Section C — Apportionments: Assessed / Paid / Date for each item
+  var acbA=num(r,'acbAssessed'), acbP=num(r,'acbPaid'), acbD=g(r,'acbDate');
+  var mybA=num(r,'mybAssessed'), mybP=num(r,'mybPaid'), mybD=g(r,'mybDate');
+  var advA=num(r,'advAssessed'), advP=num(r,'advPaid'), advD=g(r,'advDate');
+  var ostA=num(r,'ostAssessed'), ostP=num(r,'ostPaid'), ostD=g(r,'ostDate');
+  var peaA=num(r,'peaAssessed'), peaP=num(r,'peaPaid'), peaD=g(r,'peaDate');
+  var pedA=num(r,'pedAssessed'), pedP=num(r,'pedPaid'), pedD=g(r,'pedDate');
+  var pecA=num(r,'pecAssessed'), pecP=num(r,'pecPaid'), pecD=g(r,'pecDate');
+  var panA=num(r,'panAssessed'), panP=num(r,'panPaid'), panD=g(r,'panDate');
+  var pasA=num(r,'pasAssessed'), pasP=num(r,'pasPaid'), pasD=g(r,'pasDate');
+  var retA=num(r,'retAssessed'), retP=num(r,'retPaid'), retD=g(r,'retDate');
+  var erpA=num(r,'erpAssessed'), erpPd=num(r,'erpPaid'), erpD=g(r,'erpDate');
+  var tacA=num(r,'tacAssessed'), tacP=num(r,'tacPaid'), tacD=g(r,'tacDate');
+  var funds   = num(r,'fundsRaised');
+  var paidPas = num(r,'paidPastor');
+  var tithes  = num(r,'totalTithes');
+
+  // Section D — ERP
+  var erpPledged   = g(r,'erpPledged');
+  var erpPledgeRef = g(r,'erpPledgedRef');
+  var erpPaidYr    = g(r,'erpPaidYear');
+  var erpPaidYrRef = g(r,'erpPaidYearRef');
+  var erpCum       = g(r,'erpCumulative');
+  var erpCumRef    = g(r,'erpCumRef');
+  var erpOut       = g(r,'erpOutstanding');
+  var erpSettle    = g(r,'erpSettleDate');
+
+  // Section E — Ministries (all)
+  var mins = {};
+  try { mins = JSON.parse(g(r,'ministries') || '{}'); } catch(e) {}
+
+  // Section G — Narrative
+  var acc1 = g(r,'accomplishment1');
+  var acc2 = g(r,'accomplishment2');
+  var ch1  = g(r,'challenge1');
+  var ch2  = g(r,'challenge2');
+  var out  = g(r,'outreach');
+  var mfpe = g(r,'mattersForPE');
+
+  // Section F — Property (all 16 fields)
+  var titleDeed        = g(r,'titleDeed');
+  var titleDeedName    = g(r,'titleDeedName');
+  var ameRegistered    = g(r,'ameRegistered');
+  var erfNumber        = g(r,'erfNumber');
+  var insured          = g(r,'insured');
+  var insurerPolicy    = g(r,'insurerPolicy');
+  var parsonage        = g(r,'parsonage');
+  var parsonageCond    = g(r,'parsonageCond');
+  var npoNumber        = g(r,'npoNumber');
+  var sarsNumber       = g(r,'sarsNumber');
+  var bankAME          = g(r,'bankAME');
+  var numSignatories   = g(r,'numSignatories');
+  var finStatements    = g(r,'finStatements');
+  var finStatementsDate= g(r,'finStatementsDate');
+  var boardConstituted = g(r,'boardConstituted');
+  var lastChurchConf   = g(r,'lastChurchConf');
+
+  // Section H — Certification
+  var certPastorDate    = g(r,'certPastorDate');
+  var stewardBoardChair = g(r,'stewardBoardChair');
+  var stewardBoardDate  = g(r,'stewardBoardDate');
+  var adultDelegateSig  = g(r,'adultDelegateSig');
+  var youthDelegateSig  = g(r,'youthDelegateSig');
+  var isResub           = g(r,'isResubmission');
+  var resubReason       = g(r,'resubmissionReason');
+
+  var h = '';
+  h += '<div class="page">';
+
+  // Banner
+  h += '<div class="dist-banner">';
+  h += '<div class="dist-banner-name">' + esc(dist.name) + ' &mdash; Church Report</div>';
+  h += '<div class="dist-banner-sub">43rd Session, M.M. Mokone Memorial Annual Conference &middot; 8 October 2026</div>';
+  h += '</div>';
+
+  h += '<div class="page-inner" style="padding-top:10px">';
+
+  // Church title
+  h += '<div class="church-title-bar">';
+  h += '<div class="church-name">' + esc(church) + '</div>';
+  h += '<div class="church-sub">' + esc(dist.name) + ' &middot; ' + esc(dist.pe) + ' &middot; 43rd Session 2026</div>';
+  h += '</div>';
+
+  // SECTION A — Identity
+  h += '<div class="sec">';
+  h += '<div class="sh">Section A &mdash; Church &amp; Pastoral Information</div>';
+  h += '<div class="id-grid">';
+  cell('Pastor / Minister',      pastor || '&mdash;');
+  cell('Ministerial Status',     status || '&mdash;');
+  cell('Date of Appointment',    apptDate || '&mdash;');
+  cell('Years Served at Charge', years || '&mdash;');
+  cell('Station / Circuit',      station || '&mdash;');
+  cell('No. Preaching Points',   preachPts || '&mdash;');
+  cell('Pastor Contact',         contact || '&mdash;');
+  cell('Pastor Email',           email || '&mdash;');
+  cell('Adult Delegate',         adultDel || '&mdash;');
+  cell('Youth Delegate',         youthDel || '&mdash;');
+  if (address) cell('Church Address', address);
+  if (pe && pe !== dist.pe) cell('Presiding Elder', pe);
+  h += '</div></div>';
+
+  // SECTION B — Membership
+  h += '<div class="sec">';
+  h += '<div class="sh">Section B &mdash; Membership, Growth &amp; Discipleship</div>';
+  h += '<table>';
+  h += '<tr><th class="lft" style="width:38%">Category</th><th style="width:13%">Prev (2025)</th><th style="width:13%">Curr (2026)</th><th style="width:11%">Change</th><th>Notes</th></tr>';
+
+  mRow('Full Members &mdash; Adults',   aP, aC);
+  mRow('Full Members &mdash; Youth',    yP, yC);
+  mRow('Full Members &mdash; Children', cP, cC);
+
+  // Total row
+  var td = tC - tP;
+  var tdCls = td > 0 ? 'pos' : td < 0 ? 'neg' : '';
+  h += '<tr>';
+  h += '<td class="tot"><strong>TOTAL FULL MEMBERSHIP</strong></td>';
+  h += '<td class="tot num">' + (tP || '&mdash;') + '</td>';
+  h += '<td class="tot num"><strong>' + (tC || '&mdash;') + '</strong></td>';
+  h += '<td class="tot num"><span class="' + tdCls + '">' + (tP||tC ? (td>0?'+':'')+td : '') + '</span></td>';
+  h += '<td class="tot">&nbsp;</td>';
+  h += '</tr>';
+
+  mRow('Avg. Sunday Attendance', atP, atC);
+  mRow('Church School Enrollment', csP, csC);
+  if (titP || titC) mRow('Tithers', titP, titC);
+  mRow('Conversions',  conP, conC);
+  mRow('Accessions',   accP, accC);
+  mRow('Baptisms',     bapP, bapC);
+  if (cfmP || cfmC)  mRow('Confirmations', cfmP, cfmC);
+  if (dthP || dthC)  mRow('Deaths during the year', dthP, dthC);
+  if (trfP || trfC)  mRow('Transfers out / Removals', trfP, trfC);
+  h += '</table></div>';
+
+  // SECTION C — Full Apportionments (Assessed / Paid / Date / %)
+  h += '<div class="sec">';
+  h += '<div class="sh">Section C &mdash; Apportionments &amp; Financial Report</div>';
+  h += '<table>';
+  h += '<tr><th class="lft" style="width:40%">Apportionment Item</th><th style="width:14%">Assessed</th><th style="width:14%">Paid</th><th style="width:13%">Date Paid</th><th>%</th></tr>';
+  apRow('Annual Conference Budget (ACB)',   acbA, acbP, acbD, 0);
+  apRow('Minutes Yearbook (MYB)',           mybA, mybP, mybD, 1);
+  apRow('Advocacy Fund (ADV)',              advA, advP, advD, 0);
+  apRow('O.S. Turner Memorial (OST)',       ostA, ostP, ostD, 1);
+  apRow('PE Apportionment — General',      peaA, peaP, peaD, 0);
+  apRow('PE Apportionment — District',     pedA, pedP, pedD, 1);
+  apRow('PE Apportionment — Conference',   pecA, pecP, pecD, 0);
+  apRow('Pan African Fund (PAN)',           panA, panP, panD, 1);
+  apRow('Pastor\'s Apportionment (PAS)',   pasA, pasP, pasD, 0);
+  apRow('Retirement Fund (RET)',            retA, retP, retD, 1);
+  apRow('ERP Apportionment',               erpA, erpPd,erpD, 0);
+  // TOTAL row
+  var tacPct = tacA > 0 ? Math.round(tacP/tacA*100) : null;
+  var tacPctCls = tacPct !== null ? (tacPct>=100?'pos':tacPct>=75?'':'neg') : '';
+  h += '<tr style="background:var(--muted-pur);color:white;font-weight:bold">';
+  h += '<td>TOTAL BROUGHT TO ANNUAL CONFERENCE</td>';
+  h += '<td class="num">' + (tacA ? rands(tacA) : '&mdash;') + '</td>';
+  h += '<td class="num">' + rands(tacP) + '</td>';
+  h += '<td>' + esc(tacD || '&mdash;') + '</td>';
+  h += '<td class="num"><span class="' + tacPctCls + '">' + (tacPct !== null ? tacPct+'%' : '&mdash;') + '</span></td>';
+  h += '</tr>';
+  h += '</table>';
+  // Other financials
+  h += '<table style="margin-top:2px">';
+  h += '<tr><th class="lft" style="width:60%">Other Financial Items</th><th>Amount</th></tr>';
+  h += '<tr><td class="lbl">Total Funds Raised by the Church</td><td class="dat num"><strong>' + rands(funds) + '</strong></td></tr>';
+  if (tithes) h += '<tr class="alt"><td class="lbl">Total Tithes Received</td><td class="dat num">' + rands(tithes) + '</td></tr>';
+  h += '<tr><td class="lbl">Total Paid to the Pastor (all compensation)</td><td class="dat num">' + rands(paidPas) + '</td></tr>';
+  h += '</table></div>';
+
+  // SECTION D — ERP
+  if (erpPledged) {
+    h += '<div class="sec">';
+    h += '<div class="sh">Section D &mdash; Equity &amp; Reparations Program (ERP)</div>';
+    h += '<table>';
+    h += '<tr><th style="width:22%">ERP Pledge</th><th style="width:22%">Paid This Year</th><th style="width:22%">Cumulative Total</th><th style="width:22%">Outstanding Balance</th><th>Settlement Date</th></tr>';
+    h += '<tr>';
+    h += '<td class="dat num">' + rands(+erpPledged) + '</td>';
+    h += '<td class="dat num">' + rands(+erpPaidYr)  + '</td>';
+    h += '<td class="dat num">' + rands(+erpCum)     + '</td>';
+    h += '<td class="dat num">' + rands(+erpOut)     + '</td>';
+    h += '<td class="dat">' + esc(erpSettle || '&mdash;') + '</td>';
+    h += '</tr>';
+    h += '</table>';
+    if (erpPledgeRef || erpPaidYrRef || erpCumRef) {
+      h += '<table style="margin-top:1px">';
+      h += '<tr><th class="lft" style="width:30%">ERP Reference / Receipt</th><th>Detail</th></tr>';
+      if (erpPledgeRef) h += '<tr><td class="lbl">Pledge Reference</td><td class="dat">' + esc(erpPledgeRef) + '</td></tr>';
+      if (erpPaidYrRef) h += '<tr class="alt"><td class="lbl">Payment Reference</td><td class="dat">' + esc(erpPaidYrRef) + '</td></tr>';
+      if (erpCumRef)    h += '<tr><td class="lbl">Cumulative Reference</td><td class="dat">' + esc(erpCumRef) + '</td></tr>';
+      h += '</table>';
+    }
+    h += '</div>';
+  }
+
+  // SECTION E — All Ministries
+  h += '<div class="sec">';
+  h += '<div class="sh">Section E &mdash; Ministries (All ' + MLIST.length + ')</div>';
+  h += '<table>';
+  h += '<tr><th class="lft" style="width:40%">Ministry</th><th style="width:11%">Active</th><th style="width:10%">Members</th><th style="width:10%">Meetings</th><th>Leader</th></tr>';
+  MLIST.forEach(function(m, i) {
+    var info = mins[m] || {};
+    var activeVal = (info.active || '').toLowerCase();
+    var activeLabel = activeVal === 'yes' ? 'Yes' : (activeVal === 'no' ? 'No' : '&mdash;');
+    var activeCls   = activeVal === 'yes' ? 'pos' : (activeVal === 'no' ? 'neg' : '');
+    var cls = i % 2 === 0 ? '' : 'alt';
+    h += '<tr class="' + cls + '">';
+    h += '<td>' + esc(m) + '</td>';
+    h += '<td class="num"><strong class="' + activeCls + '">' + activeLabel + '</strong></td>';
+    h += '<td class="num">' + esc(info.members  || '&mdash;') + '</td>';
+    h += '<td class="num">' + esc(info.meetings || '&mdash;') + '</td>';
+    h += '<td>'             + esc(info.leader   || '&mdash;') + '</td>';
+    h += '</tr>';
+  });
+  h += '</table></div>';
+
+  // SECTION G — Narrative
+  if (acc1 || acc2 || ch1 || ch2 || out) {
+    h += '<div class="sec">';
+    h += '<div class="sh">Section G &mdash; Narrative Report</div>';
+
+    if (acc1 || acc2) {
+      h += '<div class="narr-block">';
+      h += '<div class="narr-head">&#10022;&ensp;Major Accomplishments During the Year</div>';
+      h += '<div class="narr-body">';
+      if (acc1) h += '<div style="margin-bottom:4px"><strong>1.</strong>&ensp;' + esc(acc1) + '</div>';
+      if (acc2) h += '<div><strong>2.</strong>&ensp;' + esc(acc2) + '</div>';
+      h += '</div></div>';
+    }
+    if (ch1 || ch2) {
+      h += '<div class="narr-block">';
+      h += '<div class="narr-head">&#9650;&ensp;Major Challenges During the Year</div>';
+      h += '<div class="narr-body">';
+      if (ch1) h += '<div style="margin-bottom:4px"><strong>1.</strong>&ensp;' + esc(ch1) + '</div>';
+      if (ch2) h += '<div><strong>2.</strong>&ensp;' + esc(ch2) + '</div>';
+      h += '</div></div>';
+    }
+    if (out) {
+      h += '<div class="narr-block">';
+      h += '<div class="narr-head">&#9728;&ensp;Ministry &amp; Outreach Highlights</div>';
+      h += '<div class="narr-body">' + esc(out) + '</div>';
+      h += '</div>';
+    }
+    if (mfpe) {
+      h += '<div class="narr-block">';
+      h += '<div class="narr-head" style="background:#8b0000;color:white">&#9650;&ensp;Matters for the Attention of the Bishop &amp; Presiding Elder</div>';
+      h += '<div class="narr-body">' + esc(mfpe) + '</div>';
+      h += '</div>';
+    }
+    h += '</div>';
+  }
+
+  // SECTION F — Full Property & Organisation
+  h += '<div class="sec">';
+  h += '<div class="sh">Section F &mdash; Property &amp; Organisation</div>';
+  h += '<table>';
+  h += '<tr><th class="lft" style="width:32%">Item</th><th style="width:18%">Detail</th><th class="lft" style="width:32%">Item</th><th>Detail</th></tr>';
+  propRow2('Title Deed Registered',      titleDeed,        'Deed Registered in Name of', titleDeedName,    0);
+  propRow2('AME Registered Property',    ameRegistered,    'ERF / Stand Number',          erfNumber,        1);
+  propRow2('Property Insured',           insured,          'Insurer &amp; Policy No.',    insurerPolicy,    0);
+  propRow2('Parsonage / Manse',          parsonage,        'Parsonage Condition',          parsonageCond,    1);
+  propRow2('NPO Number',                 npoNumber,        'SARS PBO Number',              sarsNumber,       0);
+  propRow2('Bank Account (AME name)',    bankAME,          'Number of Signatories',        numSignatories,   1);
+  propRow2('Financial Statements Filed', finStatements,    'Fin. Statements Date',         finStatementsDate,0);
+  propRow2('Steward Board Constituted',  boardConstituted, 'Last Church Conference Held',  lastChurchConf,   1);
+  h += '</table></div>';
+
+  // SECTION H — Certification
+  h += '<div class="sec" style="margin-top:6px">';
+  h += '<div class="sh">Section H &mdash; Certification &amp; Submission</div>';
+  h += '<table>';
+  h += '<tr><th class="lft" style="width:36%">Certifying Party</th><th>Name / Signature</th><th style="width:22%">Date</th></tr>';
+  h += '<tr>';
+  h += '<td class="lbl">Officiating Minister / Pastor</td>';
+  h += '<td class="dat">' + esc(pastor || '&mdash;') + '</td>';
+  h += '<td class="dat">' + esc(certPastorDate || '&mdash;') + '</td>';
+  h += '</tr>';
+  h += '<tr class="alt">';
+  h += '<td class="lbl">Steward Board Chairperson</td>';
+  h += '<td class="dat">' + esc(stewardBoardChair || '&mdash;') + '</td>';
+  h += '<td class="dat">' + esc(stewardBoardDate || '&mdash;') + '</td>';
+  h += '</tr>';
+  h += '<tr>';
+  h += '<td class="lbl">Adult Delegate</td>';
+  h += '<td class="dat">' + esc(adultDelegateSig || adultDel || '&mdash;') + '</td>';
+  h += '<td class="dat">&nbsp;</td>';
+  h += '</tr>';
+  h += '<tr class="alt">';
+  h += '<td class="lbl">Youth Delegate</td>';
+  h += '<td class="dat">' + esc(youthDelegateSig || youthDel || '&mdash;') + '</td>';
+  h += '<td class="dat">&nbsp;</td>';
+  h += '</tr>';
+  h += '</table>';
+  if (isResub && isResub.toLowerCase() === 'yes') {
+    h += '<div class="narr-block" style="margin-top:4px">';
+    h += '<div class="narr-head" style="background:#C4972A;color:#14022e">&#9888;&ensp;Resubmission</div>';
+    h += '<div class="narr-body">' + esc(resubReason || 'This report is a resubmission.') + '</div>';
+    h += '</div>';
+  }
+  h += '</div>';
+
+  h += '</div>'; // page-inner
+
+  // Footer
+  h += '<div class="page-foot">';
+  h += '<span>M.M. Mokone Annual Conference 2026 &middot; 43rd Session &middot; ' + esc(dist.name) + '</span>';
+  h += '<span>' + esc(church) + ' &middot; ' + esc(pastor) + '</span>';
+  h += '</div>';
+
+  h += '</div>'; // page
+
+  /* ─── inner helper functions (closured) ─── */
+  function cell(k, v) {
+    h += '<div class="cell"><span class="k">' + k + '</span><span class="v">' + esc(v) + '</span></div>';
+  }
+  function mRow(lbl, pv, cv) {
+    var d = cv - pv, cls = d > 0 ? 'pos' : d < 0 ? 'neg' : '';
+    h += '<tr>';
+    h += '<td>' + lbl + '</td>';
+    h += '<td class="dat num">' + (pv || '') + '</td>';
+    h += '<td class="dat num">' + (cv || '') + '</td>';
+    h += '<td class="num">' + (pv||cv ? '<span class="'+cls+'">'+(d>0?'+':'')+d+'</span>' : '') + '</td>';
+    h += '<td class="dat">&nbsp;</td>';
+    h += '</tr>';
+  }
+  function apRow(lbl, assessed, paid, date, alt) {
+    var pct = assessed > 0 ? Math.round(paid / assessed * 100) : null;
+    var pctCls = pct !== null ? (pct >= 100 ? 'pos' : pct >= 75 ? '' : 'neg') : '';
+    var cls = alt ? 'alt' : '';
+    h += '<tr class="' + cls + '">';
+    h += '<td class="lbl">' + lbl + '</td>';
+    h += '<td class="dat num">' + (assessed ? rands(assessed) : '&mdash;') + '</td>';
+    h += '<td class="dat num">' + (paid     ? rands(paid)     : '&mdash;') + '</td>';
+    h += '<td class="dat">'    + esc(date || '&mdash;') + '</td>';
+    h += '<td class="num"><span class="' + pctCls + '">' + (pct !== null ? pct + '%' : '&mdash;') + '</span></td>';
+    h += '</tr>';
+  }
+  function propRow2(k1, v1, k2, v2, alt) {
+    var cls = alt ? 'alt' : '';
+    h += '<tr class="' + cls + '">';
+    h += '<td class="lbl">' + k1 + '</td><td class="dat">' + esc(v1 || '&mdash;') + '</td>';
+    h += '<td class="lbl">' + k2 + '</td><td class="dat">' + esc(v2 || '&mdash;') + '</td>';
+    h += '</tr>';
+  }
+
+  return h;
+}
+
+/* ── TOC ── */
+function buildTOC(byDistrict) {
+  var h = '';
+  DISTRICTS.forEach(function(d) {
+    var churches = byDistrict[d.name] || [];
+    h += '<div class="toc-district">';
+    h += '<span class="toc-dist-name">&#10022;&ensp;' + esc(d.name) + '</span>';
+    h += '<span class="toc-dist-pe">&ensp;&mdash;&ensp;' + esc(d.pe) + '</span>';
+    h += '</div>';
+    if (churches.length === 0) {
+      h += '<div style="padding-left:14px;font-size:9pt;color:#bbb;font-style:italic;margin-bottom:4px">No submissions received</div>';
+    } else {
+      h += '<div style="margin-bottom:2px;padding-left:14px;font-size:8.5pt;color:var(--purple);font-weight:600">Presiding Elder&rsquo;s Summary Report &mdash; ' + esc(d.pe) + '</div>';
+      churches.forEach(function(r) {
+        var c = cn(r);
+        h += '<div class="toc-church">';
+        h += '<span style="font-size:9pt">' + esc(c) + '</span>';
+        h += '<span class="toc-dots"></span>';
+        h += '</div>';
+      });
+    }
+  });
+  return h;
+}
+
+/* ── MAIN: FETCH + BUILD ── */
+fetch(API)
+  .then(function(res) { return res.json(); })
+  .then(function(data) {
+    var raw = data.submissions || data || [];
+
+    // De-duplicate: keep latest submission per church
+    var latest = {};
+    raw.forEach(function(r) {
+      var c = cn(r);
+      if (!c) return;
+      var t = ts(r);
+      if (!latest[c] || t > ts(latest[c])) latest[c] = r;
+    });
+    var all = Object.keys(latest).map(function(k) { return latest[k]; });
+
+    // Group by district (exact match, then fuzzy)
+    var byDistrict = {};
+    DISTRICTS.forEach(function(d) { byDistrict[d.name] = []; });
+
+    all.forEach(function(r) {
+      var dname = dn(r);
+      var matched = null;
+
+      // Exact match
+      DISTRICTS.forEach(function(d) {
+        if (d.name === dname || d.name.toLowerCase() === dname.toLowerCase()) matched = d.name;
+      });
+      // Fuzzy (key word)
+      if (!matched) {
+        DISTRICTS.forEach(function(d) {
+          var key = d.name.replace(' District','').toLowerCase();
+          if (dname.toLowerCase().indexOf(key) >= 0) matched = d.name;
+        });
+      }
+
+      if (matched) {
+        byDistrict[matched].push(r);
+      }
+    });
+
+    // Sort churches alphabetically within each district
+    DISTRICTS.forEach(function(d) {
+      byDistrict[d.name].sort(function(a, b) {
+        return cn(a).localeCompare(cn(b));
+      });
+    });
+
+    // Build TOC
+    document.getElementById('toc-content').innerHTML = buildTOC(byDistrict);
+
+    // Build booklet
+    var bookletHtml = '';
+    DISTRICTS.forEach(function(d) {
+      var churches = byDistrict[d.name] || [];
+      bookletHtml += buildPE(d, churches);
+      churches.forEach(function(r) {
+        bookletHtml += buildChurch(r, d);
+      });
+    });
+
+    document.getElementById('booklet-content').innerHTML =
+      bookletHtml ||
+      '<div class="page"><div class="load-msg" style="color:#b00">No church reports found. Check API connection.</div></div>';
+  })
+  .catch(function(err) {
+    var msg = err && err.message ? err.message : String(err);
+    document.getElementById('booklet-content').innerHTML =
+      '<div class="page"><div class="load-msg" style="color:#b00;flex-direction:column;gap:10px">' +
+      '<span style="font-size:18px">&#9888;</span>' +
+      '<span><strong>Could not load church reports.</strong><br>' + esc(msg) + '</span>' +
+      '<span style="font-size:10px;color:#aaa">Make sure you are connected to the internet, then refresh this page.</span>' +
+      '</div></div>';
+  });
+
+})();
+</script>
+</body>
+</html>
