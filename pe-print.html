@@ -48,8 +48,8 @@ th{border:1px solid #666;padding:4px 5px;background:#4A0F76;font-weight:bold;col
 </head>
 <body>
 <div class="toolbar">
-  <span>&#9432; Presiding Elder Annual Summary Report 2026 — <span id="dist-label">Loading...</span></span>
-  <button id="printBtn" onclick="window.print()">&#128438; Print / Save as PDF</button>
+  <span>ⓘ Presiding Elder Annual Summary Report 2026 — <span id="dist-label">Loading...</span></span>
+  <button id="printBtn" onclick="window.print()">🖶 Print / Save as PDF</button>
 </div>
 
 <!-- PAGE 1: PE SUMMARY REPORT -->
@@ -60,14 +60,14 @@ th{border:1px solid #666;padding:4px 5px;background:#4A0F76;font-weight:bold;col
     <div class="doc-box" style="margin-top:8px"><div class="doc-box-title">Presiding Elder's Annual Summary Report</div></div>
     <div class="doc-note">To be completed by the Presiding Elder and lodged with the Episcopal Office before the opening of the Annual Conference. Shaded cells are for completion.</div>
   </div>
-  <div id="summary-body"><p style="text-align:center;padding:40px;color:#666">Loading report data&#8230;</p></div>
+  <div id="summary-body"><p style="text-align:center;padding:40px;color:#666">Loading report data…</p></div>
 </div>
 
 <!-- PAGE 2: CHARGE ROSTER -->
 <div class="page-wide page-break">
   <div class="doc-header" style="margin-bottom:8px">
-    <div class="doc-title1">African Methodist Episcopal Church &middot; Nineteenth Episcopal District</div>
-    <div style="font-size:12pt;font-weight:bold;text-transform:uppercase;color:#000;margin:6px 0">Presiding Elder District &mdash; Charge Roster Summary</div>
+    <div class="doc-title1">African Methodist Episcopal Church · Nineteenth Episcopal District</div>
+    <div style="font-size:12pt;font-weight:bold;text-transform:uppercase;color:#000;margin:6px 0">Presiding Elder District — Charge Roster Summary</div>
     <div class="doc-note">One line per charge. Complete a line for every charge in the District, including those that have paid nothing.</div>
   </div>
   <table class="roster-meta">
@@ -114,7 +114,7 @@ th{border:1px solid #666;padding:4px 5px;background:#4A0F76;font-weight:bold;col
       </tbody>
     </table>
   </div>
-  <div class="footer">African Methodist Episcopal Church &middot; 19th Episcopal District &middot; M.M. Mokone Memorial Annual Conference 2026<br>Senior Bishop Wilfred Jacobus Messiah, Presiding Prelate</div>
+  <div class="footer">African Methodist Episcopal Church · 19th Episcopal District · M.M. Mokone Memorial Annual Conference 2026<br>Senior Bishop Wilfred Jacobus Messiah, Presiding Prelate</div>
 </div>
 
 <script>
@@ -330,14 +330,26 @@ var PE_NAMES = {
 var peName = PE_NAMES[district] || "";
 document.getElementById("roster-pe").textContent = peName;
 
+// Hardcoded PE data per district (contact, email, treasurer, LLP, vacant charges, new churches)
+var PE_DATA = {
+  "Capital District":    { contact:"071 170 1574",  email:"mandisi.mexico@gmail.com",     sars:"", treasurer:"Rev. Sebego Zephaniah Moremi",            llp:1, vacant:0, newChurches:0 },
+  "Polokwane District":  { contact:"072 505 4557",  email:"thabom898@gmail.com",          sars:"", treasurer:"Bro. Lesiba A. Sekoala",                  llp:0, vacant:0, newChurches:0 },
+  "Vhembe District":     { contact:"073 991 9025",  email:"tndinannyi@yahoo.com",         sars:"", treasurer:"Rev. Jabulani Hendrieck Monegi",           llp:0, vacant:1, newChurches:1 },
+  "North End District":  { contact:"078 234 2793",  email:"dibetuleepo@gmail.com",        sars:"", treasurer:"Mot. Mandifunde Mengoae",                  llp:0, vacant:0, newChurches:0 },
+  "Bela-Bela District":  { contact:"072 185 7127",  email:"motabogigeorge36@gmail.com",   sars:"", treasurer:"Rev. G.P. Lesito",                         llp:0, vacant:0, newChurches:0 },
+  "Ga-Rankuwa District": { contact:"082 448 4248",  email:"Moobilsk@gmail.com",           sars:"", treasurer:"Bro. Motlhotlho Matthews Taukobong",       llp:0, vacant:0, newChurches:0 }
+};
+var peInfo = PE_DATA[district] || {};
+
 function n(v){return parseFloat(v||"0")||0;}
 function fmt(v){return v>0?v.toLocaleString("en-ZA"):"";}
-function fmtR(v){return v>0?"R "+v.toLocaleString("en-ZA",{minimumFractionDigits:2,maximumFractionDigits:2}):"";}
+function fmtR(v){return v>0?"R "+Math.round(v).toLocaleString("en-ZA"):"";}
 function gn(s,k1,k2){return n(s[k1])||n(s[k2]);}
 
 function buildSummary(churches, submissions){
   var tot={adultsC:0,youthC:0,childrenC:0,totalMembC:0,attC:0,tithC:0,csC:0,convC:0,accC:0,bapC:0,
-    funds:0,acbA:0,acbP:0,advP:0,ostP:0,panP:0,pasP:0,retP:0,erpPledge:0,erpYear:0,erpCum:0,tacP:0,tithes:0};
+    funds:0,acbA:0,acbP:0,mybP:0,advP:0,ostP:0,panP:0,pasP:0,retP:0,erpPledge:0,erpYear:0,erpCum:0,tacP:0,tithes:0,
+    titleDeedYes:0,erpArrears:0};
   submissions.forEach(function(s){
     tot.adultsC+=gn(s,"Adults Curr","adultsC");
     tot.youthC+=gn(s,"Youth Curr","youthC");
@@ -353,6 +365,7 @@ function buildSummary(churches, submissions){
     tot.tithes+=gn(s,"Total Tithes","totalTithes");
     tot.acbA+=gn(s,"ACB Assessed","acbAssessed");
     tot.acbP+=gn(s,"ACB Paid","acbPaid");
+    tot.mybP+=gn(s,"MYB Paid","mybPaid");
     tot.advP+=gn(s,"ADV Paid","advPaid");
     tot.ostP+=gn(s,"OST Paid","ostPaid");
     tot.panP+=gn(s,"PAN Paid","panPaid");
@@ -362,6 +375,12 @@ function buildSummary(churches, submissions){
     tot.erpYear+=gn(s,"ERP Paid Year","erpPaidYear");
     tot.erpCum+=gn(s,"ERP Cumulative","erpCumulative");
     tot.tacP+=gn(s,"TAC Paid","tacPaid");
+    // Count title deeds held
+    var td=(s["Title Deed"]||s["titleDeed"]||"").trim().toLowerCase();
+    if(td==="yes")tot.titleDeedYes++;
+    // Count charges in arrears on ERP
+    var erpOut=parseFloat(s["ERP Outstanding"]||s["erpOutstanding"]||"0")||0;
+    if(erpOut>0)tot.erpArrears++;
   });
 
   var html = "";
@@ -369,47 +388,50 @@ function buildSummary(churches, submissions){
   html += "<div class='sec'><div class='sh'>Identification</div><table>";
   html += "<tr><td class='lbl' style='width:30%'>Annual Conference</td><td class='dat'>M.M. Mokone Memorial Annual Conference</td><td class='lbl' style='width:20%'>Presiding Bishop</td><td class='dat'>Senior Bishop Wilfred Jacobus Messiah</td></tr>";
   html += "<tr><td class='lbl'>Conference opening date</td><td class='dat'>08 October 2026</td><td class='lbl'>Conference year</td><td class='dat'>2026</td></tr>";
-  html += "<tr><td class='lbl'>Name of Presiding Elder</td><td class='dat'>"+peName+"</td><td class='lbl'>Presiding Elder contact number</td><td class='dat'>&nbsp;</td></tr>";
-  html += "<tr><td class='lbl'>Name of Presiding Elder District</td><td class='dat'>"+district+"</td><td class='lbl'>Presiding Elder e-mail address</td><td class='dat'>&nbsp;</td></tr>";
-  html += "<tr><td class='lbl'>SARS tax number</td><td class='dat'>&nbsp;</td><td class='lbl'>District Treasurer</td><td class='dat'>&nbsp;</td></tr>";
+  html += "<tr><td class='lbl'>Name of Presiding Elder</td><td class='dat'>"+peName+"</td><td class='lbl'>Presiding Elder contact number</td><td class='dat'>"+(peInfo.contact||" ")+"</td></tr>";
+  html += "<tr><td class='lbl'>Name of Presiding Elder District</td><td class='dat'>"+district+"</td><td class='lbl'>Presiding Elder e-mail address</td><td class='dat'>"+(peInfo.email||" ")+"</td></tr>";
+  html += "<tr><td class='lbl'>SARS tax number</td><td class='dat'>"+(peInfo.sars||" ")+"</td><td class='lbl'>District Treasurer</td><td class='dat'>"+(peInfo.treasurer||" ")+"</td></tr>";
   html += "</table></div>";
 
   // NUMERICALS
   html += "<div class='sec'><div class='sh'>Numericals</div><table>";
-  html += "<tr><td class='lbl' style='width:38%'>Number of charges or circuits</td><td class='dat' style='width:12%'>"+churches.length+"</td><td class='lbl' style='width:38%'>Full members &mdash; adults</td><td class='dat' style='width:12%'>"+fmt(tot.adultsC)+"</td></tr>";
-  html += "<tr><td class='lbl'>If circuits, total number of preaching points</td><td class='dat'>&nbsp;</td><td class='lbl'>Full members &mdash; youth</td><td class='dat'>"+fmt(tot.youthC)+"</td></tr>";
-  html += "<tr><td class='lbl'>Number of Pastors</td><td class='dat'>"+churches.length+"</td><td class='lbl'>Full members &mdash; children</td><td class='dat'>"+fmt(tot.childrenC)+"</td></tr>";
-  html += "<tr><td class='lbl'>Number of licensed local preachers</td><td class='dat'>&nbsp;</td><td class='lbl'>Total membership</td><td class='dat'><strong>"+fmt(tot.totalMembC)+"</strong></td></tr>";
-  html += "<tr><td class='lbl'>Number of title deeds held</td><td class='dat'>&nbsp;</td><td class='lbl'>Average Sunday attendance across the District</td><td class='dat'>"+fmt(tot.attC)+"</td></tr>";
-  html += "<tr><td class='lbl'>Number of adult delegates</td><td class='dat'>&nbsp;</td><td class='lbl'>Number of tithers in the District</td><td class='dat'>"+fmt(tot.tithC)+"</td></tr>";
-  html += "<tr><td class='lbl'>Number of youth delegates</td><td class='dat'>&nbsp;</td><td class='lbl'>Church School enrolment</td><td class='dat'>"+fmt(tot.csC)+"</td></tr>";
-  html += "<tr><td class='lbl'>Number of conversions</td><td class='dat'>"+fmt(tot.convC)+"</td><td class='lbl'>Number of charges without a title deed</td><td class='dat'>&nbsp;</td></tr>";
-  html += "<tr><td class='lbl'>Number of accessions</td><td class='dat'>"+fmt(tot.accC)+"</td><td class='lbl'>Number of vacant charges</td><td class='dat'>&nbsp;</td></tr>";
-  html += "<tr><td class='lbl'>Number of baptisms</td><td class='dat'>"+fmt(tot.bapC)+"</td><td class='lbl'>Number of new churches planted this year</td><td class='dat'>&nbsp;</td></tr>";
+  html += "<tr><td class='lbl' style='width:38%'>Number of charges or circuits</td><td class='dat' style='width:12%'>"+churches.length+"</td><td class='lbl' style='width:38%'>Full members — adults</td><td class='dat' style='width:12%'>"+fmt(tot.adultsC)+"</td></tr>";
+  html += "<tr><td class='lbl'>If circuits, total number of preaching points</td><td class='dat'> </td><td class='lbl'>Full members — youth</td><td class='dat'>"+fmt(tot.youthC)+"</td></tr>";
+  html += "<tr><td class='lbl'>Number of Pastors</td><td class='dat'>"+churches.length+"</td><td class='lbl'>Full members — children</td><td class='dat'>"+fmt(tot.childrenC)+"</td></tr>";
+  var adultDel = churches.length;
+  var youthDel = churches.filter(function(c){return c.y && c.y.trim()&&c.y.trim()!=="—";}).length;
+  var noTitleDeed = churches.length - tot.titleDeedYes;
+  html += "<tr><td class='lbl'>Number of licensed local preachers</td><td class='dat'>"+(peInfo.llp!==undefined?peInfo.llp:" ")+"</td><td class='lbl'>Total membership</td><td class='dat'><strong>"+fmt(tot.totalMembC)+"</strong></td></tr>";
+  html += "<tr><td class='lbl'>Number of title deeds held</td><td class='dat'>"+tot.titleDeedYes+"</td><td class='lbl'>Average Sunday attendance across the District</td><td class='dat'>"+fmt(tot.attC)+"</td></tr>";
+  html += "<tr><td class='lbl'>Number of adult delegates</td><td class='dat'>"+adultDel+"</td><td class='lbl'>Number of tithers in the District</td><td class='dat'>"+fmt(tot.tithC)+"</td></tr>";
+  html += "<tr><td class='lbl'>Number of youth delegates</td><td class='dat'>"+youthDel+"</td><td class='lbl'>Church School enrolment</td><td class='dat'>"+fmt(tot.csC)+"</td></tr>";
+  html += "<tr><td class='lbl'>Number of conversions</td><td class='dat'>"+fmt(tot.convC)+"</td><td class='lbl'>Number of charges without a title deed</td><td class='dat'>"+noTitleDeed+"</td></tr>";
+  html += "<tr><td class='lbl'>Number of accessions</td><td class='dat'>"+fmt(tot.accC)+"</td><td class='lbl'>Number of vacant charges</td><td class='dat'>"+(peInfo.vacant!==undefined?peInfo.vacant:" ")+"</td></tr>";
+  html += "<tr><td class='lbl'>Number of baptisms</td><td class='dat'>"+fmt(tot.bapC)+"</td><td class='lbl'>Number of new churches planted this year</td><td class='dat'>"+(peInfo.newChurches!==undefined?peInfo.newChurches:" ")+"</td></tr>";
   html += "</table></div>";
 
   // FINANCIALS
   html += "<div class='sec'><div class='sh'>Financials (South African Rand)</div><table>";
-  html += "<tr><td class='lbl' style='width:38%'>Mid-Year Budget</td><td class='dat' style='width:12%'>&nbsp;</td><td class='lbl' style='width:38%'><strong>EPISCOPAL RESIDENCE PROJECT &mdash; pledged by the District</strong></td><td class='dat' style='width:12%'>"+fmtR(tot.erpPledge)+"</td></tr>";
-  html += "<tr><td class='lbl'>Annual Conference Budget</td><td class='dat'>"+fmtR(tot.acbP)+"</td><td class='lbl'><strong>EPISCOPAL RESIDENCE PROJECT &mdash; paid this conference year</strong></td><td class='dat'>"+fmtR(tot.erpYear)+"</td></tr>";
-  html += "<tr><td class='lbl'>Advance Offering</td><td class='dat'>"+fmtR(tot.advP)+"</td><td class='lbl'><strong>EPISCOPAL RESIDENCE PROJECT &mdash; cumulative paid to date</strong></td><td class='dat'>"+fmtR(tot.erpCum)+"</td></tr>";
+  html += "<tr><td class='lbl' style='width:38%'>Mid-Year Budget</td><td class='dat' style='width:12%'>"+fmtR(tot.mybP)+"</td><td class='lbl' style='width:38%'><strong>EPISCOPAL RESIDENCE PROJECT — pledged by the District</strong></td><td class='dat' style='width:12%'>"+fmtR(tot.erpPledge)+"</td></tr>";
+  html += "<tr><td class='lbl'>Annual Conference Budget</td><td class='dat'>"+fmtR(tot.acbP)+"</td><td class='lbl'><strong>EPISCOPAL RESIDENCE PROJECT — paid this conference year</strong></td><td class='dat'>"+fmtR(tot.erpYear)+"</td></tr>";
+  html += "<tr><td class='lbl'>Advance Offering</td><td class='dat'>"+fmtR(tot.advP)+"</td><td class='lbl'><strong>EPISCOPAL RESIDENCE PROJECT — cumulative paid to date</strong></td><td class='dat'>"+fmtR(tot.erpCum)+"</td></tr>";
   html += "<tr><td class='lbl'>Office Staff</td><td class='dat'>"+fmtR(tot.ostP)+"</td><td class='lbl'>Total funds raised by the local churches</td><td class='dat'>"+fmtR(tot.funds)+"</td></tr>";
-  html += "<tr><td class='lbl'>Provident Fund &mdash; January to June</td><td class='dat'>&nbsp;</td><td class='lbl'>Total tithes received by the local churches</td><td class='dat'>"+fmtR(tot.tithes)+"</td></tr>";
-  html += "<tr><td class='lbl'>Provident Fund &mdash; July to December</td><td class='dat'>&nbsp;</td><td class='lbl'>Number of charges that have paid Episcopal Residence in full</td><td class='dat'>&nbsp;</td></tr>";
-  html += "<tr><td class='lbl'>Presiding Elder's Annuity received</td><td class='dat'>"+fmtR(tot.panP)+"</td><td class='lbl'>Number of charges in arrears on the Episcopal Residence Project</td><td class='dat'>&nbsp;</td></tr>";
+  html += "<tr><td class='lbl'>Provident Fund — January to June</td><td class='dat'> </td><td class='lbl'>Total tithes received by the local churches</td><td class='dat'>"+fmtR(tot.tithes)+"</td></tr>";
+  html += "<tr><td class='lbl'>Provident Fund — July to December</td><td class='dat'> </td><td class='lbl'>Number of charges that have paid Episcopal Residence in full</td><td class='dat'> </td></tr>";
+  html += "<tr><td class='lbl'>Presiding Elder's Annuity received</td><td class='dat'>"+fmtR(tot.panP)+"</td><td class='lbl'>Number of charges in arrears on the Episcopal Residence Project</td><td class='dat'>"+tot.erpArrears+"</td></tr>";
   html += "<tr><td class='tot' colspan='2'><strong>TOTAL BROUGHT TO ANNUAL CONFERENCE</strong></td><td class='tot' colspan='2'><strong>"+fmtR(tot.tacP)+"</strong></td></tr>";
   html += "</table></div>";
 
   // MATTERS FOR BISHOP
   html += "<div class='sec'><div class='sh'>Matters for the Attention of the Bishop</div>";
-  html += "<table><tr><td style='height:28px'>&nbsp;</td></tr><tr><td style='height:28px'>&nbsp;</td></tr><tr><td style='height:28px'>&nbsp;</td></tr><tr><td style='height:28px'>&nbsp;</td></tr></table></div>";
+  html += "<table><tr><td style='height:28px'> </td></tr><tr><td style='height:28px'> </td></tr><tr><td style='height:28px'> </td></tr><tr><td style='height:28px'> </td></tr></table></div>";
 
   // CERTIFICATION
   html += "<div class='sec'><div class='sh'>Certification</div>";
   html += "<p class='cert-txt'>I hereby certify that, to the best of my knowledge and belief, the above is a true and accurate statement of the numerical and financial condition of the above-named Presiding Elder District for this conference year.</p>";
   html += "<table style='margin-top:6px'>";
-  html += "<tr><td class='lbl' style='width:35%'>Signature of the Presiding Elder</td><td class='sig' style='width:30%'>&nbsp;</td><td class='lbl' style='width:15%'>Date</td><td class='sig'>&nbsp;</td></tr>";
-  html += "<tr><td class='lbl'>Received by the Episcopal Office</td><td class='sig'>&nbsp;</td><td class='lbl'>Date</td><td class='sig'>&nbsp;</td></tr>";
+  html += "<tr><td class='lbl' style='width:35%'>Signature of the Presiding Elder</td><td class='sig' style='width:30%'> </td><td class='lbl' style='width:15%'>Date</td><td class='sig'> </td></tr>";
+  html += "<tr><td class='lbl'>Received by the Episcopal Office</td><td class='sig'> </td><td class='lbl'>Date</td><td class='sig'> </td></tr>";
   html += "</table></div>";
 
   document.getElementById("summary-body").innerHTML = html;
@@ -444,7 +466,7 @@ function buildRoster(allChurches, subMap, district){
       totals.ad+=ad;totals.ost+=ost;totals.pan+=pan;totals.pas+=pas;
       totals.ret+=ret;totals.erp+=erp;totals.tac+=tac;
       var f=function(v){return v>0?v.toLocaleString("en-ZA"):"";};
-      var r=function(v){return v>0?"R "+v.toLocaleString("en-ZA",{minimumFractionDigits:2,maximumFractionDigits:2}):"";};
+      var r=function(v){return v>0?"R "+Math.round(v).toLocaleString("en-ZA"):"";};
       tr.innerHTML = "<td style='text-align:center'>"+(i+1)+"</td><td>"+ch.n+"</td><td>"+ch.p+"</td>"+
         "<td style='text-align:right'>"+f(mp)+"</td><td style='text-align:right'>"+f(mc)+"</td>"+
         "<td style='text-align:right'>"+f(at)+"</td><td style='text-align:right'>"+f(cv)+"</td>"+
@@ -461,7 +483,7 @@ function buildRoster(allChurches, subMap, district){
 
   // TOTALS ROW
   var f=function(v){return v>0?"<strong>"+v.toLocaleString("en-ZA")+"</strong>":"";};
-  var r=function(v){return v>0?"<strong>R "+v.toLocaleString("en-ZA",{minimumFractionDigits:2,maximumFractionDigits:2})+"</strong>":"";};
+  var r=function(v){return v>0?"<strong>R "+Math.round(v).toLocaleString("en-ZA")+"</strong>":"";};
   var ttr = document.createElement("tr");
   ttr.style.background = "#9C8FAF";
   ttr.style.fontWeight = "bold";
