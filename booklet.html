@@ -25,7 +25,7 @@
 /* ═══════════════════════════════════════════════════
    PAGE SETUP
    ═══════════════════════════════════════════════════ */
-@page { size: A4 portrait; margin: 0; }
+@page { size: A4 portrait; margin: 8mm; }
 
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -65,7 +65,9 @@ body{
     box-shadow: none;
     break-before: page;
     page-break-before: always;
+    overflow: hidden;
   }
+  .page-inner{ padding-left: 10mm; padding-right: 10mm; }
   .page:first-of-type{
     break-before: auto;
     page-break-before: auto;
@@ -492,7 +494,8 @@ th[style*="text-align:left"], th.lft{ text-align: left; }
     print-color-adjust: exact !important;
   }
   .sec{ page-break-inside: avoid; }
-  .page-foot{ position: fixed; }
+  .page-foot{ position: absolute; bottom: 6mm; left: 18mm; right: 18mm; }
+  .page{ overflow: hidden; }
 }
 </style>
 </head>
@@ -728,7 +731,7 @@ function buildPE(dist, churches) {
 
 /* helper for PE two-col table row */
 function tr2(label, val) {
-  return '<tr><td class="lbl">' + esc(label) + '</td><td class="dat num"><strong>' + val + '</strong></td><td class="dat">&nbsp;</td></tr>';
+  return '<tr><td class="lbl">' + label + '</td><td class="dat num"><strong>' + val + '</strong></td><td class="dat">&nbsp;</td></tr>';
 }
 function hr(x) { return x; } // placeholder — not needed
 
