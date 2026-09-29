@@ -25,7 +25,8 @@
 /* ═══════════════════════════════════════════════════
    PAGE SETUP
    ═══════════════════════════════════════════════════ */
-@page { size: A4 portrait; margin: 8mm; }
+@page           { size: A4 portrait;  margin: 8mm; }
+@page landscape { size: A4 landscape; margin: 8mm; }
 
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -59,18 +60,30 @@ body{
   body{ background: white; }
   .page{
     width: 100%;
-    min-height: 0;
-    height: auto;
+    height: calc(297mm - 16mm); /* A4 minus 8mm top + 8mm bottom margins */
     margin: 0;
     box-shadow: none;
-    break-before: page;
-    page-break-before: always;
+    /* break-after prevents the blank-page-before-each-div problem that
+       break-before causes when overflow pushes content past a page boundary */
+    page-break-after: always;
+    break-after: page;
+    page-break-inside: avoid;
+    break-inside: avoid;
     overflow: hidden;
+    position: relative;
   }
-  .page-inner{ padding-left: 10mm; padding-right: 10mm; }
-  .page:first-of-type{
-    break-before: auto;
-    page-break-before: auto;
+  /* Landscape roster pages */
+  .pe-roster{
+    page: landscape;
+    width: 100%;
+    min-height: 0;
+    height: calc(210mm - 16mm); /* A4-landscape minus top+bottom 8mm margins */
+  }
+  .page-inner{
+    padding-left: 10mm;
+    padding-right: 10mm;
+    padding-top: 0;
+    padding-bottom: 16mm; /* space for absolute footer */
   }
   .no-print{ display: none !important; }
 }
@@ -445,6 +458,39 @@ th[style*="text-align:left"], th.lft{ text-align: left; }
 /* gold accent rule */
 .gold-rule{ border: none; border-top: 1.5px solid var(--gold); margin: 9px 0; }
 
+/* ── Landscape roster page (screen preview) ── */
+.pe-roster{
+  width: 297mm; /* landscape width */
+  min-height: 210mm;
+}
+/* Compact roster table */
+.roster-tbl{
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 7.5pt;
+}
+.roster-tbl thead tr{
+  background: var(--purple);
+  color: white;
+}
+.roster-tbl thead th{
+  padding: 3px 3px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,.25);
+  line-height: 1.25;
+  font-size: 7pt;
+  font-family: Arial, sans-serif;
+  letter-spacing: .2px;
+}
+.roster-tbl th.lft{ text-align: left; }
+.roster-tbl tbody tr td{
+  padding: 2px 3px;
+  border: 1px solid var(--border);
+  font-size: 7.5pt;
+}
+.roster-tbl tbody tr.alt td{ background: var(--cream); }
+.roster-tbl .num{ text-align: right; }
+
 /* ═══════════════════════════════════════════════════
    PAGE FOOTER
    ═══════════════════════════════════════════════════ */
@@ -554,12 +600,30 @@ th[style*="text-align:left"], th.lft{ text-align: left; }
 var API = 'https://script.google.com/macros/s/AKfycbzuLLT1P3bypTDws-lwex8Ieq_svIeXJpjN3a5yX5R-GSLWH4t9C8T3zyMRXT5WWac78Q/exec';
 
 var DISTRICTS = [
-  { name:'Ga-Rankuwa District',  pe:'Rev. LS Moobi'     },
-  { name:'Bela-Bela District',   pe:'Rev. GO Motabogi'  },
-  { name:'Polokwane District',   pe:'Rev. MDT Makhene'  },
-  { name:'Vhembe District',      pe:'Rev. NM Tshivhase' },
-  { name:'North End District',   pe:'Rev. DO Leepo'     },
-  { name:'Capital District',     pe:'Rev. MA Mexico'    }
+  { name:'Ga-Rankuwa District',  pe:'Rev. LS Moobi',
+    contact:'082 448 4248', email:'Moobilsk@gmail.com',
+    treasurer:'Bro. Motlhotlho Matthews Taukobong',
+    licensedPreachers:0, vacantCharges:0, newChurches:0 },
+  { name:'Bela-Bela District',   pe:'Rev. GO Motabogi',
+    contact:'072 185 7127', email:'motabogigeorge36@gmail.com',
+    treasurer:'Rev. G.P. Lesito',
+    licensedPreachers:0, vacantCharges:0, newChurches:0 },
+  { name:'Polokwane District',   pe:'Rev. MDT Makhene',
+    contact:'072 505 4557', email:'thabom898@gmail.com',
+    treasurer:'Bro. Lesiba A. Sekoala',
+    licensedPreachers:0, vacantCharges:0, newChurches:0 },
+  { name:'Vhembe District',      pe:'Rev. NM Tshivhase',
+    contact:'073 991 9025', email:'tndinannyi@yahoo.com',
+    treasurer:'Rev. Jabulani Hendrieck Monegi',
+    licensedPreachers:0, vacantCharges:0, newChurches:1 },
+  { name:'North End District',   pe:'Rev. DO Leepo',
+    contact:'078 234 2793', email:'dibetuleepo@gmail.com',
+    treasurer:'Mot. Mandifunde Mengoae',
+    licensedPreachers:0, vacantCharges:1, newChurches:0 },
+  { name:'Capital District',     pe:'Rev. MA Mexico',
+    contact:'071 170 1574', email:'mandisi.mexico@gmail.com',
+    treasurer:'Rev. S.Z. Moremi',
+    licensedPreachers:1, vacantCharges:0, newChurches:0 }
 ];
 
 var MLIST = [
@@ -611,121 +675,285 @@ function ts(r) { return g(r, 'timestamp', 'Timestamp'); }
 /* ── PE SUMMARY PAGE ── */
 function buildPE(dist, churches) {
   var T = {
-    adultsC:0, youthC:0, childrenC:0, membC:0,
-    attC:0, convC:0, accC:0, baptC:0,
-    funds:0, paidPastor:0, tac:0, tithes:0
+    adultsP:0, adultsC:0, youthP:0, youthC:0, childrenP:0, childrenC:0,
+    membP:0, membC:0, attC:0, convC:0, accC:0, baptC:0,
+    titherC:0, churchSchoolC:0,
+    adultDel:0, youthDel:0,
+    hasTitleDeed:0, noTitleDeed:0,
+    funds:0, paidPastor:0, tac:0, tithes:0,
+    mybPaid:0, acbPaid:0, advPaid:0, ostPaid:0,
+    panPaid:0, pasPaid:0, peaPaid:0, erpPaid:0,
+    erpPledgedAmt:0, erpPaidYrAmt:0, erpCumAmt:0, erpOutAmt:0,
+    erpPaidFull:0, erpInArrears:0,
+    numCircuits:0, numPreachPts:0, numStations:0
   };
 
   churches.forEach(function(r) {
-    var aC = num(r,'adultsCurr');
-    var yC = num(r,'youthCurr');
-    var cC = num(r,'childrenCurr');
+    var aC = num(r,'adultsCurr'), aP = num(r,'adultsPrev');
+    var yC = num(r,'youthCurr'),  yP = num(r,'youthPrev');
+    var cC = num(r,'childrenCurr'), cP = num(r,'childrenPrev');
     var mC = num(r,'totalCurr') || (aC + yC + cC);
-    T.adultsC   += aC;
-    T.youthC    += yC;
-    T.childrenC += cC;
-    T.membC     += mC;
-    T.attC      += num(r,'attendanceCurr');
-    T.convC     += num(r,'conversionsCurr');
-    T.accC      += num(r,'accessionsCurr');
-    T.baptC     += num(r,'baptismsCurr');
-    T.funds     += num(r,'fundsRaised');
-    T.paidPastor+= num(r,'paidPastor');
-    // TAC — read directly from the spreadsheet TAC Paid column
-    T.tac += num(r,'tacPaid');
-    T.tithes    += num(r,'totalTithes');
+    var mP = num(r,'totalPrev') || (aP + yP + cP);
+    T.adultsC   += aC;  T.adultsP   += aP;
+    T.youthC    += yC;  T.youthP    += yP;
+    T.childrenC += cC;  T.childrenP += cP;
+    T.membC     += mC;  T.membP     += mP;
+    T.attC          += num(r,'attendanceCurr');
+    T.convC         += num(r,'conversionsCurr');
+    T.accC          += num(r,'accessionsCurr');
+    T.baptC         += num(r,'baptismsCurr');
+    T.titherC       += num(r,'tithersCurr');
+    T.churchSchoolC += num(r,'churchSchoolCurr');
+    // Delegates: these fields store the delegate's NAME (text), not a number.
+    // Count 1 per church that has a non-empty delegate name.
+    T.adultDel += (g(r,'adultDelegate') ? 1 : 0);
+    T.youthDel += (g(r,'youthDelegate') ? 1 : 0);
+    // Title deed status
+    var td = String(g(r,'titleDeed') || '').trim().toLowerCase();
+    if (td === 'yes' || td === 'y') { T.hasTitleDeed++; } else { T.noTitleDeed++; }
+    // Financials
+    T.funds      += num(r,'fundsRaised');
+    T.paidPastor += num(r,'paidPastor');
+    T.tac        += num(r,'tacPaid');
+    T.tithes     += num(r,'totalTithes');
+    T.mybPaid    += num(r,'mybPaid');
+    T.acbPaid    += num(r,'acbPaid');
+    T.advPaid    += num(r,'advPaid');
+    T.ostPaid    += num(r,'ostPaid');
+    T.panPaid    += num(r,'panPaid');   // Provident Fund Jan–Jun
+    T.pasPaid    += num(r,'pasPaid');   // Provident Fund Jul–Dec
+    T.peaPaid    += num(r,'peaPaid');   // Presiding Elder's Annuity
+    T.erpPaid    += num(r,'erpPaid');
+    // ERP detailed tracking
+    var erpPl  = num(r,'erpPledged');
+    var erpPY  = num(r,'erpPaidYear');
+    var erpCum = num(r,'erpCumulative');
+    var erpOut = num(r,'erpOutstanding');
+    T.erpPledgedAmt += erpPl;
+    T.erpPaidYrAmt  += erpPY;
+    T.erpCumAmt     += erpCum;
+    T.erpOutAmt     += erpOut;
+    if (erpPl > 0 && erpOut === 0) { T.erpPaidFull++; }
+    else if (erpOut > 0)            { T.erpInArrears++; }
+    // Count charges vs circuits
+    var st = String(g(r,'station') || '').toLowerCase();
+    if (st.indexOf('circuit') >= 0) {
+      T.numCircuits++;
+      T.numPreachPts += (num(r,'preachingPoints') || 1);
+    } else {
+      T.numStations++;
+    }
   });
+  var totalCharges = T.numStations + T.numCircuits;
 
+  var footerHtml = '<div class="page-foot">'
+    + '<span>M.M. Mokone Annual Conference 2026 &middot; 42nd Session &middot; ' + esc(dist.name) + '</span>'
+    + '<span>' + esc(dist.pe) + ' &middot; Presiding Elder</span>'
+    + '</div>';
+
+  /* ── PAGE 1: PORTRAIT SUMMARY ── */
   var h = '';
   h += '<div class="page">';
 
   // District banner
   h += '<div class="dist-banner">';
   h += '<div class="dist-banner-name">' + esc(dist.name) + '</div>';
-  h += '<div class="dist-banner-sub">Presiding Elder&rsquo;s Summary Report &mdash; 42nd Session, 8 October 2026</div>';
+  h += '<div class="dist-banner-sub">Presiding Elder&rsquo;s Annual Summary Report &mdash; 42nd Session, 8 October 2026</div>';
   h += '</div>';
 
-  h += '<div class="page-inner" style="padding-top:12px">';
+  h += '<div class="page-inner" style="padding-top:8px">';
 
   // PE identity block
-  h += '<div class="pe-identity" style="margin-bottom:12px">';
+  h += '<div class="pe-identity" style="margin-bottom:8px">';
   h += '<div class="item"><span class="lbl-sm">Presiding Elder</span><span class="val">' + esc(dist.pe) + '</span></div>';
   h += '<div class="item"><span class="lbl-sm">District</span><span class="val">' + esc(dist.name) + '</span></div>';
+  h += '<div class="item"><span class="lbl-sm">Contact</span><span class="val">' + esc(dist.contact || '') + '</span></div>';
+  h += '<div class="item"><span class="lbl-sm">Email</span><span class="val">' + esc(dist.email || '') + '</span></div>';
+  h += '<div class="item"><span class="lbl-sm">District Treasurer</span><span class="val">' + esc(dist.treasurer || '') + '</span></div>';
   h += '<div class="item"><span class="lbl-sm">Session</span><span class="val">42nd Annual Conference &mdash; 2026</span></div>';
-  h += '<div class="item"><span class="lbl-sm">Churches Reporting</span><span class="val">' + churches.length + ' churches</span></div>';
+  h += '<div class="item"><span class="lbl-sm">Churches Reporting</span><span class="val">' + churches.length + ' charges</span></div>';
   h += '</div>';
 
-  hr(h); h += '<hr class="gold-rule">';
+  h += '<hr class="gold-rule">';
 
-  // Membership aggregate
+  // ── District Numericals (two-column grid) ──
   h += '<div class="sec">';
-  h += '<div class="sh">District Membership &amp; Growth Summary</div>';
+  h += '<div class="sh">A. District Numericals</div>';
   h += '<table>';
-  h += '<tr><th class="lft" style="width:42%">Category</th><th style="width:22%">Total &mdash; District</th><th>Notes</th></tr>';
-  h += tr2('Full Members &mdash; Adults',      T.adultsC.toLocaleString('en-ZA'));
-  h += tr2('Full Members &mdash; Youth',       T.youthC.toLocaleString('en-ZA'));
-  h += tr2('Full Members &mdash; Children',    T.childrenC.toLocaleString('en-ZA'));
-  h += '<tr><td class="tot"><strong>TOTAL MEMBERSHIP &mdash; ' + esc(dist.name.toUpperCase()) + '</strong></td><td class="tot num"><strong style="font-size:11pt">' + T.membC.toLocaleString('en-ZA') + '</strong></td><td class="tot">&nbsp;</td></tr>';
-  h += tr2('Average Sunday Attendance (aggregated)',  T.attC.toLocaleString('en-ZA'));
-  h += tr2('Total Conversions',     T.convC);
-  h += tr2('Total Accessions',      T.accC);
-  h += tr2('Total Baptisms',        T.baptC);
+  h += '<tr>';
+  h += '<th class="lft" style="width:34%">Item</th><th style="width:16%">Total</th>';
+  h += '<th class="lft" style="width:34%">Item</th><th style="width:16%">Total</th>';
+  h += '</tr>';
+  function numRow4(a,av,b,bv){
+    return '<tr><td class="lbl">'+a+'</td><td class="dat num"><strong>'+av+'</strong></td>'
+          +'<td class="lbl">'+b+'</td><td class="dat num"><strong>'+bv+'</strong></td></tr>';
+  }
+  h += numRow4(
+    'Number of charges / circuits', totalCharges,
+    'Full members &mdash; adults', T.adultsC.toLocaleString('en-ZA'));
+  h += numRow4(
+    'Number of circuits (subset)', T.numCircuits,
+    'Full members &mdash; youth', T.youthC.toLocaleString('en-ZA'));
+  h += numRow4(
+    'Total preaching points', T.numPreachPts || '&mdash;',
+    'Full members &mdash; children', T.childrenC.toLocaleString('en-ZA'));
+  h += numRow4(
+    'Number of pastors', churches.length,
+    '<strong>TOTAL MEMBERSHIP</strong>', '<strong>' + T.membC.toLocaleString('en-ZA') + '</strong>');
+  h += numRow4(
+    'Number of licensed local preachers', dist.licensedPreachers != null ? dist.licensedPreachers : '&mdash;',
+    'Average Sunday attendance', T.attC.toLocaleString('en-ZA'));
+  h += numRow4(
+    'Number of title deeds held', T.hasTitleDeed,
+    'Church School enrolment', T.churchSchoolC.toLocaleString('en-ZA'));
+  h += numRow4(
+    'Charges without a title deed', T.noTitleDeed,
+    'Number of tithers', T.titherC.toLocaleString('en-ZA'));
+  h += numRow4(
+    'Number of adult delegates', T.adultDel || '&mdash;',
+    'Number of conversions', T.convC);
+  h += numRow4(
+    'Number of youth delegates', T.youthDel || '&mdash;',
+    'Number of accessions', T.accC);
+  h += numRow4(
+    'Vacant charges', dist.vacantCharges != null ? dist.vacantCharges : '&mdash;',
+    'Number of baptisms', T.baptC);
+  h += numRow4(
+    'New churches planted this year', dist.newChurches != null ? dist.newChurches : '&mdash;',
+    '', '');
   h += '</table></div>';
 
-  // Financial aggregate
+  h += '<hr class="gold-rule">';
+
+  // ── Financial Summary (left = apportionments; right = ERP + totals) ──
   h += '<div class="sec">';
-  h += '<div class="sh">District Financial Summary</div>';
+  h += '<div class="sh">B. District Financial Summary</div>';
   h += '<table>';
-  h += '<tr><th class="lft" style="width:55%">Item</th><th style="width:45%">Total for District</th></tr>';
-  h += '<tr><td class="lbl">Total Funds Raised (all churches)</td><td class="dat num"><strong>' + rands(T.funds) + '</strong></td></tr>';
-  h += '<tr class="alt"><td class="lbl">Total Paid to Pastors (all compensation)</td><td class="dat num">' + rands(T.paidPastor) + '</td></tr>';
-  if (T.tithes) h += '<tr><td class="lbl">Total Tithes Received</td><td class="dat num">' + rands(T.tithes) + '</td></tr>';
-  h += '<tr><td class="tot"><strong>TOTAL BROUGHT TO ANNUAL CONFERENCE</strong></td><td class="tot num"><strong style="font-size:11pt">' + rands(T.tac) + '</strong></td></tr>';
+  h += '<tr>';
+  h += '<th class="lft" style="width:34%">Apportionment Item</th><th style="width:16%">Total Paid</th>';
+  h += '<th class="lft" style="width:34%">Item</th><th style="width:16%">Total</th>';
+  h += '</tr>';
+  function finRow4(a,av,b,bv,altRow){
+    var cls = altRow ? ' class="alt"' : '';
+    return '<tr'+cls+'><td class="lbl">'+a+'</td><td class="dat num">'+av+'</td>'
+          +'<td class="lbl">'+b+'</td><td class="dat num">'+bv+'</td></tr>';
+  }
+  h += finRow4(
+    'Mid-Year Budget', rands(T.mybPaid),
+    'ERP &mdash; pledged by District', rands(T.erpPledgedAmt), false);
+  h += finRow4(
+    'Annual Conference Budget', rands(T.acbPaid),
+    'ERP &mdash; paid this conference year', rands(T.erpPaidYrAmt), true);
+  h += finRow4(
+    'Advance Offering', rands(T.advPaid),
+    'ERP &mdash; cumulative paid to date', rands(T.erpCumAmt), false);
+  h += finRow4(
+    'Office Staff', rands(T.ostPaid),
+    '<strong>ERP outstanding on pledge</strong>', '<strong>' + rands(T.erpOutAmt) + '</strong>', true);
+  h += finRow4(
+    'Provident Fund &mdash; Jan to Jun', rands(T.panPaid),
+    'Charges paid ERP in full', T.erpPaidFull, false);
+  h += finRow4(
+    'Provident Fund &mdash; Jul to Dec', rands(T.pasPaid),
+    'Charges in arrears on ERP', T.erpInArrears, true);
+  h += finRow4(
+    'Presiding Elder&rsquo;s Annuity received', rands(T.peaPaid),
+    'Total funds raised by local churches', rands(T.funds), false);
+  h += finRow4(
+    '', '',
+    'Total tithes received by local churches', rands(T.tithes), true);
+  h += '<tr><td class="tot" colspan="2"><strong>TOTAL BROUGHT TO ANNUAL CONFERENCE</strong></td>'
+     + '<td class="tot num" colspan="2"><strong style="font-size:11pt">' + rands(T.tac) + '</strong></td></tr>';
   h += '</table></div>';
 
-  // Church listing
-  h += '<div class="sec">';
-  h += '<div class="sh">Churches in ' + esc(dist.name) + ' &mdash; Key Figures (' + churches.length + ' churches)</div>';
+  h += '</div>'; // page-inner
+  h += footerHtml;
+  h += '</div>'; // page (portrait)
+
+  /* ── PAGE 2: LANDSCAPE CHARGE ROSTER ── */
+  h += '<div class="page pe-roster">';
+  h += '<div class="dist-banner">';
+  h += '<div class="dist-banner-name">' + esc(dist.name) + ' &mdash; Charge Roster</div>';
+  h += '<div class="dist-banner-sub">African Methodist Episcopal Church &middot; M.M. Mokone Memorial Annual Conference &middot; 42nd Session, 8 October 2026</div>';
+  h += '</div>';
+
+  h += '<div class="page-inner" style="padding-top:6px;padding-bottom:20mm">';
   if (churches.length === 0) {
     h += '<div style="padding:12px;font-style:italic;color:#888;font-size:9pt">No submissions received for this district.</div>';
   } else {
-    h += '<table>';
-    h += '<tr>';
-    h += '<th class="lft" style="width:35%">Church</th>';
-    h += '<th style="width:12%">Memb.</th>';
-    h += '<th style="width:8%">Conv.</th>';
-    h += '<th style="width:8%">Acc.</th>';
-    h += '<th style="width:8%">Bapt.</th>';
-    h += '<th>Funds Raised</th>';
-    h += '<th>To Conference</th>';
-    h += '</tr>';
+    h += '<table class="roster-tbl">';
+    h += '<thead><tr>';
+    h += '<th style="width:3%">#</th>';
+    h += '<th style="width:17%" class="lft">Church / Charge</th>';
+    h += '<th style="width:10%" class="lft">Pastor</th>';
+    h += '<th style="width:4%">Stn</th>';
+    h += '<th style="width:5%">Memb.<br>Prev</th>';
+    h += '<th style="width:5%">Memb.<br>Curr</th>';
+    h += '<th style="width:4%">Conv.</th>';
+    h += '<th style="width:4%">Acc.</th>';
+    h += '<th style="width:4%">Bapt.</th>';
+    h += '<th style="width:4%">Tith.</th>';
+    h += '<th style="width:7%">Funds<br>Raised</th>';
+    h += '<th style="width:6%">MYB<br>Paid</th>';
+    h += '<th style="width:6%">ACB<br>Paid</th>';
+    h += '<th style="width:6%">Adv.<br>Offering</th>';
+    h += '<th style="width:6%">PE<br>Annuity</th>';
+    h += '<th style="width:6%">ERP<br>Paid</th>';
+    h += '<th style="width:7%">Total to<br>Conf.</th>';
+    h += '</tr></thead>';
+    h += '<tbody>';
     churches.forEach(function(r, idx) {
+      var mP = num(r,'totalPrev') || (num(r,'adultsPrev') + num(r,'youthPrev') + num(r,'childrenPrev'));
       var mC = num(r,'totalCurr') || (num(r,'adultsCurr') + num(r,'youthCurr') + num(r,'childrenCurr'));
-      var tacRowPaid = num(r,'tacPaid');
+      var st = String(g(r,'station') || '').toLowerCase();
+      var stnLabel = st.indexOf('circuit') >= 0 ? 'C' : 'S';
       var rowCls = idx % 2 === 0 ? '' : 'alt';
       h += '<tr class="' + rowCls + '">';
-      h += '<td style="font-weight:600">' + esc(cn(r)) + '</td>';
+      h += '<td class="num">' + (idx + 1) + '</td>';
+      h += '<td style="font-weight:600;font-size:8pt">' + esc(cn(r)) + '</td>';
+      h += '<td style="font-size:8pt">' + esc(pn(r)) + '</td>';
+      h += '<td class="num" style="font-size:8pt">' + stnLabel + '</td>';
+      h += '<td class="num">' + (mP || '&mdash;') + '</td>';
       h += '<td class="num">' + (mC || '&mdash;') + '</td>';
       h += '<td class="num">' + (num(r,'conversionsCurr') || '&mdash;') + '</td>';
       h += '<td class="num">' + (num(r,'accessionsCurr')  || '&mdash;') + '</td>';
       h += '<td class="num">' + (num(r,'baptismsCurr')    || '&mdash;') + '</td>';
+      h += '<td class="num">' + (num(r,'tithersCurr')     || '&mdash;') + '</td>';
       h += '<td class="num">' + rands(num(r,'fundsRaised')) + '</td>';
-      h += '<td class="num">' + rands(tacRowPaid) + '</td>';
+      h += '<td class="num">' + rands(num(r,'mybPaid'))    + '</td>';
+      h += '<td class="num">' + rands(num(r,'acbPaid'))    + '</td>';
+      h += '<td class="num">' + rands(num(r,'advPaid'))    + '</td>';
+      h += '<td class="num">' + rands(num(r,'peaPaid'))    + '</td>';
+      h += '<td class="num">' + rands(num(r,'erpPaid'))    + '</td>';
+      h += '<td class="num" style="font-weight:700">' + rands(num(r,'tacPaid')) + '</td>';
       h += '</tr>';
     });
-    h += '</table>';
+    // Totals row
+    h += '<tr style="background:var(--purple);color:white;font-weight:700">';
+    h += '<td colspan="4" style="padding:3px 6px;font-size:8pt;text-align:left">DISTRICT TOTALS</td>';
+    h += '<td class="num">' + T.membP.toLocaleString('en-ZA') + '</td>';
+    h += '<td class="num">' + T.membC.toLocaleString('en-ZA') + '</td>';
+    h += '<td class="num">' + T.convC + '</td>';
+    h += '<td class="num">' + T.accC  + '</td>';
+    h += '<td class="num">' + T.baptC + '</td>';
+    h += '<td class="num">' + T.titherC.toLocaleString('en-ZA') + '</td>';
+    h += '<td class="num">' + rands(T.funds)   + '</td>';
+    h += '<td class="num">' + rands(T.mybPaid) + '</td>';
+    h += '<td class="num">' + rands(T.acbPaid) + '</td>';
+    h += '<td class="num">' + rands(T.advPaid) + '</td>';
+    h += '<td class="num">' + rands(T.peaPaid) + '</td>';
+    h += '<td class="num">' + rands(T.erpPaid) + '</td>';
+    h += '<td class="num">' + rands(T.tac)     + '</td>';
+    h += '</tr>';
+    h += '</tbody></table>';
   }
-  h += '</div>'; // sec (church listing)
-
   h += '</div>'; // page-inner
-
-  // Footer
   h += '<div class="page-foot">';
-  h += '<span>M.M. Mokone Annual Conference 2026 &middot; 42nd Session &middot; ' + esc(dist.name) + '</span>';
+  h += '<span>M.M. Mokone Annual Conference 2026 &middot; 42nd Session &middot; ' + esc(dist.name) + ' Charge Roster</span>';
   h += '<span>' + esc(dist.pe) + ' &middot; Presiding Elder</span>';
   h += '</div>';
+  h += '</div>'; // pe-roster page
 
-  h += '</div>'; // page
   return h;
 }
 
