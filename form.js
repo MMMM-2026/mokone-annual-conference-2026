@@ -2,6 +2,7 @@
 // GitHub Pages version
 
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzuLLT1P3bypTDws-lwex8Ieq_svIeXJpjN3a5yX5R-GSLWH4t9C8T3zyMRXT5WWac78Q/exec";
+function nm(s){return(s||'').toLowerCase().replace(/[^a-z0-9]/g,' ').replace(/\s+/g,' ').trim();}
 
 const D={
   "Capital District":{pe:"The Rev. Mandisi Albert Mexico",c:[
