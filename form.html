@@ -141,10 +141,212 @@ textarea{min-height:90px;resize:vertical;line-height:1.6}
 .sg-use{flex:1;padding:10px;background:#6B2D8B;color:white;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer}
 .sg-keep{flex:1;padding:10px;background:#f0f0f0;color:#333;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer}
 
+
+/* ══════════════════════════════════════════════
+   KINGDOM IMPACT — FORM CLOSED EXPERIENCE
+   Canvas starfield · Live stats · Church finder
+   ══════════════════════════════════════════════ */
+#form-closed{position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;overflow-y:auto;background:#0a0318}
+#fc-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.fc-scroll{position:relative;z-index:1;min-height:100%;display:flex;flex-direction:column;align-items:center;padding:50px 20px 70px;gap:0}
+
+/* ── HERO CROSS — ROTATING RAYS ── */
+.fc-hero-cross{position:relative;width:150px;height:150px;margin:0 auto 32px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fc-hero-rays{position:absolute;inset:-75px;border-radius:50%;background:conic-gradient(transparent 0deg,rgba(196,151,42,.22) 5deg,transparent 13deg,transparent 22deg,rgba(196,151,42,.14) 27deg,transparent 35deg,transparent 44deg,rgba(196,151,42,.22) 49deg,transparent 57deg,transparent 66deg,rgba(196,151,42,.14) 71deg,transparent 79deg,transparent 88deg,rgba(196,151,42,.22) 93deg,transparent 101deg,transparent 110deg,rgba(196,151,42,.14) 115deg,transparent 123deg,transparent 132deg,rgba(196,151,42,.22) 137deg,transparent 145deg,transparent 154deg,rgba(196,151,42,.14) 159deg,transparent 167deg,transparent 176deg,rgba(196,151,42,.22) 181deg,transparent 189deg,transparent 198deg,rgba(196,151,42,.14) 203deg,transparent 211deg,transparent 220deg,rgba(196,151,42,.22) 225deg,transparent 233deg,transparent 242deg,rgba(196,151,42,.14) 247deg,transparent 255deg,transparent 264deg,rgba(196,151,42,.22) 269deg,transparent 277deg,transparent 286deg,rgba(196,151,42,.14) 291deg,transparent 299deg,transparent 308deg,rgba(196,151,42,.22) 313deg,transparent 321deg,transparent 330deg,rgba(196,151,42,.14) 335deg,transparent 343deg,transparent 352deg,rgba(196,151,42,.22) 357deg,transparent 360deg);animation:fcrays 26s linear infinite;pointer-events:none}
+@keyframes fcrays{to{transform:rotate(360deg);}}
+.fc-hero-halo{position:absolute;inset:-12px;border-radius:50%;background:radial-gradient(circle,rgba(196,151,42,.2) 0%,transparent 70%);animation:fchalo 3.5s ease-in-out infinite}
+@keyframes fchalo{0%,100%{transform:scale(.88);opacity:.5}50%{transform:scale(1.12);opacity:1}}
+.fc-hero-svg{position:relative;z-index:1;width:90px;height:90px;filter:drop-shadow(0 0 22px rgba(196,151,42,.9)) drop-shadow(0 0 55px rgba(196,151,42,.4));animation:fcshine 3.5s ease-in-out infinite}
+@keyframes fcshine{0%,100%{filter:drop-shadow(0 0 18px rgba(196,151,42,.8)) drop-shadow(0 0 45px rgba(196,151,42,.35));}50%{filter:drop-shadow(0 0 40px rgba(196,151,42,1)) drop-shadow(0 0 90px rgba(196,151,42,.65)) drop-shadow(0 0 130px rgba(196,151,42,.2));}}
+
+/* ── HERO TEXT ── */
+.fc-eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:4px;color:#e8c97a;margin-bottom:16px;text-align:center;opacity:.85}
+.fc-title{font-family:"Playfair Display",serif;font-size:clamp(28px,6vw,44px);font-weight:700;color:#fff;text-align:center;line-height:1.18;margin-bottom:14px;text-wrap:balance;text-shadow:0 4px 40px rgba(196,151,42,.35)}
+.fc-sub{font-size:14px;color:#c4a8e0;line-height:1.95;text-align:center;max-width:510px;margin-bottom:32px}
+.fc-divider{border:none;border-top:1px solid rgba(196,151,42,.2);width:100%;max-width:560px;margin:28px 0}
+
+/* ── ROLL OF HONOUR TICKER ── */
+.fc-honor{width:100%;overflow:hidden;padding:18px 0;background:linear-gradient(90deg,#0a0318 0%,rgba(74,15,118,.15) 50%,#0a0318 100%);margin:0 0 4px}
+.fc-honor-lbl{font-size:9px;text-transform:uppercase;letter-spacing:3.5px;color:#C4972A;text-align:center;margin-bottom:13px;opacity:.75}
+.fc-honor-track{overflow:hidden;width:100%}
+.fc-honor-inner{display:flex;white-space:nowrap;width:max-content;animation:fcscroll 70s linear infinite}
+@keyframes fcscroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+.fc-honor-name{display:inline-flex;align-items:center;gap:14px;font-family:"Playfair Display",serif;font-size:13px;color:rgba(232,201,122,.75);padding:0 4px;white-space:nowrap}
+.fc-honor-sep{font-size:8px;color:rgba(196,151,42,.35)}
+.fc-honor-placeholder{text-align:center;font-size:11px;color:#3d2060;padding:6px;letter-spacing:1px}
+
+/* ── KINGDOM IMPACT COUNTERS ── */
+.fc-impact{width:100%;max-width:560px;margin-bottom:4px}
+.fc-impact-label{font-size:9px;text-transform:uppercase;letter-spacing:3px;color:#C4972A;text-align:center;margin-bottom:16px}
+.fc-counters{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.fc-counter{background:rgba(255,255,255,.04);border:1px solid rgba(196,151,42,.2);border-radius:16px;padding:20px 10px;text-align:center;position:relative;overflow:hidden}
+.fc-counter::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at top,rgba(196,151,42,.08),transparent 65%)}
+.fc-cnt-val{font-family:"Playfair Display",serif;font-size:clamp(22px,4vw,34px);font-weight:700;color:#e8c97a;display:block;line-height:1;margin-bottom:7px;font-variant-numeric:tabular-nums}
+.fc-cnt-lbl{font-size:10px;color:#9b7bb5;text-transform:uppercase;letter-spacing:1px;line-height:1.35;display:block}
+.fc-cnt-icon{font-size:20px;display:block;margin-bottom:9px;opacity:.85}
+.fc-loading-txt{text-align:center;font-size:11px;color:#6b4a8a;padding:14px 0;letter-spacing:1px}
+
+/* ── CHURCH FINDER ── */
+.fc-finder{width:100%;max-width:560px;margin-bottom:4px}
+.fc-finder-hd{text-align:center;margin-bottom:18px}
+.fc-finder-icon{font-size:32px;display:block;margin-bottom:10px}
+.fc-finder-title{font-family:"Playfair Display",serif;font-size:20px;color:#fff;font-weight:700;margin-bottom:6px}
+.fc-finder-sub{font-size:12px;color:#9b7bb5;line-height:1.7}
+.fc-search-wrap{position:relative;margin-bottom:16px}
+.fc-search-input{width:100%;padding:15px 18px 15px 50px;background:rgba(255,255,255,.06);border:1.5px solid rgba(196,151,42,.35);border-radius:14px;font-size:15px;color:#fff;font-family:"Open Sans",sans-serif;outline:none;transition:border-color .25s,box-shadow .25s;box-sizing:border-box}
+.fc-search-input:focus{border-color:#C4972A;box-shadow:0 0 0 4px rgba(196,151,42,.12)}
+.fc-search-input::placeholder{color:#5d3a7a}
+.fc-search-ico{position:absolute;left:17px;top:50%;transform:translateY(-50%);font-size:17px;pointer-events:none;opacity:.55}
+
+/* STAMP ANIMATION — THE CINEMATIC WOW */
+@keyframes fcStampIn{0%{transform:scale(3.5) rotate(-14deg);opacity:0;filter:blur(8px);}55%{transform:scale(.91) rotate(2deg);opacity:1;filter:blur(0);}75%{transform:scale(1.04) rotate(-0.8deg);}100%{transform:scale(1) rotate(0deg);opacity:1;}}
+.fc-stamp-wrap{animation:fcStampIn .7s cubic-bezier(.22,1,.36,1) both;background:linear-gradient(150deg,rgba(196,151,42,.14) 0%,rgba(74,15,118,.2) 100%);border:2px solid rgba(196,151,42,.55);border-radius:22px;padding:30px 24px;text-align:center;position:relative;overflow:hidden}
+.fc-stamp-wrap::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at top,rgba(196,151,42,.14),transparent 55%);pointer-events:none}
+.fc-stamp-badge{display:inline-block;background:linear-gradient(135deg,#b8860b,#C4972A,#e8c060,#C4972A,#b8860b);background-size:300% 300%;animation:fcgoldshift 3s ease infinite;border-radius:40px;padding:9px 26px;font-size:13px;font-weight:800;color:#0a0318;letter-spacing:3.5px;text-transform:uppercase;margin-bottom:20px;box-shadow:0 6px 28px rgba(196,151,42,.45)}
+@keyframes fcgoldshift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.fc-stamp-church{font-family:"Playfair Display",serif;font-size:clamp(21px,5vw,32px);font-weight:700;color:#fff;margin-bottom:8px;text-shadow:0 2px 24px rgba(196,151,42,.35);line-height:1.2}
+.fc-stamp-dist{font-size:11px;text-transform:uppercase;letter-spacing:3px;color:#C4972A;margin-bottom:5px}
+.fc-stamp-pastor{font-size:13px;color:#c4a8e0;margin-bottom:18px}
+.fc-stamp-date{display:inline-block;background:rgba(255,255,255,.05);border:1px solid rgba(196,151,42,.22);border-radius:8px;padding:7px 18px;font-size:11px;color:#9b7bb5;margin-bottom:20px}
+.fc-stamp-stats{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:20px}
+.fc-ss{background:rgba(255,255,255,.05);border-radius:12px;padding:14px 18px;text-align:center;flex:1;min-width:110px}
+.fc-ss-val{font-family:"Playfair Display",serif;font-size:22px;color:#e8c97a;display:block;font-variant-numeric:tabular-nums}
+.fc-ss-lbl{font-size:10px;color:#9b7bb5;text-transform:uppercase;letter-spacing:.8px;display:block;margin-top:2px}
+.fc-stamp-verse{font-size:13px;color:#c4a8e0;font-style:italic;padding:14px 18px;background:rgba(107,45,139,.18);border-radius:12px;line-height:1.7}
+.fc-no-result{text-align:center;padding:18px;font-size:12px;color:#6b4a8a;border:1px dashed rgba(107,45,139,.3);border-radius:12px}
+
+/* ── COUNTDOWN ── */
+.fc-countdown{width:100%;max-width:560px;margin-bottom:4px}
+.fc-cd-label{font-size:9px;text-transform:uppercase;letter-spacing:3px;color:#C4972A;text-align:center;margin-bottom:14px}
+.fc-cd-row{display:flex;gap:10px;justify-content:center}
+.fc-cd-box{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:16px 12px;text-align:center;min-width:68px;flex:1;max-width:92px}
+.fc-cd-num{font-family:"Playfair Display",serif;font-size:clamp(26px,5.5vw,40px);font-weight:700;color:#fff;display:block;line-height:1;font-variant-numeric:tabular-nums}
+.fc-cd-unit{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:#9b7bb5;display:block;margin-top:6px}
+.fc-cd-live{font-family:"Playfair Display",serif;font-size:22px;color:#e8c97a;text-align:center;padding:20px}
+
+/* ── FOOTER NOTE ── */
+.fc-note{background:rgba(74,15,118,.18);border:1px solid rgba(107,45,139,.35);border-radius:14px;padding:20px 22px;font-size:12px;color:#c4a8e0;line-height:1.9;text-align:left;width:100%;max-width:560px}
+.fc-note strong{color:#e8c97a}
+.fc-footer-line{text-align:center;font-size:10px;color:#2d1640;margin-top:32px;letter-spacing:.5px}
 </style>
 </head>
 <body>
-<div id="main-form">
+
+<!-- ════════════════════════════════════════════
+     KINGDOM IMPACT — EXTRAORDINARY CLOSED FORM
+     ════════════════════════════════════════════ -->
+<div id="form-closed">
+  <canvas id="fc-canvas"></canvas>
+  <div class="fc-scroll">
+
+    <!-- HERO — GREAT CROSS WITH RAYS OF LIGHT -->
+    <div class="fc-hero-cross">
+      <div class="fc-hero-rays"></div>
+      <div class="fc-hero-halo"></div>
+      <svg class="fc-hero-svg" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="cg" cx="50%" cy="40%" r="60%">
+            <stop offset="0%" stop-color="#fff9e4"/>
+            <stop offset="55%" stop-color="#e8c97a"/>
+            <stop offset="100%" stop-color="#C4972A"/>
+          </radialGradient>
+        </defs>
+        <rect x="39" y="10" width="12" height="70" rx="6" fill="url(#cg)"/>
+        <rect x="10" y="32" width="70" height="12" rx="6" fill="url(#cg)"/>
+      </svg>
+    </div>
+
+    <div class="fc-eyebrow">&#10022; M.M. Mokone Memorial Annual Conference 2026 &#10022;</div>
+    <div class="fc-title">The Record is Written.<br>The Gates are Sealed.</div>
+    <div class="fc-sub">Thank you, Pastor.</div>
+
+    <div class="fc-divider"></div>
+
+    <!-- ROLL OF HONOUR — LIVE SCROLLING TICKER OF EVERY CHURCH THAT SUBMITTED -->
+    <div class="fc-honor">
+      <div class="fc-honor-lbl">&#10022; Roll of Honour — Churches That Answered the Call &#10022;</div>
+      <div class="fc-honor-track">
+        <div class="fc-honor-inner" id="fc-honor-inner">
+          <span class="fc-honor-placeholder" id="fc-honor-placeholder">&#8635; Loading the roll of honour&hellip;</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc-divider"></div>
+
+    <!-- KINGDOM IMPACT COUNTERS -->
+    <div class="fc-impact">
+      <div class="fc-impact-label">&#9670; Kingdom Impact — What This District Accomplished</div>
+      <div id="fc-loading" class="fc-loading-txt">&#8635; Loading live district data&hellip;</div>
+      <div class="fc-counters" id="fc-counters" style="display:none">
+        <div class="fc-counter">
+          <span class="fc-cnt-icon">&#10013;</span>
+          <span class="fc-cnt-val" id="cnt-churches">0</span>
+          <span class="fc-cnt-lbl">Charges<br>Answered</span>
+        </div>
+        <div class="fc-counter">
+          <span class="fc-cnt-icon">&#128591;</span>
+          <span class="fc-cnt-val" id="cnt-members">0</span>
+          <span class="fc-cnt-lbl">Lives<br>Recorded</span>
+        </div>
+        <div class="fc-counter">
+          <span class="fc-cnt-icon">&#11088;</span>
+          <span class="fc-cnt-val" id="cnt-districts">0</span>
+          <span class="fc-cnt-lbl">Districts<br>United</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc-divider"></div>
+
+    <!-- CHURCH SUBMISSION FINDER -->
+    <div class="fc-finder">
+      <div class="fc-finder-hd">
+        <span class="fc-finder-icon">&#128269;</span>
+        <div class="fc-finder-title">Is Your Name in the Book?</div>
+        <div class="fc-finder-sub">Search your church name below &mdash; see your place in the eternal record of this Conference</div>
+      </div>
+      <div class="fc-search-wrap">
+        <span class="fc-search-ico">&#10003;</span>
+        <input
+          type="text"
+          id="fc-church-input"
+          class="fc-search-input"
+          placeholder="e.g. Nkosi Memorial, Ebenezer, Mt. Zion&hellip;"
+          autocomplete="off"
+          spellcheck="false"
+        >
+      </div>
+      <div id="fc-result"></div>
+    </div>
+
+    <div class="fc-divider"></div>
+
+    <!-- LIVE COUNTDOWN TO ANNUAL CONFERENCE -->
+    <div class="fc-countdown">
+      <div class="fc-cd-label">&#9670; The Conference Convenes In</div>
+      <div class="fc-cd-row" id="fc-countdown">
+        <div class="fc-cd-box"><span class="fc-cd-num" id="fc-cd-d">--</span><span class="fc-cd-unit">Days</span></div>
+        <div class="fc-cd-box"><span class="fc-cd-num" id="fc-cd-h">--</span><span class="fc-cd-unit">Hours</span></div>
+        <div class="fc-cd-box"><span class="fc-cd-num" id="fc-cd-m">--</span><span class="fc-cd-unit">Minutes</span></div>
+        <div class="fc-cd-box"><span class="fc-cd-num" id="fc-cd-s">--</span><span class="fc-cd-unit">Seconds</span></div>
+      </div>
+      <div style="text-align:center;font-size:11px;color:#6b4a8a;margin-top:10px;letter-spacing:.5px">
+        08 October 2026 &middot; Opening of the Annual Conference
+      </div>
+    </div>
+
+    <div class="fc-divider"></div>
+
+    <div class="fc-footer-line">
+      African Methodist Episcopal Church &middot; 19th Episcopal District &middot; M.M. Mokone Memorial Annual Conference 2026
+    </div>
+
+  </div><!-- /fc-scroll -->
+</div>
+<!-- ════════════════════════════════════════════ -->
+
+<div id="main-form" style="display:none">
 <header class="header">
   <img src="ame19th-logo-white.png" alt="19th Episcopal District">
   <div class="h-eyebrow">African Methodist Episcopal Church &middot; Nineteenth Episcopal District</div>
@@ -161,7 +363,7 @@ textarea{min-height:90px;resize:vertical;line-height:1.6}
       <div class="cd-box"><span class="cd-n" id="c1m">--</span><span class="cd-u">Min</span></div>
       <div class="cd-box"><span class="cd-n" id="c1s">--</span><span class="cd-u">Sec</span></div>
     </div>
-    <div class="cd-lbl">Deadline: 20 September 2026 at 23:59</div>
+    <div class="cd-lbl">Deadline: 29 September 2026 &middot; 17:00 SAST</div>
   </div>
   <div class="cd-bar">
     <div style="font-size:9px;color:#e8c97a;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:5px">&#10024; Annual Conference opens</div>
@@ -437,7 +639,7 @@ textarea{min-height:90px;resize:vertical;line-height:1.6}
     <div><div class="crl">Date</div><input type="date" id="h-pastor-date"></div>
   </div>
   <div class="cr">
-    <div><div class="crl">Member of the Steward Board</div><input type="text" id="h-steward" placeholder="Full name of Steward Board member"></div>
+    <div><div class="crl">Chairperson of the Steward Board</div><input type="text" id="h-steward" placeholder="Full name of Steward Board Chair"></div>
     <div class="cor">&amp;</div>
     <div><div class="crl">Date</div><input type="date" id="h-steward-date"></div>
   </div>
@@ -487,6 +689,273 @@ textarea{min-height:90px;resize:vertical;line-height:1.6}
   African Methodist Episcopal Church &middot; 19th Episcopal District &middot; M.M. Mokone Memorial Annual Conference 2026
 </div>
 <script src="form.js"></script>
+<script>
+/* ═══════════════════════════════════════════════
+   DATE GATE — decides which page the visitor sees
+   ═══════════════════════════════════════════════ */
+(function(){
+  var CLOSE_DATE = new Date('2026-09-29T17:00:00+02:00'); /* 17:00 SAST 29 Sep — submissions closed */
+  var isOpen = new Date() < CLOSE_DATE;
+  var fcEl = document.getElementById('form-closed');
+  var mfEl = document.getElementById('main-form');
+  if(isOpen){
+    if(fcEl) fcEl.style.display = 'none';
+    if(mfEl) mfEl.style.display = 'block';
+  } else {
+    /* Already default: form-closed visible, main-form hidden */
+    if(mfEl) mfEl.style.display = 'none';
+  }
+})();
+</script>
+<script>
+/* ══════════════════════════════════════════════════════════
+   KINGDOM IMPACT CLOSED FORM — INTERACTIVE EXPERIENCE
+   Canvas particles · Live data · Church finder · Countdown
+   ══════════════════════════════════════════════════════════ */
+(function(){
+  var SCRIPT_URL="https://script.google.com/macros/s/AKfycbzuLLT1P3bypTDws-lwex8Ieq_svIeXJpjN3a5yX5R-GSLWH4t9C8T3zyMRXT5WWac78Q/exec";
+  var allSubs=[];
+
+  /* ── 1. CANVAS PARTICLE STARFIELD ── */
+  (function initCanvas(){
+    var canvas=document.getElementById("fc-canvas");
+    if(!canvas)return;
+    var ctx=canvas.getContext("2d");
+    var W=0,H=0,particles=[];
+
+    function resize(){
+      W=canvas.width=window.innerWidth;
+      H=canvas.height=window.innerHeight;
+    }
+    window.addEventListener("resize",resize);
+    resize();
+
+    /* Seed particles */
+    for(var i=0;i<90;i++){
+      particles.push({
+        x:Math.random()*W,
+        y:Math.random()*H,
+        size:Math.random()*2.2+0.5,
+        speed:Math.random()*0.35+0.06,
+        drift:(Math.random()-0.5)*0.18,
+        opacity:Math.random()*0.45+0.05,
+        isCross:Math.random()<0.12,
+        phase:Math.random()*Math.PI*2,
+        gold:Math.random()<0.3
+      });
+    }
+
+    function drawCross(x,y,sz,alpha){
+      ctx.save();
+      ctx.globalAlpha=alpha;
+      ctx.strokeStyle="#C4972A";
+      ctx.lineWidth=0.8;
+      ctx.lineCap="round";
+      ctx.beginPath();
+      ctx.moveTo(x-sz,y);ctx.lineTo(x+sz,y);
+      ctx.moveTo(x,y-sz*1.6);ctx.lineTo(x,y+sz*1.6);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    var frame=0;
+    function animate(){
+      requestAnimationFrame(animate);
+      ctx.clearRect(0,0,W,H);
+      frame++;
+      particles.forEach(function(p){
+        p.y-=p.speed;
+        p.x+=p.drift+Math.sin(p.phase+frame*0.008)*0.15;
+        p.phase+=0.015;
+        if(p.y<-16){p.y=H+8;p.x=Math.random()*W;}
+        if(p.x<-10)p.x=W+8;
+        if(p.x>W+10)p.x=-8;
+        if(p.isCross){
+          drawCross(p.x,p.y,p.size*2.2,p.opacity*0.65);
+        }else{
+          ctx.save();
+          ctx.globalAlpha=p.opacity;
+          ctx.fillStyle=p.gold?"#C4972A":"rgba(212,184,240,0.8)";
+          ctx.beginPath();
+          ctx.arc(p.x,p.y,p.size,0,6.283);
+          ctx.fill();
+          ctx.restore();
+        }
+      });
+    }
+    animate();
+  })();
+
+  /* ── 2. ANIMATED COUNTER ── */
+  function animCount(id,target,format){
+    var el=document.getElementById(id);
+    if(!el||target===0){if(el)el.textContent=format(0);return;}
+    var start=performance.now(),dur=2600;
+    function step(now){
+      var t=Math.min((now-start)/dur,1);
+      var ease=1-Math.pow(1-t,3);
+      el.textContent=format(Math.round(target*ease));
+      if(t<1)requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  /* ── 3. LOAD LIVE DATA FROM SHEET ── */
+  function loadImpact(){
+    fetch(SCRIPT_URL)
+      .then(function(r){return r.json();})
+      .then(function(data){
+        var raw=data.submissions||data||[];
+        /* De-duplicate: keep latest row per church */
+        var latest={};
+        raw.forEach(function(r){
+          var cn=(r["Church"]||r.churchName||"").trim();
+          if(!cn)return;
+          if(!latest[cn]||String(r.Timestamp||"")>String(latest[cn].Timestamp||""))latest[cn]=r;
+        });
+        allSubs=Object.values(latest);
+
+        /* Aggregate */
+        var districtSet={};
+        var totalMembers=0;
+        allSubs.forEach(function(r){
+          var d=(r.District||r.district||"").trim();
+          if(d)districtSet[d]=1;
+          var tc=parseFloat(r["Total Memb C"]||r.totalMembC||0)||0;
+          if(tc>0){
+            totalMembers+=tc;
+          }else{
+            totalMembers+=(parseFloat(r["Adults Curr"]||r.adultsC||0)||0)
+                         +(parseFloat(r["Youth Curr"]||r.youthC||0)||0)
+                         +(parseFloat(r["Children Curr"]||r.childrenC||0)||0);
+          }
+        });
+
+        /* Show counters */
+        document.getElementById("fc-loading").style.display="none";
+        document.getElementById("fc-counters").style.display="grid";
+
+        animCount("cnt-churches",allSubs.length,function(v){return v+" / 68";});
+        animCount("cnt-members",totalMembers,function(v){return v.toLocaleString("en-ZA");});
+        animCount("cnt-districts",Object.keys(districtSet).length,function(v){return v+" / 6";});
+
+        /* Populate Roll of Honour ticker */
+        var inner=document.getElementById("fc-honor-inner");
+        if(inner&&allSubs.length>0){
+          var names=allSubs.map(function(r){return(r["Church"]||r.churchName||"").trim();}).filter(Boolean);
+          if(names.length>0){
+            var html="";
+            /* Duplicate so scroll loops seamlessly */
+            for(var ri=0;ri<2;ri++){
+              names.forEach(function(n){
+                html+='<span class="fc-honor-name">&#10013;&ensp;'+n+'</span><span class="fc-honor-sep">&#10022;</span>';
+              });
+            }
+            inner.innerHTML=html;
+            /* Speed: ~2.5 s per name so reading is comfortable */
+            var dur=Math.max(25,names.length*2.5);
+            inner.style.animationDuration=dur+"s";
+          }
+        }
+      })
+      .catch(function(){
+        var loadEl=document.getElementById("fc-loading");
+        if(loadEl){loadEl.textContent="Live data unavailable — portal is closed.";}
+      });
+  }
+
+  /* ── 4. CHURCH FINDER ── */
+  function nm(s){return(s||"").toLowerCase().replace(/[^a-z0-9]/g," ").replace(/\s+/g," ").trim();}
+
+  function showResult(r,query){
+    var el=document.getElementById("fc-result");
+    if(!el)return;
+    if(!r){
+      if(query&&query.length>=2&&allSubs.length>0){
+        el.innerHTML='<div class="fc-no-result">No submission found for &ldquo;'+query+'&rdquo;.<br>Check the spelling or speak to your Presiding Elder.</div>';
+      }else{
+        el.innerHTML="";
+      }
+      return;
+    }
+    var cn=r["Church"]||r.churchName||"";
+    var dist=r.District||r.district||"";
+    var pastor=r.Pastor||r.pastor||"";
+    var ts=r.Timestamp||r.timestamp||"";
+    var dateStr="";
+    if(ts){
+      try{dateStr=new Date(ts).toLocaleDateString("en-ZA",{day:"numeric",month:"long",year:"numeric"});}catch(e){}
+    }
+    /* Force re-trigger animation by cloning */
+    var wrap=document.createElement("div");
+    wrap.innerHTML=
+      '<div class="fc-stamp-wrap">'+
+        '<div class="fc-stamp-badge">&#10003;&nbsp; RECEIVED &nbsp;&#10003;</div>'+
+        '<div class="fc-stamp-church">'+cn+'</div>'+
+        (dist?'<div class="fc-stamp-dist">'+dist+'</div>':'')+
+        (pastor?'<div class="fc-stamp-pastor">Rev. '+pastor+'</div>':'')+
+        (dateStr?'<div class="fc-stamp-date">&#128197;&nbsp; Submitted '+dateStr+'</div>':'')+
+        '<div class="fc-stamp-verse">&ldquo;Well done, good and faithful servant &mdash; enter into the joy of your Lord.&rdquo; &mdash; Matthew 25:21</div>'+
+      '</div>';
+    el.innerHTML="";
+    el.appendChild(wrap.firstChild);
+  }
+
+  function searchChurch(query){
+    var q=nm(query);
+    if(!q||q.length<2){showResult(null,"");return;}
+    var best=null,bestScore=0;
+    allSubs.forEach(function(r){
+      var cn=nm(r["Church"]||r.churchName||"");
+      if(!cn)return;
+      var score=0;
+      if(cn===q)score=100;
+      else if(cn.startsWith(q))score=80;
+      else if(cn.includes(q))score=50+q.length;
+      /* Check individual words */
+      var words=q.split(" ");
+      words.forEach(function(w){if(w.length>2&&cn.includes(w))score=Math.max(score,30);});
+      if(score>bestScore){bestScore=score;best=r;}
+    });
+    showResult(bestScore>0?best:null,query);
+  }
+
+  var debounceTimer;
+  var inp=document.getElementById("fc-church-input");
+  if(inp){
+    inp.addEventListener("input",function(){
+      clearTimeout(debounceTimer);
+      var q=inp.value.trim();
+      if(q.length<2){document.getElementById("fc-result").innerHTML="";return;}
+      debounceTimer=setTimeout(function(){searchChurch(q);},350);
+    });
+  }
+
+  /* ── 5. LIVE COUNTDOWN ── */
+  function updateCountdown(){
+    var target=new Date("2026-10-08T08:00:00+02:00");
+    var now=new Date();
+    var diff=target-now;
+    if(diff<=0){
+      var row=document.getElementById("fc-countdown");
+      if(row)row.innerHTML='<div class="fc-cd-live">&#9733; The Annual Conference is OPEN! &#9733;</div>';
+      return;
+    }
+    var d=Math.floor(diff/86400000);
+    var h=Math.floor((diff%86400000)/3600000);
+    var m=Math.floor((diff%3600000)/60000);
+    var s=Math.floor((diff%60000)/1000);
+    function set(id,v){var e=document.getElementById(id);if(e)e.textContent=String(v).padStart(2,"0");}
+    set("fc-cd-d",d);set("fc-cd-h",h);set("fc-cd-m",m);set("fc-cd-s",s);
+  }
+  setInterval(updateCountdown,1000);
+  updateCountdown();
+
+  /* ── INIT ── */
+  loadImpact();
+
+})();
+</script>
 
 <div class="sg-modal" id="sg-modal">
   <div class="sg-box">
