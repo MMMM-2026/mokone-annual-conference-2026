@@ -669,10 +669,8 @@ function buildPE(dist, churches) {
     T.baptC     += num(r,'baptismsCurr');
     T.funds     += num(r,'fundsRaised');
     T.paidPastor+= num(r,'paidPastor');
-    // TAC = sum of all individual paid apportionments
-    T.tac += (num(r,'acbPaid')+num(r,'mybPaid')+num(r,'advPaid')+num(r,'ostPaid')+
-              num(r,'peaPaid')+num(r,'pedPaid')+num(r,'pecPaid')+num(r,'panPaid')+
-              num(r,'pasPaid')+num(r,'retPaid')+num(r,'erpPaid'));
+    // TAC — read directly from the spreadsheet TAC Paid column
+    T.tac += num(r,'tacPaid');
     T.tithes    += num(r,'totalTithes');
   });
 
@@ -741,9 +739,7 @@ function buildPE(dist, churches) {
     h += '</tr>';
     churches.forEach(function(r, idx) {
       var mC = num(r,'totalCurr') || (num(r,'adultsCurr') + num(r,'youthCurr') + num(r,'childrenCurr'));
-      var tacRowPaid = (num(r,'acbPaid')+num(r,'mybPaid')+num(r,'advPaid')+num(r,'ostPaid')+
-                        num(r,'peaPaid')+num(r,'pedPaid')+num(r,'pecPaid')+num(r,'panPaid')+
-                        num(r,'pasPaid')+num(r,'retPaid')+num(r,'erpPaid'));
+      var tacRowPaid = num(r,'tacPaid');
       var rowCls = idx % 2 === 0 ? '' : 'alt';
       h += '<tr class="' + rowCls + '">';
       h += '<td style="font-weight:600">' + esc(cn(r)) + '</td>';
@@ -823,9 +819,9 @@ function buildChurch(r, dist) {
   var pasA=num(r,'pasAssessed'), pasP=num(r,'pasPaid'), pasD=g(r,'pasDate');
   var retA=num(r,'retAssessed'), retP=num(r,'retPaid'), retD=g(r,'retDate');
   var erpA=num(r,'erpAssessed'), erpPd=num(r,'erpPaid'), erpD=g(r,'erpDate');
-  // TAC — calculated from individual rows (not a separate field)
-  var tacA = (acbA||0)+(mybA||0)+(advA||0)+(ostA||0)+(peaA||0)+(pedA||0)+(pecA||0)+(panA||0)+(pasA||0)+(retA||0)+(erpA||0);
-  var tacP = (acbP||0)+(mybP||0)+(advP||0)+(ostP||0)+(peaP||0)+(pedP||0)+(pecP||0)+(panP||0)+(pasP||0)+(retP||0)+(erpPd||0);
+  // TAC — read directly from the spreadsheet TAC Assessed/Paid columns
+  var tacA = num(r,'tacAssessed');
+  var tacP = num(r,'tacPaid');
   var tacD = g(r,'tacDate');
   var funds   = num(r,'fundsRaised');
   var paidPas = num(r,'paidPastor');
@@ -1121,12 +1117,7 @@ function buildChurch(r, dist) {
   h += '<td class="dat">&nbsp;</td>';
   h += '</tr>';
   h += '</table>';
-  if (isResub && isResub.toLowerCase() === 'yes') {
-    h += '<div class="narr-block" style="margin-top:4px">';
-    h += '<div class="narr-head" style="background:#C4972A;color:#14022e">&#9888;&ensp;Resubmission</div>';
-    h += '<div class="narr-body">' + esc(resubReason || 'This report is a resubmission.') + '</div>';
-    h += '</div>';
-  }
+  // Resubmission notice intentionally omitted from printed report
   h += '</div>';
 
   h += '</div>'; // page-inner
