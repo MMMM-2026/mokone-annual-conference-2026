@@ -857,7 +857,7 @@ function buildPE(dist, churches) {
     'Provident Fund &mdash; Jul to Dec', rands(T.pasPaid),
     'Charges in arrears on ERP', T.erpInArrears, true);
   h += finRow4(
-    'Presiding Elder&rsquo;s Annuity received', rands(T.peaPaid),
+    'Presiding Elder Apportionment received', rands(T.peaPaid),
     'Total funds raised by local churches', rands(T.funds), false);
   h += finRow4(
     '', '',
@@ -897,7 +897,7 @@ function buildPE(dist, churches) {
     h += '<th style="width:6%">MYB<br>Paid</th>';
     h += '<th style="width:6%">ACB<br>Paid</th>';
     h += '<th style="width:6%">Adv.<br>Offering</th>';
-    h += '<th style="width:6%">PE<br>Annuity</th>';
+    h += '<th style="width:6%">PE<br>Apport.</th>';
     h += '<th style="width:6%">ERP<br>Paid</th>';
     h += '<th style="width:7%">Total to<br>Conf.</th>';
     h += '</tr></thead>';
@@ -1147,7 +1147,7 @@ function buildChurch(r, dist) {
   apRow('Presiding Elder — Apportionment',          peaA, peaP, peaD, 0);
   apRow('Presiding Elder — District',               pedA, pedP, pedD, 1);
   apRow('Presiding Elder — Church School',          pecA, pecP, pecD, 0);
-  apRow('Presiding Elder’s Annuity',                panA, panP, panD, 1);
+  apRow('Presiding Elder Apportionment',                panA, panP, panD, 1);
   apRow('Pastor’s Annuity',                         pasA, pasP, pasD, 0);
   apRow('Retirement Benefits and Risk (AMEC Plans)',     retA, retP, retD, 1);
   // ERP bold row
