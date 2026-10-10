@@ -192,7 +192,7 @@ function parseMinutes(raw){
 
 /* ---------- helpers ---------- */
 function num(s){ s=String(s).replace(/[R\s]/g,''); if(/,\d{2}$/.test(s)) s=s.replace(/,(\d{2})$/,'.$1'); s=s.replace(/,/g,''); var m=s.match(/^\d+(\.\d+)?/); return m?parseFloat(m[0]):NaN; }
-function flags(c){ var out=[]; [['ac','Annual Conference Budget'],['er','Episcopal Residence Project']].forEach(function(x){
+function flags(c){ var out=[]; [['ac','Annual Conference Budget']].forEach(function(x){
   var a=num(c[x[0]+'A']),p=num(c[x[0]+'P']),o=num(c[x[0]+'O']); if(isNaN(a)||isNaN(p)||isNaN(o)) return;
   if(Math.abs(Math.max(a-p,0)-o)>=1) out.push(x[1]); }); return out; }
 var normName = function(s){ return String(s).toLowerCase().replace(/a\.?m\.?e\.?/g,'').replace(/church|memorial|chapel|cathedral|temple/g,'').replace(/\bmount\b/g,'mt').replace(/[^a-z0-9]/g,''); };
