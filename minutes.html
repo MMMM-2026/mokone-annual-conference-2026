@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conference Minutes · M.M. Mokone Annual Conference 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--purple:#1a0a2e;--purple2:#3a1750;--gold:#C4972A;--goldsoft:#e8c97a;--bg:#f4f1f8;--paper:#fff;--ink:#1d1526;--muted:#665c75;--line:#ddd5e8;
+  --accent:#4b1d6e;--accent-soft:#eee4f6;--pend:#8a5200;--pend-bg:#fcefd4;--ok:#1c6642;--ok-bg:#dcf2e5;--no:#9c2a2a;--no-bg:#fae2df;
+  --doc:Georgia,"Times New Roman",serif;--ui:"Open Sans",system-ui,-apple-system,"Segoe UI",sans-serif;--head:"Playfair Display",Georgia,serif}
+*{box-sizing:border-box}
+html{color-scheme:light}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:15px;line-height:1.5}
+[hidden]{display:none!important}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.wrap{max-width:860px;margin:0 auto;padding-left:16px;padding-right:16px}
+.hero{background:linear-gradient(160deg,var(--purple) 0%,var(--purple2) 55%,var(--purple) 100%);color:#fff;border-bottom:3px solid var(--gold)}
+.hero .wrap{padding-top:16px;padding-bottom:14px;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:flex-end;justify-content:space-between}
+.eyebrow{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--goldsoft)}
+h1{font-family:var(--head);font-weight:700;font-size:clamp(20px,5vw,26px);line-height:1.2;margin:3px 0 0;text-wrap:balance}
+.hero .sec{font-size:12.5px;color:#d4b8f0;text-align:right}
+.hero .sec button{background:none;border:0;padding:0;color:var(--goldsoft);text-decoration:underline;font-weight:600}
+.bar{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.tabs{display:flex;gap:2px;overflow-x:auto}
+.tabs button{border:0;background:transparent;padding:10px 11px;font-weight:600;color:var(--muted);border-bottom:3px solid transparent;white-space:nowrap}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--gold)}
+.count{display:inline-block;min-width:20px;padding:0 6px;margin-left:5px;border-radius:10px;background:var(--pend-bg);color:var(--pend);font-size:12px;text-align:center}
+.count.ok{background:var(--ok-bg);color:var(--ok)}
+main.wrap{padding-top:16px;padding-bottom:90px;display:flex;flex-direction:column;gap:14px}
+.notice{font-size:13.5px;color:var(--muted);border-left:3px solid var(--gold);padding:2px 0 2px 12px}
+.notice b{color:var(--ink)}
+.linkbtn{border:0;background:none;padding:0;color:var(--accent);font-weight:600;text-decoration:underline}
+.jump{display:flex;flex-wrap:wrap;gap:6px}
+.jump button{border:1px solid var(--line);background:var(--paper);border-radius:20px;padding:4px 11px;font-size:13px}
+details.check{background:var(--pend-bg);border-radius:8px;padding:9px 12px;font-size:13.5px}
+details.check summary{font-weight:700;color:var(--pend);cursor:pointer}
+details.check ul{margin:8px 0 2px;padding-left:18px;display:flex;flex-direction:column;gap:3px}
+.book{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:6px clamp(12px,3.5vw,34px) 18px}
+.blk{display:grid;grid-template-columns:52px minmax(0,1fr);gap:4px 10px;padding:13px 0;border-bottom:1px solid var(--line);scroll-margin-top:60px}
+.blk:last-child{border-bottom:0}
+.ref{font-family:var(--head);font-weight:700;color:var(--accent);font-size:16px;padding-top:2px;font-variant-numeric:tabular-nums}
+.body{min-width:0;display:flex;flex-direction:column;gap:8px}
+.body p{font-family:var(--doc);font-size:17px;line-height:1.6;margin:0;max-width:66ch;overflow-wrap:anywhere}
+.blk.head .body p{font-family:var(--head);font-weight:700;font-size:20px;line-height:1.25}
+.blk.head{border-bottom:2px solid var(--purple2)}
+.blk.church h3{font-family:var(--head);font-size:17.5px;font-weight:700;margin:0}
+.tscroll{overflow-x:auto}
+table{border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums;min-width:100%}
+th,td{padding:4px 12px 4px 0;text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left;white-space:normal;min-width:130px}
+th:last-child,td:last-child{padding-right:0}
+thead th{font-weight:700;color:var(--muted);font-size:11px;letter-spacing:.05em;text-transform:uppercase;border-bottom:1px solid var(--line)}
+.meta{font-size:13.5px;color:var(--muted)}
+.meta b{color:var(--ink);font-variant-numeric:tabular-nums}
+.tools{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.propose{border:1px solid var(--line);background:transparent;border-radius:6px;padding:4px 10px;font-size:13px;font-weight:700;color:var(--accent)}
+.propose:hover{background:var(--accent-soft)}
+.pill{display:inline-block;border-radius:4px;padding:1px 8px;font-size:12px;font-weight:700;white-space:nowrap}
+.pill.pending{background:var(--pend-bg);color:var(--pend)}
+.pill.accepted{background:var(--ok-bg);color:var(--ok)}
+.pill.declined{background:var(--no-bg);color:var(--no)}
+.flag{font-size:13px;color:var(--pend);font-weight:600}
+.waiting{display:flex;flex-direction:column;gap:6px;border-left:3px solid var(--pend);padding-left:10px;font-size:13.5px}
+.who{color:var(--muted);font-size:13px}
+del{background:var(--no-bg);color:var(--no);text-decoration:line-through}
+ins{background:var(--ok-bg);color:var(--ok);text-decoration:none;font-weight:700}
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--paper)}
+.seg button{border:0;background:transparent;padding:7px 12px;font-weight:600;font-size:13.5px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:#fff}
+.cards{display:flex;flex-direction:column;gap:12px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;gap:9px}
+.card header{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline;justify-content:space-between}
+.card h3{margin:0;font-size:15px;font-weight:700}
+.card .change{font-family:var(--doc);font-size:16.5px;line-height:1.5;overflow-wrap:anywhere;max-height:260px;overflow-y:auto}
+.card .why{font-size:13.5px}
+.daycard{flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.daycard h3{font-family:var(--head);font-size:18px}
+.acts{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{border:1px solid var(--line);background:var(--paper);border-radius:6px;padding:8px 14px;font-weight:700;font-size:14px;text-decoration:none;color:var(--ink);display:inline-block}
+.btn.go{background:var(--gold);color:#fff;border-color:var(--gold)}
+.btn.yes{background:var(--ok);color:#fff;border-color:var(--ok)}
+.btn.nope{color:var(--no)}
+.btn[disabled]{opacity:.55;cursor:default}
+.stack{display:flex;flex-direction:column;gap:6px}
+label{font-size:13px;font-weight:700}
+label small{font-weight:400;color:var(--muted)}
+input[type=text],input[type=password],select,textarea{width:100%;border:1px solid var(--line);border-radius:6px;background:var(--paper);padding:9px 10px}
+textarea{min-height:120px;font-family:var(--doc);font-size:16px;line-height:1.45;resize:vertical}
+textarea.big{min-height:300px;font-size:14px}
+.empty{color:var(--muted);padding:26px 0;text-align:center}
+.sched ol{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:10px;font-family:var(--doc);font-size:17px;line-height:1.5}
+.overlay{position:fixed;inset:0;background:rgba(26,10,46,.55);z-index:20;display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--paper);width:min(640px,100%);max-height:92%;overflow-y:auto;border-radius:14px 14px 0 0;padding:18px;display:flex;flex-direction:column;gap:12px}
+.sheet h2{font-family:var(--head);font-size:21px;margin:0}
+.row2{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.err{color:var(--no);font-size:13.5px;font-weight:700}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--purple);color:#fff;padding:10px 16px;border-radius:8px;font-size:14px;z-index:15;max-width:calc(100% - 32px)}
+@media (max-width:520px){.blk{grid-template-columns:minmax(0,1fr)}.ref:empty{display:none}table{font-size:12.5px}th,td{padding-right:8px}th:first-child,td:first-child{min-width:92px}}
+</style>
+</head>
+<body>
+<div class="hero"><div class="wrap">
+  <div><div class="eyebrow">M.M. Mokone Memorial Annual Conference 2026</div><h1 id="title">Conference Minutes</h1></div>
+  <div class="sec" id="secbox"></div>
+</div></div>
+<div class="bar" id="bar" hidden><div class="wrap"><div class="tabs" role="tablist" id="tabs"></div></div></div>
+<main class="wrap" id="main"><div class="empty">Loading the minutes…</div></main>
+<div id="layer"></div>
+
+<script>
+/* ====== SETTINGS ====== */
+var MINUTES_URL = "https://script.google.com/macros/s/AKfycbzEWYVxcN3-eSBgCr76LIH3LoxZw9LyM6DP34rpScuF4L8eiVRV_Jw8TQbQ_5bIgd76/exec";   // the web app URL of the minutes Apps Script
+var REPORT_URL  = "https://script.google.com/macros/s/AKfycbzuLLT1P3bypTDws-lwex8Ieq_svIeXJpjN3a5yX5R-GSLWH4t9C8T3zyMRXT5WWac78Q/exec"; // Pastor's Summary Reports
+/* ====================== */
+
+var F = {name:'Church name', m25:'Membership, last year', m26:'Membership, this year',
+  acA:'Annual Conference Budget, assessed', acP:'Annual Conference Budget, paid', acO:'Annual Conference Budget, outstanding',
+  erA:'Episcopal Residence Project, assessed', erP:'Episcopal Residence Project, paid', erO:'Episcopal Residence Project, outstanding',
+  funds:'Total funds raised by the church'};
+var ROLES = ['Delegate','Pastor','Presiding Elder','Conference Officer','Episcopal Officer','Bishop'];
+var ui = {view:'home', tab:'minutes', filter:'pending', form:null, editing:null, declining:null, removing:null, busy:false, preview:null};
+var days = [], D = null, reports = null;
+var sec = {pin:'', name:''}, me = {name:'', role:'Delegate', church:''};
+try { sec = JSON.parse(sessionStorage.getItem('mm-sec')) || sec; } catch(e){}
+try { me = Object.assign(me, JSON.parse(localStorage.getItem('mm-me') || '{}')); } catch(e){}
+var $ = function(id){ return document.getElementById(id); };
+var esc = function(s){ return String(s==null?'':s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); };
+var words = function(s){ return String(s).trim().split(/\s+/).filter(Boolean); };
+
+function api(params){ var q = Object.keys(params).map(function(k){ return k+'='+encodeURIComponent(params[k]); }).join('&');
+  return fetch(MINUTES_URL+'?'+q).then(function(r){ return r.json(); }); }
+function send(body){ return fetch(MINUTES_URL, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(body)})
+  .then(function(r){ return r.json(); })
+  .then(function(r){ if(r && r.badPin){ sec={pin:'',name:''}; try{sessionStorage.removeItem('mm-sec');}catch(e){} } return r; }); }
+
+/* ---------- reading pasted minutes ---------- */
+function parseMinutes(raw){
+  var L = [];
+  String(raw).replace(/\r/g,'').split('\n').forEach(function(l){
+    var s = l.replace(/ /g,' ').trim();
+    if(!s || /P\s?a\s?g\s?e/.test(s) && s.length<16 || /^_+$/.test(s)) return;
+    if(/^Item(\t|\s{2,})/.test(s) || /^Section [A-Z]\b/.test(s) || /^OTHER FINANCIAL/i.test(s)) return;
+    L.push(s);
+  });
+  var M = [];
+  for(var i=0;i<L.length;i++){ var s=L[i];
+    if(/^Total Funds Raised/i.test(s) && !/R\s?\d/.test(s) && i+1<L.length){ s += ' ' + L[++i]; }
+    M.push(s); }
+  L = M;
+  var cells = function(s){ return s.split(/\t+|\s{2,}/).map(function(c){ return c.trim(); }).filter(function(c){ return c!==''; }); };
+  var isRow = function(s){ return /^(Total Membership|Annual Conference|Episcopal Residence|Total Funds)/i.test(s); };
+  var blocks = [], cur = null, district = '', dnum = '', topN = 0, sub = false, lastSub = 0, prevEnd = true;
+  var add = function(b){ blocks.push(b); cur = b; return b; };
+  for(i=0;i<L.length;i++){
+    s = L[i]; var nxt = L[i+1] || '';
+    if(/^Total Membership/i.test(nxt) && !isRow(s)){
+      var c = {kind:'church', district:district, ref:dnum, name:s.replace(/\.$/,''), m25:'', m26:'', acA:'', acP:'', acO:'', erA:'', erP:'', erO:'', funds:''};
+      i++;
+      while(i<L.length && isRow(L[i])){ var p = cells(L[i]);
+        if(/^Total Membership/i.test(p[0])){ c.m25=p[1]||''; c.m26=p[2]||''; }
+        else if(/^Annual/i.test(p[0])){ c.acA=p[1]||''; c.acP=p[2]||''; c.acO=p[3]||''; }
+        else if(/^Episcopal/i.test(p[0])){ c.erA=p[1]||''; c.erP=p[2]||''; c.erO=p[3]||''; }
+        else { c.funds = p.length>1 ? p.slice(1).join(' ') : L[i].replace(/^.*Church\s*/i,''); }
+        i++; }
+      i--; blocks.push(c); cur = null; prevEnd = true; continue;
+    }
+    var m = s.match(/^(\d+(?:\.\d+)?)\.?\s*(.*\bDistrict)\.?$/);
+    if(m && s.length<60){ dnum = m[1]; district = m[2].trim(); if(m[1].indexOf('.')<0){ topN = parseInt(m[1],10); sub=false; }
+      blocks.push({kind:'district', ref:dnum, text:s.replace(/\s+/g,' ')}); cur=null; prevEnd=true; continue; }
+    if(/^(MORNING|AFTERNOON|EVENING) SESSION/i.test(s) || (/^DAY\s/i.test(s) && s.length<60)){ blocks.push({kind:'session', ref:'', text:s}); cur=null; prevEnd=true; continue; }
+    m = s.match(/^(\d+(?:\.\d+)*)\.?\s+(\S.*)$/);
+    if(m && !/^\d+\s?(years|th|st|nd|rd)\b/i.test(s)){
+      var num = m[1], ref = num;
+      if(num.indexOf('.')<0){ var v = parseInt(num,10);
+        if(topN>0 && ((sub && v===lastSub+1) || (!sub && v<=topN && v===1))){ sub=true; lastSub=v; ref=topN+'.'+v; }
+        else { topN=v; sub=false; lastSub=0; } }
+      add({kind:'text', ref:ref, text:m[2]}); prevEnd = /[.:!?"”’)]$/.test(s); continue;
+    }
+    if(/^[❖•▪■*-]\s*/.test(s) && s.length>3){ add({kind:'text', ref:'Note', text:s.replace(/^[❖•▪■*-]\s*/,'')}); prevEnd=/[.:!?"”’)]$/.test(s); continue; }
+    if(/^(Statement|Word) of commendation/i.test(s)){ add({kind:'text', ref:dnum+' Commendation', text:s}); prevEnd=/[.:!?"”’)]$/.test(s); continue; }
+    if(!cur) add({kind:'text', ref:'', text:s}); else cur.text += (prevEnd ? '\n\n' : ' ') + s;
+    prevEnd = /[.:!?"”’)]$/.test(s);
+  }
+  blocks.forEach(function(b,k){ b.id = 'b'+(k+1); });
+  return blocks;
+}
+
+/* ---------- helpers ---------- */
+function num(s){ s=String(s).replace(/[R\s]/g,''); if(/,\d{2}$/.test(s)) s=s.replace(/,(\d{2})$/,'.$1'); s=s.replace(/,/g,''); var m=s.match(/^\d+(\.\d+)?/); return m?parseFloat(m[0]):NaN; }
+function flags(c){ var out=[]; [['ac','Annual Conference Budget'],['er','Episcopal Residence Project']].forEach(function(x){
+  var a=num(c[x[0]+'A']),p=num(c[x[0]+'P']),o=num(c[x[0]+'O']); if(isNaN(a)||isNaN(p)||isNaN(o)) return;
+  if(Math.abs(Math.max(a-p,0)-o)>=1) out.push(x[1]); }); return out; }
+var normName = function(s){ return String(s).toLowerCase().replace(/a\.?m\.?e\.?/g,'').replace(/church|memorial|chapel|cathedral|temple/g,'').replace(/\bmount\b/g,'mt').replace(/[^a-z0-9]/g,''); };
+var distKey = function(s){ return (String(s).toLowerCase().match(/[a-z]+/)||[''])[0]; };
+function reportFor(b){ if(!reports) return null; var n=normName(b.name), d=distKey(b.district), hit=null, any=null, cnt=0;
+  reports.forEach(function(r){ if(normName(r.Church)!==n) return; if(distKey(r.District)===d) hit=r; any=r; });
+  if(hit) return hit; reports.forEach(function(r){ if(normName(r.Church)===n && distKey(r.District)!==distKey((any||{}).District)) cnt++; }); return cnt?null:any; }
+function reportDiffs(b){ var r=reportFor(b); if(!r) return [];
+  var map={m25:'Total Prev',m26:'Total Curr',acA:'ACB Assessed',acP:'ACB Paid',erA:'ERP Assessed',erP:'ERP Paid',erO:'ERP Outstanding',funds:'Funds Raised'}, out=[];
+  Object.keys(map).forEach(function(k){ var a=num(b[k]), v=num(r[map[k]]); if(isNaN(a)||isNaN(v)) return; if(Math.abs(a-v)>=1) out.push(F[k]+': minutes say '+b[k]+', the report says '+r[map[k]]); });
+  return out; }
+var blockOf = function(id){ return D.blocks.filter(function(b){ return b.id===id; })[0]; };
+var order = function(id){ for(var i=0;i<D.blocks.length;i++) if(D.blocks[i].id===id) return i; return 1e9; };
+function label(b){ if(!b) return 'Removed item';
+  if(b.kind==='church') return (b.ref?'Item '+b.ref+', ':'')+b.name;
+  if(b.added) return 'Added item'; if(!b.ref) return 'Heading'; if(b.ref==='Note') return 'Note';
+  if(/Commendation/.test(b.ref)) return 'Item '+b.ref.replace(' Commendation','')+', commendation';
+  return 'Item '+b.ref; }
+function where(b){ var l=label(b); if(!b || b.kind==='church' || (b.ref && b.ref!=='Note' && !/Commendation/.test(b.ref))) return l;
+  var w=words(b.text); return l+' (“'+w.slice(0,6).join(' ')+(w.length>6?'…':'')+'”)'; }
+function diff(a,b){ var A=words(a),B=words(b),n=A.length,m=B.length,W=m+1; var T=new Uint16Array((n+1)*W),i,j;
+  for(i=n-1;i>=0;i--) for(j=m-1;j>=0;j--) T[i*W+j]= A[i]===B[j] ? T[(i+1)*W+j+1]+1 : Math.max(T[(i+1)*W+j],T[i*W+j+1]);
+  i=0;j=0; var out=[]; var push=function(t,w){ var l=out[out.length-1]; if(l&&l[0]===t) l[1].push(w); else out.push([t,[w]]); };
+  while(i<n&&j<m){ if(A[i]===B[j]){push('=',A[i]);i++;j++;} else if(T[(i+1)*W+j]>=T[i*W+j+1]){push('-',A[i]);i++;} else {push('+',B[j]);j++;} }
+  while(i<n) push('-',A[i++]); while(j<m) push('+',B[j++]);
+  return out.map(function(x){ var t=x[0],w=x[1],s=w.join(' '); if(t==='=' && w.length>24) s=w.slice(0,8).join(' ')+' … '+w.slice(-8).join(' ');
+    s=esc(s); return t==='='?s:t==='-'?'<del>'+s+'</del>':'<ins>'+s+'</ins>'; }).join(' '); }
+function snippet(a,b){ var A=words(a),B=words(b),p=0,s=0; while(p<A.length&&p<B.length&&A[p]===B[p]) p++;
+  while(s<A.length-p&&s<B.length-p&&A[A.length-1-s]===B[B.length-1-s]) s++;
+  var cut=function(X){ var from=Math.max(0,p-3),to=Math.min(X.length,X.length-s+3); return (from>0?'… ':'')+X.slice(from,to).join(' ')+(to<X.length?' …':''); };
+  return [cut(A),cut(B)]; }
+var stamp = function(ms){ try{ return new Date(ms).toLocaleString('en-ZA',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}); }catch(e){ return ''; } };
+var who = function(p){ return esc(p.by.name)+', '+esc(p.by.role)+(p.by.church?', '+esc(p.by.church):''); };
+function counts(){ var c={pending:0,accepted:0,declined:0}; D.proposals.forEach(function(p){ c[p.status]++; }); return c; }
+function changeHtml(p){ var b=blockOf(p.block);
+  var from = p.status==='accepted' ? p.was : (p.kind==='add' ? '' : (p.kind==='field' ? (b?b[p.field]:p.base) : (b?b.text:p.base)));
+  var to = p.status==='accepted' ? p.final : p.proposed;
+  if(p.kind==='add') return '<span class="meta">New item to follow this one:</span> <ins>'+esc(to)+'</ins>';
+  if(p.kind==='field') return '<span class="meta">'+esc(F[p.field])+':</span> <del>'+esc(from)+'</del> <ins>'+esc(to)+'</ins>';
+  return diff(from,to); }
+
+/* ---------- drawing ---------- */
+function blockHtml(b, pend, tools){
+  var ps = pend[b.id] || [];
+  var head = b.kind==='district' || b.kind==='session' || (!b.ref && !b.added);
+  var h = '<article class="blk '+(b.kind==='church'?'church':'')+(head?' head':'')+'" id="'+esc(b.id)+'">';
+  h += '<div class="ref">'+(b.kind==='church'||head||b.ref==='Note'||/Commend/.test(b.ref||'')?'':esc(b.ref||''))+'</div><div class="body">';
+  if(b.kind==='church'){
+    var fl = flags(b);
+    h += '<h3>'+esc(b.name)+'</h3><div class="meta">Total membership: <b>'+esc(b.m25)+'</b> last year, <b>'+esc(b.m26)+'</b> this year</div>';
+    h += '<div class="tscroll"><table><thead><tr><th>Financial report</th><th>Assessed</th><th>Paid</th><th>Outstanding</th></tr></thead><tbody>'+
+      '<tr><td>Annual Conference Budget</td><td>'+esc(b.acA)+'</td><td>'+esc(b.acP)+'</td><td>'+esc(b.acO)+'</td></tr>'+
+      '<tr><td>Episcopal Residence Project</td><td>'+esc(b.erA)+'</td><td>'+esc(b.erP)+'</td><td>'+esc(b.erO)+'</td></tr></tbody></table></div>';
+    h += '<div class="meta">Total funds raised by the church: <b>'+esc(b.funds)+'</b></div>';
+    if(fl.length) h += '<div class="flag">Check the '+esc(fl.join(' and '))+' figures: assessed less paid does not equal outstanding.</div>';
+    if(sec.name){ reportDiffs(b).forEach(function(t){ h += '<div class="flag">Pastor’s report differs. '+esc(t)+'.</div>'; }); }
+  } else h += String(b.text).split(/\n\n/).map(function(p){ return '<p>'+esc(p)+'</p>'; }).join('');
+  if(tools){
+    h += '<div class="tools"><button type="button" class="propose" data-propose="'+esc(b.id)+'">Propose a change</button>'+
+      (b.changed?'<span class="pill accepted">Corrected</span>':'')+(b.added?'<span class="pill accepted">Added</span>':'')+
+      (ps.length?'<span class="pill pending">'+ps.length+' waiting for the secretary</span>':'')+'</div>';
+    if(ps.length) h += '<div class="waiting">'+ps.map(function(p){ return '<div><div>'+changeHtml(p)+'</div><div class="who">'+who(p)+'</div></div>'; }).join('')+'</div>';
+  }
+  return h + '</div></article>';
+}
+function renderChrome(){
+  $('secbox').innerHTML = sec.name ? 'Signed in as '+esc(sec.name)+'<br><button data-act="signout">Sign out</button>' : '<button data-act="signin">Conference Secretary sign in</button>';
+  $('title').textContent = ui.view==='day' && D ? D.day.title : ui.view==='load' ? 'Load a day’s minutes' : 'Conference Minutes';
+  $('bar').hidden = !(ui.view==='day' && D);
+  if(ui.view==='day' && D){ var c = counts();
+    $('tabs').innerHTML = '<button type="button" data-act="home">‹ All days</button>' + [['minutes','Minutes'],['proposals',sec.name?'Proposals to decide':'Proposed changes'],['schedule','Schedule of corrections']].map(function(t){
+      return '<button type="button" role="tab" data-tab="'+t[0]+'" aria-selected="'+(ui.tab===t[0])+'">'+t[1]+
+        (t[0]==='proposals'&&c.pending?'<span class="count">'+c.pending+'</span>':'')+(t[0]==='schedule'&&c.accepted?'<span class="count ok">'+c.accepted+'</span>':'')+'</button>'; }).join(''); }
+}
+function renderHome(){
+  var h = '<div class="notice"><b>One link for the whole conference.</b> Open a day to read the minutes. If something is wrong or missing, tap “Propose a change” on that item. The Conference Secretaries decide on every proposal, and the minutes change only when they accept it.</div>';
+  if(!days.length) h += '<div class="empty">No minutes have been published yet.</div>';
+  h += '<div class="cards">'+days.map(function(d){
+    var x = '<section class="card daycard"><div><h3>'+esc(d.title)+'</h3><div class="who">Published '+esc(stamp(d.publishedAt))+
+      (d.counts.pending?' · <span class="pill pending">'+d.counts.pending+' waiting</span>':'')+(d.counts.accepted?' · <span class="pill accepted">'+d.counts.accepted+' corrected</span>':'')+'</div></div>'+
+      '<div class="acts"><a class="btn go" href="#'+esc(d.id)+'">Open</a>'+(sec.name?'<button class="btn nope" data-act="remove" data-id="'+esc(d.id)+'">Remove</button>':'')+'</div>';
+    if(ui.removing===d.id) x += '<div class="stack" style="flex-basis:100%"><div class="err">This removes the minutes and every proposal made on them, for everyone. It cannot be undone.</div><div class="acts"><button class="btn nope" data-act="remove-go" data-id="'+esc(d.id)+'">Yes, remove these minutes</button><button class="btn" data-act="cancel">Keep them</button></div></div>';
+    return x+'</section>'; }).join('')+'</div>';
+  if(sec.name) h += '<div class="acts"><button class="btn go" data-act="load">Add a day’s minutes</button></div>';
+  return h;
+}
+function renderLoad(){
+  var h = '<div class="notice"><b>Copy the whole day from your document and paste it below.</b> The page splits it into numbered items and church tables. Check the preview, then publish.</div>';
+  h += '<div class="stack"><label for="l-title">Title</label><input type="text" id="l-title" placeholder="Minutes of Day Three, 10 October 2026" value="'+esc(ui.loadTitle||'')+'"></div>';
+  h += '<div class="stack"><label for="l-text">The minutes</label><textarea class="big" id="l-text" placeholder="Paste the minutes here">'+esc(ui.loadText||'')+'</textarea></div>';
+  h += '<div class="err" id="l-err"></div><div class="acts"><button class="btn go" data-act="preview">Preview</button><button class="btn" data-act="home">Cancel</button></div>';
+  if(ui.preview){ var ch = ui.preview.filter(function(b){ return b.kind==='church'; }), ds = ui.preview.filter(function(b){ return b.kind==='district'; }), fl = ch.filter(function(b){ return flags(b).length; });
+    h += '<div class="card"><h3>Preview: '+(ui.preview.length-ch.length)+' items and '+ch.length+' churches in '+ds.length+' districts</h3>'+
+      (fl.length?'<div class="flag">'+fl.length+' churches have figures that do not add up. You can publish and correct them afterwards, or fix your document and paste again.</div>':'')+
+      '<div class="acts"><button class="btn yes" data-act="publish"'+(ui.busy?' disabled':'')+'>'+(ui.busy?'Publishing…':'Publish these minutes')+'</button></div></div>';
+    h += '<div class="book">'+ui.preview.map(function(b){ return blockHtml(b,{},false); }).join('')+'</div>'; }
+  return h;
+}
+function renderMinutes(){
+  var pend = {}; D.proposals.forEach(function(p){ if(p.status==='pending') (pend[p.block]=pend[p.block]||[]).push(p); });
+  var districts = D.blocks.filter(function(b){ return b.kind==='district'; });
+  var flagged = D.blocks.filter(function(b){ return b.kind==='church' && flags(b).length; });
+  var h = '<div class="notice">'+(sec.name ? '<b>Secretary view.</b> The text below is the official record. It changes only when a secretary accepts a proposal.'
+    : '<b>These are the official minutes.</b> Tap “Propose a change” on any item. Your proposal goes to the Conference Secretaries, and the minutes stay as they are until a secretary accepts it.')+
+    ' <button class="linkbtn" data-act="refresh">Refresh</button></div>';
+  if(districts.length) h += '<div class="jump">'+districts.map(function(d){ return '<button type="button" data-jump="'+esc(d.id)+'">'+esc(d.text.replace(/^[\d.\s]+/,'').replace(/\.$/,''))+'</button>'; }).join('')+'</div>';
+  if(flagged.length) h += '<details class="check"><summary>'+flagged.length+' churches have figures that do not add up</summary><ul>'+
+    flagged.map(function(b){ return '<li><button class="linkbtn" data-jump="'+esc(b.id)+'">'+esc(b.name)+'</button> ('+esc(String(b.district).replace(' District',''))+'): '+esc(flags(b).join(' and '))+'</li>'; }).join('')+
+    '</ul><div class="meta">Checked automatically: assessed less paid should equal outstanding.</div></details>';
+  return h + '<div class="book">'+D.blocks.map(function(b){ return blockHtml(b,pend,true); }).join('')+'</div>';
+}
+function renderProposals(){
+  var c = counts(), names = {pending:'Waiting',accepted:'Accepted',declined:'Declined'};
+  var h = '<div class="filters"><div class="seg">'+['pending','accepted','declined'].map(function(f){ return '<button type="button" data-filter="'+f+'" aria-pressed="'+(ui.filter===f)+'">'+names[f]+' '+c[f]+'</button>'; }).join('')+'</div>'+
+    (sec.name?'':'<span class="meta">Only a Conference Secretary can accept or decline.</span>')+'</div>';
+  var list = D.proposals.filter(function(p){ return p.status===ui.filter; }).sort(function(a,b){ return order(a.block)-order(b.block); });
+  if(!list.length) return h+'<div class="empty">'+({pending:'Nothing is waiting. Every proposal has been decided.',accepted:'No proposals accepted yet.',declined:'No proposals declined.'}[ui.filter])+'</div>';
+  h += '<div class="cards">';
+  list.forEach(function(p){
+    var b = blockOf(p.block), cur = b ? (p.kind==='field'?b[p.field]:b.text) : '';
+    var stale = p.status==='pending' && p.kind!=='add' && b && cur!==p.base;
+    h += '<section class="card"><header><h3>'+esc(where(b))+'</h3><span class="pill '+p.status+'">'+esc(p.type)+', '+({pending:'waiting',accepted:'accepted',declined:'declined'}[p.status])+'</span></header>';
+    h += '<div class="change">'+changeHtml(p)+'</div>';
+    if(p.reason) h += '<div class="why"><b>Reason:</b> '+esc(p.reason)+'</div>';
+    h += '<div class="who">Proposed by '+who(p)+' · '+esc(stamp(p.at))+'</div>';
+    if(stale) h += '<div class="flag">This item has changed since the proposal was sent. Check the wording before you accept.</div>';
+    if(p.status!=='pending' && p.decidedBy) h += '<div class="who">'+(p.status==='accepted'?'Accepted':'Declined')+' by '+esc(p.decidedBy)+' · '+esc(stamp(p.decidedAt))+'</div>';
+    if(p.status==='declined' && p.note) h += '<div class="why"><b>Secretary:</b> '+esc(p.note)+'</div>';
+    if(p.status==='accepted' && p.final!==p.proposed) h += '<div class="why"><b>The secretary adjusted the wording before accepting.</b></div>';
+    if(sec.name){
+      var dis = ui.busy?' disabled':'';
+      if(p.status==='pending'){
+        if(ui.editing===p.id) h += '<div class="stack"><label for="fin">Wording to enter in the minutes</label>'+(p.kind==='field'?'<input type="text" id="fin" value="'+esc(p.proposed)+'">':'<textarea id="fin">'+esc(p.proposed)+'</textarea>')+
+          '<div class="acts"><button class="btn yes" data-act="accept-edit" data-id="'+p.id+'"'+dis+'>Accept this wording</button><button class="btn" data-act="cancel">Cancel</button></div></div>';
+        else if(ui.declining===p.id) h += '<div class="stack"><label for="why">Reason for declining <small>(everyone will see this)</small></label><input type="text" id="why">'+
+          '<div class="acts"><button class="btn nope" data-act="decline-go" data-id="'+p.id+'"'+dis+'>Decline</button><button class="btn" data-act="cancel">Cancel</button></div></div>';
+        else h += '<div class="acts"><button class="btn yes" data-act="accept" data-id="'+p.id+'"'+dis+'>Accept</button><button class="btn" data-act="edit" data-id="'+p.id+'">Change wording, then accept</button><button class="btn nope" data-act="decline" data-id="'+p.id+'">Decline</button></div>';
+      } else h += '<div class="acts"><button class="btn" data-act="reopen" data-id="'+p.id+'"'+dis+'>'+(p.status==='accepted'?'Undo and put back in the queue':'Put back in the queue')+'</button></div>';
+    }
+    h += '</section>';
+  });
+  return h+'</div>';
+}
+function scheduleLines(){
+  return D.proposals.filter(function(p){ return p.status==='accepted'; }).sort(function(a,b){ return order(a.block)-order(b.block); }).map(function(p){
+    var b = blockOf(p.block), t;
+    if(p.kind==='add') t = where(b)+': add after this item, “'+p.final+'”';
+    else if(p.kind==='field') t = label(b)+', '+F[p.field]+': “'+p.was+'” corrected to “'+p.final+'”.';
+    else { var s = snippet(p.was,p.final); t = where(b)+': “'+s[0]+'” corrected to “'+s[1]+'”.'; }
+    return {t:t, by:p.by.name+' ('+p.by.role+(p.by.church?', '+p.by.church:'')+')'}; });
+}
+function scheduleText(){ return 'M.M. MOKONE MEMORIAL ANNUAL CONFERENCE 2026\n'+D.day.title+'\nSCHEDULE OF CORRECTIONS\n\n'+scheduleLines().map(function(l,i){ return (i+1)+'. '+l.t+'\n   Proposed by '+l.by; }).join('\n\n'); }
+function renderSchedule(){
+  var L = scheduleLines(), c = counts();
+  var h = '<div class="notice"><b>For the reading of the minutes.</b> This list builds itself from the proposals the secretaries accepted, in the order of the minutes, so the motion to adopt “with corrections” has the corrections written down.</div>';
+  if(!L.length) return h+'<div class="empty">No corrections accepted yet. '+(c.pending?c.pending+' waiting for the secretary.':'')+'</div>';
+  h += '<div class="book sched" style="padding-top:18px"><ol>'+L.map(function(l){ return '<li>'+esc(l.t)+'<div class="who">Proposed by '+esc(l.by)+'</div></li>'; }).join('')+'</ol></div>';
+  h += '<div class="acts"><button class="btn go" data-act="copy">Copy the schedule for WhatsApp</button></div><textarea id="copybox" readonly hidden></textarea>';
+  if(c.pending) h += '<div class="meta">'+c.pending+' more proposals are still waiting for the secretary.</div>';
+  return h;
+}
+function renderLayer(){
+  var L = $('layer');
+  if(ui.form==='signin'){
+    L.innerHTML = '<div class="overlay" data-act="close-form"><form class="sheet" id="sform" novalidate><h2>Conference Secretary sign in</h2><div class="stack"><label for="s-pin">Your PIN</label><input type="password" id="s-pin" autocomplete="off"></div><div class="err" id="f-err"></div><div class="acts"><button class="btn go" type="submit">Sign in</button><button class="btn" type="button" data-act="close-form-btn">Cancel</button></div></form></div>';
+    $('sform').addEventListener('submit', function(e){ e.preventDefault(); var pin = $('s-pin').value.trim(); if(!pin) return;
+      $('f-err').textContent = 'Checking…';
+      send({action:'login', pin:pin}).then(function(r){ if(!r.ok){ $('f-err').textContent = r.error; return; }
+        sec = {pin:pin, name:r.name}; try{ sessionStorage.setItem('mm-sec', JSON.stringify(sec)); }catch(x){}
+        ui.form = null; loadReports(); render(); toast('Signed in as '+r.name+'.'); }).catch(function(){ $('f-err').textContent = 'Could not reach the server. Check your connection and try again.'; }); });
+    $('s-pin').focus(); return; }
+  if(!ui.form || !D){ L.innerHTML = ''; return; }
+  var b = blockOf(ui.form); if(!b){ ui.form=null; L.innerHTML=''; return; }
+  var others = D.proposals.filter(function(p){ return p.block===b.id && p.status==='pending'; }).length;
+  var h = '<div class="overlay" data-act="close-form"><form class="sheet" id="pform" novalidate><h2>Propose a change</h2><div class="meta"><b>'+esc(where(b))+'</b>'+
+    (others?' · '+others+' already waiting on this item. Check them first so the secretary is not sent the same thing twice.':'')+'</div>';
+  if(b.kind==='church'){
+    h += '<div class="stack"><label for="f-field">Which entry is wrong?</label><select id="f-field">'+Object.keys(F).map(function(k){ return '<option value="'+k+'">'+esc(F[k])+' (now '+esc(b[k])+')</option>'; }).join('')+'</select></div>';
+    h += '<div class="stack"><label for="f-value">What it should be</label><input type="text" id="f-value" autocomplete="off"></div>';
+  } else {
+    h += '<div class="stack"><label for="f-type">Kind of change</label><select id="f-type"><option value="Correction">Correction: a name, spelling, figure or fact is wrong</option><option value="Amendment">Amendment: the wording should say it differently</option><option value="Addition">Addition: something is missing after this item</option></select></div>';
+    h += '<div class="stack"><label for="f-text" id="f-text-l">Edit the wording as it should read</label><textarea id="f-text">'+esc(b.text)+'</textarea></div>';
+  }
+  h += '<div class="stack"><label for="f-reason">Reason <small>(helps the secretary decide)</small></label><input type="text" id="f-reason" autocomplete="off"></div>';
+  h += '<div class="row2"><div class="stack"><label for="f-name">Your name</label><input type="text" id="f-name" value="'+esc(me.name)+'"></div>'+
+       '<div class="stack"><label for="f-role">You are a</label><select id="f-role">'+ROLES.map(function(r){ return '<option'+(r===me.role?' selected':'')+'>'+r+'</option>'; }).join('')+'</select></div></div>';
+  h += '<div class="stack"><label for="f-church">Church and district</label><input type="text" id="f-church" value="'+esc(me.church)+'" placeholder="e.g. Nkosi Memorial, Capital"></div>';
+  h += '<div class="err" id="f-err"></div><div class="acts"><button class="btn go" type="submit" id="f-go">Send to the secretary</button><button class="btn" type="button" data-act="close-form-btn">Cancel</button></div></form></div>';
+  L.innerHTML = h;
+  var ty = $('f-type');
+  if(ty) ty.addEventListener('change', function(){ var add = ty.value==='Addition';
+    $('f-text-l').textContent = add ? 'Write the item to be added' : 'Edit the wording as it should read'; $('f-text').value = add ? '' : b.text; $('f-text').focus(); });
+  $('pform').addEventListener('submit', submitProposal);
+}
+function submitProposal(e){
+  e.preventDefault();
+  var v = function(id){ var el=$(id); return el?el.value.trim():''; }, err = function(m){ $('f-err').textContent = m; };
+  var b = blockOf(ui.form), body = {action:'propose', dayId:D.day.id, block:b.id, reason:v('f-reason'), name:v('f-name'), role:v('f-role'), church:v('f-church')};
+  if(b.kind==='church'){ body.kind='field'; body.field=v('f-field'); body.proposed=v('f-value');
+    if(!body.proposed) return err('Enter what the entry should be.');
+    if(body.proposed===b[body.field]) return err('That is the same as what the minutes already say.'); }
+  else { body.type=v('f-type'); body.proposed=v('f-text'); body.kind = body.type==='Addition' ? 'add' : 'text';
+    if(!body.proposed) return err(body.kind==='add'?'Write the item to be added.':'The wording cannot be empty.');
+    if(body.kind==='text' && words(body.proposed).join(' ')===words(b.text).join(' ')) return err('You have not changed the wording yet.'); }
+  if(!body.name) return err('Enter your name so the secretary knows who is proposing this.');
+  me = {name:body.name, role:body.role, church:body.church}; try{ localStorage.setItem('mm-me', JSON.stringify(me)); }catch(x){}
+  $('f-go').disabled = true; err('Sending…');
+  send(body).then(function(r){ if(!r.ok){ $('f-go').disabled=false; return err(r.error); }
+    ui.form = null; toast('Sent to the secretary. The minutes stay unchanged until it is accepted.'); return openDay(D.day.id, true); })
+  .catch(function(){ $('f-go').disabled=false; err('Could not send. Check your connection and try again.'); });
+}
+var toastT;
+function toast(m){ var t = document.querySelector('.toast'); if(!t){ t=document.createElement('div'); t.className='toast'; t.setAttribute('role','status'); document.body.appendChild(t); }
+  t.textContent=m; t.hidden=false; clearTimeout(toastT); toastT=setTimeout(function(){ t.hidden=true; },4000); }
+function render(){
+  renderChrome();
+  $('main').innerHTML = ui.view==='load' ? renderLoad() : ui.view==='day' && D ? (ui.tab==='minutes'?renderMinutes():ui.tab==='proposals'?renderProposals():renderSchedule()) : renderHome();
+  renderLayer();
+}
+function fail(msg){ renderChrome(); $('main').innerHTML = '<div class="empty">'+esc(msg)+'<br><br><button class="btn" data-act="retry">Try again</button></div>'; }
+
+/* ---------- loading ---------- */
+function openHome(){ ui.view='home'; D=null; return api({action:'days'}).then(function(r){ if(!r.ok) return fail(r.error); days=r.days; render(); }).catch(function(){ fail('Could not load the minutes. Check your connection.'); }); }
+function openDay(id, keep, quiet){ if(!keep){ ui.tab='minutes'; ui.filter='pending'; }
+  return api({action:'day', id:id}).then(function(r){ if(!r.ok) return fail(r.error); if(quiet && (ui.form || !D || JSON.stringify(r)===JSON.stringify(D))) return; D=r; ui.view='day'; render(); }).catch(function(){ if(!keep) fail('Could not load the minutes. Check your connection.'); }); }
+function loadReports(){ if(reports || !sec.name) return; fetch(REPORT_URL).then(function(r){ return r.json(); }).then(function(d){ reports = d.submissions || []; if(ui.view==='day') render(); }).catch(function(){}); }
+function route(){ if(MINUTES_URL.indexOf('PASTE_')===0) return fail('The minutes page is not connected yet.');
+  var id = location.hash.replace('#',''); ui.form=null; ui.editing=ui.declining=ui.removing=null;
+  if(id==='load' && sec.name){ ui.view='load'; D=null; render(); return; }
+  if(/^D-/.test(id)) openDay(id); else openHome(); }
+function act(body, msg){ ui.busy=true; render(); body.pin = sec.pin;
+  return send(body).then(function(r){ ui.busy=false; if(!r.ok){ toast(r.error); return openDay(D.day.id, true); }
+    ui.editing=ui.declining=null; toast(msg); return openDay(D.day.id, true); })
+  .catch(function(){ ui.busy=false; render(); toast('Could not reach the server. Nothing was changed.'); }); }
+
+document.addEventListener('click', function(e){
+  var t = e.target.closest('[data-tab],[data-filter],[data-jump],[data-propose],[data-act]'); if(!t) return;
+  var d = t.dataset;
+  if(d.act==='close-form'){ if(e.target===t){ ui.form=null; renderLayer(); } return; }
+  if(d.tab){ ui.tab=d.tab; render(); window.scrollTo(0,0); return; }
+  if(d.filter){ ui.filter=d.filter; render(); return; }
+  if(d.jump){ if(ui.tab!=='minutes'){ ui.tab='minutes'; render(); } var el=$(d.jump); if(el) el.scrollIntoView({block:'start'}); return; }
+  if(d.propose){ ui.form=d.propose; renderLayer(); var f=document.querySelector('#f-value,#f-text'); if(f) f.focus(); return; }
+  switch(d.act){
+    case 'close-form-btn': ui.form=null; renderLayer(); return;
+    case 'signin': ui.form='signin'; renderLayer(); return;
+    case 'signout': sec={pin:'',name:''}; try{sessionStorage.removeItem('mm-sec');}catch(x){} if(ui.view==='load') location.hash=''; else render(); return;
+    case 'home': if(location.hash) location.hash=''; else route(); return;
+    case 'retry': route(); return;
+    case 'refresh': openDay(D.day.id, true).then(function(){ toast('Up to date.'); }); return;
+    case 'load': ui.preview=null; ui.loadText=''; ui.loadTitle=''; location.hash='load'; return;
+    case 'preview': { ui.loadTitle=$('l-title').value.trim(); ui.loadText=$('l-text').value; var bl=parseMinutes(ui.loadText);
+      if(!bl.length){ $('l-err').textContent='Paste the minutes first.'; return; } ui.preview=bl; render(); return; }
+    case 'publish': { ui.loadTitle=$('l-title').value.trim(); if(!ui.loadTitle){ $('l-err').textContent='Give the minutes a title, for example “Minutes of Day Three, 10 October 2026”.'; $('l-title').focus(); return; }
+      ui.busy=true; render();
+      send({action:'publish', pin:sec.pin, title:ui.loadTitle, blocks:ui.preview}).then(function(r){ ui.busy=false; if(!r.ok){ render(); toast(r.error); return; }
+        ui.preview=null; ui.loadText=''; toast('Published. Share the usual link.'); location.hash=r.id; }).catch(function(){ ui.busy=false; render(); toast('Could not publish. Check your connection and try again.'); }); return; }
+    case 'remove': ui.removing=d.id; render(); return;
+    case 'remove-go': send({action:'removeDay', pin:sec.pin, dayId:d.id}).then(function(r){ ui.removing=null; toast(r.ok?'Removed.':r.error); openHome(); }).catch(function(){ toast('Could not reach the server.'); }); return;
+    case 'accept': act({action:'decide', id:d.id, status:'accepted'}, 'Accepted. The minutes now carry this change.'); return;
+    case 'edit': ui.editing=d.id; ui.declining=null; render(); return;
+    case 'decline': ui.declining=d.id; ui.editing=null; render(); return;
+    case 'cancel': ui.editing=ui.declining=ui.removing=null; render(); return;
+    case 'accept-edit': { var val=$('fin').value.trim(); if(!val) return; act({action:'decide', id:d.id, status:'accepted', final:val}, 'Accepted with your wording.'); return; }
+    case 'decline-go': act({action:'decide', id:d.id, status:'declined', note:$('why').value.trim()}, 'Declined. The minutes are unchanged.'); return;
+    case 'reopen': act({action:'reopen', id:d.id}, 'Back in the queue.'); return;
+    case 'copy': { var txt=scheduleText(), box=$('copybox');
+      var fb=function(){ box.hidden=false; box.value=txt; box.focus(); box.select(); toast('Select the text and copy it.'); };
+      try{ navigator.clipboard.writeText(txt).then(function(){ toast('Schedule copied.'); }, fb); }catch(x){ fb(); } return; }
+  }
+});
+window.addEventListener('hashchange', route);
+setInterval(function(){ if(ui.view==='day' && D && !ui.form && !ui.editing && !ui.declining && !ui.busy && !document.hidden) openDay(D.day.id, true, true); }, 60000);
+loadReports(); route();
+</script>
+</body>
+</html>
