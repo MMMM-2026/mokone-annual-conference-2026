@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The 42nd Session · M.M. Mokone Memorial Annual Conference</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600;1,700&family=Open+Sans:wght@400;600;700&display=swap">
+<style>
+/* Layout: a sanctuary at night. One long column on deep purple; gold is reserved for the Word, the numeral and the data marks. Each section is one act: the session, the Word preached, the thought for the day, the songs, the districts, the record. */
+:root{
+  --night:#12061f; --purple:#231036; --plum:#3a1750; --line:rgba(232,201,122,.22);
+  --gold:#C4972A; --gold-hi:#f0d58a; --ivory:#f6efe2; --muted:#bfaed3; --track:rgba(255,255,255,.09);
+  --head:"Playfair Display",Georgia,"Times New Roman",serif; --ui:"Open Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--night);color:var(--ivory);font-family:var(--ui);font-size:16px;line-height:1.6;overflow-x:hidden}
+[hidden]{display:none!important}
+a{color:var(--gold-hi)}
+:focus-visible{outline:2px solid var(--gold-hi);outline-offset:3px}
+.wrap{max-width:1040px;margin:0 auto;padding-left:20px;padding-right:20px}
+.eyebrow{font-size:11.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold-hi);font-weight:600}
+
+/* hero */
+.hero{position:relative;overflow:hidden;background:radial-gradient(120% 90% at 50% 0%,#4a1f6b 0%,#2a1140 42%,var(--night) 100%);border-bottom:3px solid var(--gold);text-align:center}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.hero .wrap{position:relative;padding-top:44px;padding-bottom:46px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.hero img{width:76px;height:76px;object-fit:contain}
+.numeral{font-family:var(--head);font-weight:900;line-height:.86;font-size:clamp(132px,36vw,300px);letter-spacing:-.04em;margin:6px 0 0;
+  background:linear-gradient(175deg,#fff3c9 0%,var(--gold-hi) 28%,var(--gold) 58%,#8a6410 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 10px 40px rgba(196,151,42,.35));animation:rise 1.4s cubic-bezier(.2,.7,.2,1) both}
+.numeral sup{font-size:.24em;letter-spacing:.02em;vertical-align:2.05em;line-height:0;margin-left:.06em;font-weight:700}
+.hero h1{font-family:var(--head);font-weight:700;font-size:clamp(24px,5.4vw,44px);line-height:1.12;margin:0;text-wrap:balance;max-width:20ch;animation:rise 1.4s .15s cubic-bezier(.2,.7,.2,1) both}
+.hero h1 em{font-style:italic;font-weight:600;color:var(--gold-hi)}
+.hero .sub{color:var(--muted);font-size:14px;max-width:46ch;animation:rise 1.4s .3s cubic-bezier(.2,.7,.2,1) both}
+.hero .sub b{color:var(--ivory);font-weight:600}
+@keyframes rise{from{opacity:.0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;width:100%;margin-top:26px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.stat{padding:18px 8px;border-left:1px solid var(--line);min-width:0}
+.stat:first-child{border-left:0}
+.stat .n{font-family:var(--head);font-weight:700;font-size:clamp(26px,5.6vw,46px);line-height:1;color:var(--gold-hi);font-variant-numeric:tabular-nums}
+.stat .l{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+.stat .d{font-size:12.5px;color:var(--ivory);margin-top:3px;font-variant-numeric:tabular-nums}
+.nav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:22px}
+.nav a{border:1px solid var(--line);border-radius:40px;padding:7px 15px;font-size:13px;font-weight:600;text-decoration:none;color:var(--ivory)}
+.nav a.cta{background:var(--gold);border-color:var(--gold);color:#1b0d05}
+
+/* sections */
+section{padding-top:64px;padding-bottom:8px}
+.sechead{display:flex;flex-direction:column;gap:6px;margin-bottom:26px}
+.sechead h2{font-family:var(--head);font-weight:700;font-size:clamp(28px,5.4vw,46px);line-height:1.08;margin:0;text-wrap:balance}
+.sechead p{margin:0;color:var(--muted);max-width:60ch;font-size:15px}
+
+/* the Word preached */
+.sermon{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:6px;background:linear-gradient(150deg,var(--plum) 0%,var(--purple) 60%,#180a27 100%);padding:clamp(22px,5vw,52px);margin-bottom:18px}
+.sermon::before{content:"\201C";position:absolute;right:-.04em;top:-.34em;font-family:var(--head);font-weight:900;font-size:clamp(220px,46vw,460px);line-height:1;color:rgba(240,213,138,.07);pointer-events:none}
+.sermon .ref{font-family:var(--head);font-style:italic;font-weight:600;font-size:clamp(20px,3.6vw,30px);color:var(--gold-hi)}
+.sermon .theme{font-family:var(--head);font-weight:900;font-size:clamp(46px,11.5vw,116px);line-height:.98;letter-spacing:-.02em;margin:10px 0 18px;text-wrap:balance;position:relative}
+.sermon .who{font-size:13px;letter-spacing:.2em;text-transform:uppercase;font-weight:700}
+.sermon .svc{color:var(--muted);font-size:14px;margin-top:4px}
+.sermon .lessons{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);border-radius:40px;padding:4px 12px;font-size:13px;color:var(--ivory)}
+details{margin-top:18px;border-top:1px solid var(--line);padding-top:12px}
+summary{cursor:pointer;font-weight:700;color:var(--gold-hi);font-size:14px}
+details p{font-family:Georgia,"Times New Roman",serif;font-size:17px;line-height:1.65;max-width:66ch;color:var(--ivory)}
+details .src{font-family:var(--ui);font-size:12.5px;color:var(--muted)}
+
+/* thought for the day */
+.thoughts{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.thought{border-top:3px solid var(--gold);background:var(--purple);padding:24px 22px 22px;display:flex;flex-direction:column;gap:14px}
+.thought blockquote{margin:0;font-family:var(--head);font-style:italic;font-weight:600;font-size:clamp(22px,3.6vw,30px);line-height:1.25;text-wrap:balance}
+.thought .meta{font-size:13.5px;color:var(--muted)}
+.thought .meta b{color:var(--gold-hi);font-weight:700}
+
+/* songs */
+.songs{display:flex;flex-direction:column}
+.song{display:grid;grid-template-columns:clamp(64px,13vw,118px) minmax(0,1fr);gap:4px 18px;align-items:baseline;padding:16px 0;border-bottom:1px solid var(--line)}
+.song .no{font-family:var(--head);font-weight:900;font-size:clamp(34px,7vw,62px);line-height:1;color:var(--gold-hi);font-variant-numeric:tabular-nums;text-align:right}
+.song .t{font-family:var(--head);font-style:italic;font-weight:600;font-size:clamp(19px,3.3vw,27px);line-height:1.25}
+.song .e{color:var(--muted);font-size:14px}
+
+/* districts */
+.drow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 16px;padding:18px 0;border-bottom:1px solid var(--line)}
+.drow h3{font-family:var(--head);font-size:clamp(20px,3.4vw,26px);font-weight:700;margin:0}
+.drow .big{font-family:var(--head);font-weight:700;font-size:clamp(22px,3.8vw,30px);color:var(--ivory);font-variant-numeric:tabular-nums;text-align:right;line-height:1.1}
+.drow .big small{display:block;font-family:var(--ui);font-weight:400;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.track{grid-column:1/-1;height:10px;background:var(--track);border-radius:0 4px 4px 0;overflow:hidden}
+.bar{height:100%;background:var(--gold);border-radius:0 4px 4px 0;width:0;transition:width 1.6s cubic-bezier(.2,.7,.2,1)}
+.drow .facts{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:4px 18px;font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.drow .facts b{color:var(--ivory);font-weight:600}
+.drow details{grid-column:1/-1;margin-top:6px}
+.drow details p{font-size:16px;font-style:italic}
+
+/* the record */
+.days{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.day{border:1px solid var(--line);border-radius:6px;padding:20px;background:var(--purple);display:flex;flex-direction:column;gap:10px}
+.day h3{font-family:var(--head);font-size:21px;margin:0;line-height:1.2}
+.day .meta{font-size:13.5px;color:var(--muted)}
+.day a{align-self:flex-start;background:var(--gold);color:#1b0d05;text-decoration:none;font-weight:700;border-radius:40px;padding:8px 16px;font-size:14px}
+.empty{color:var(--muted);text-align:center;padding:40px 0}
+footer{margin-top:70px;border-top:1px solid var(--line);padding-top:22px;padding-bottom:60px;color:var(--muted);font-size:13px;text-align:center}
+@media (max-width:560px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stat:nth-child(3){border-left:0}.stat:nth-child(n+3){border-top:1px solid var(--line)}section{padding-top:48px}}
+@media (prefers-reduced-motion:reduce){.numeral,.hero h1,.hero .sub{animation:none}.bar{transition:none}html{scroll-behavior:auto}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.moments{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:26px}
+.moment{padding:22px 4px;display:flex;flex-direction:column;gap:4px}
+.moment .n{font-family:var(--head);font-weight:700;font-size:clamp(34px,6.4vw,54px);line-height:1;color:var(--gold-hi);font-variant-numeric:tabular-nums}
+.moment .l{color:var(--muted);font-size:14.5px}
+</style>
+</head>
+<body>
+<header class="hero">
+  <canvas id="motes" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <img src="ame19th-logo-white.png" alt="" onerror="this.hidden=true">
+    <div class="eyebrow">19th Episcopal District · African Methodist Episcopal Church</div>
+    <div class="numeral" aria-hidden="true">42<sup>ND</sup></div>
+    <h1><span class="sr">The 42nd </span>Session of the <em>Mangena Maake Mokone Memorial</em> Annual Conference</h1>
+    <div class="sub" id="presiding">Polokwane AME Church, Polokwane · 8 to 11 October 2026<br><b>Senior Bishop Wilfred Jacobus Messiah</b>, presiding</div>
+    <div class="stats" id="stats" hidden></div>
+    <nav class="nav" id="nav" hidden>
+      <a href="#word">The Word</a><a href="#thought">Thought for the day</a><a href="#songs">Songs</a><a href="#districts">Districts</a><a class="cta" href="#record">Read the minutes</a>
+    </nav>
+  </div>
+</header>
+<main id="main"><div class="wrap"><div class="empty" id="loading">Gathering the record of the Conference…</div></div></main>
+<footer><div class="wrap">Drawn from the minutes kept by the Conference Secretaries. Every figure follows the minutes and changes when a correction is accepted.</div></footer>
+<script>
+var MINUTES_URL = "https://script.google.com/macros/s/AKfycbzEWYVxcN3-eSBgCr76LIH3LoxZw9LyM6DP34rpScuF4L8eiVRV_Jw8TQbQ_5bIgd76/exec";
+var MINUTES_PAGE = "minutes.html";
+var SEED = /*SEED*/null;
+
+var esc = function(s){ return String(s==null?'':s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); };
+function num(s){ s=String(s).replace(/[R\s]/g,''); if(/,\d{2}$/.test(s)) s=s.replace(/,(\d{2})$/,'.$1'); s=s.replace(/,/g,''); var m=s.match(/^\d+(\.\d+)?/); return m?parseFloat(m[0]):NaN; }
+function spaced(n){ return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g,' '); }
+function rand(n){ return 'R'+spaced(n); }
+function capName(s){ var t=String(s).trim().split(/\s+/), out=[];
+  for(var i=0;i<t.length && out.length<8;i++){ var w=t[i];
+    if(!out.length && /^the$/i.test(w)) continue;
+    if(!/^[A-Z]/.test(w) || /^(Pastor|Presiding|President|Supervisor|Chairperson|Director|Senior)$/.test(w) && out.length>1) break;
+    out.push(w);
+    if(/[.,;:]$/.test(w) && !/^(Rev|Dr|Bro|Sis|Prof|Mr|Mrs|Ms|PE|Lic|Bp|Mt|St|Rt)\.$/.test(w) && !/^[A-Z]\.$/.test(w)) break; }
+  return out.join(' ').replace(/[.,;:]+$/,''); }
+var BOOKS = 'Genesis|Exodus|Leviticus|Numbers|Deuteronomy|Joshua|Judges|Ruth|Samuel|Kings|Chronicles|Ezra|Nehemiah|Esther|Job|Psalms?|Proverbs|Ecclesiastes|Song of Solomon|Isaiah|Jeremiah|Lamentations|Ezekiel|Daniel|Hosea|Joel|Amos|Obadiah|Jonah|Micah|Nahum|Habakkuk|Zephaniah|Haggai|Zechariah|Malachi|Matthew|Mark|Luke|John|Acts?|Romans|Corinthians|Galatians|Ephesians|Philippians|Colossians|Thessalonians|Timothy|Titus|Philemon|Hebrews|James|Peter|Jude|Revelations?';
+function refs(text){ var re = new RegExp('(?:\\b([1-3])(?:st|nd|rd)?\\s+|\\b(First|Second|Third)\\s+)?\\b('+BOOKS+')\\s*(\\d{1,3})(?:\\s*[:.]\\s*(\\d{1,3})(?:\\s*[-–]\\s*(\\d{1,3}))?)?','gi'), out=[], m;
+  while((m=re.exec(text))){ var n = m[1] || ({first:'1',second:'2',third:'3'}[String(m[2]||'').toLowerCase()]||'');
+    var bk = m[3].charAt(0).toUpperCase()+m[3].slice(1).toLowerCase(); bk = bk==='Psalms'?'Psalm':bk==='Revelations'?'Revelation':bk==='Act'?'Acts':bk;
+    var r = (n?n+' ':'')+bk+' '+m[4]+(m[5]?':'+m[5]+(m[6]?'–'+m[6]:''):''); if(out.indexOf(r)<0) out.push(r); }
+  return out; }
+function quotes(text){ var re=/[“"]([^”"]{2,200})[”"]/g, out=[], m; while((m=re.exec(text))) out.push(m[1].trim()); return out; }
+function dayName(t){ return String(t).replace(/^minutes\s+(of|for)\s+/i,'').replace(/^the\s+/i,''); }
+function titleCase(s){ return String(s).toLowerCase().replace(/\b[a-z]/g,function(c){ return c.toUpperCase(); }); }
+var MONTHS = ['january','february','march','april','may','june','july','august','september','october','november','december'];
+function dayKey(d){ var m = String(d.title).match(/(\d{1,2})(?:st|nd|rd|th)?\s+([A-Za-z]+)\s+(\d{4})/); if(m){ var mi = MONTHS.indexOf(m[2].toLowerCase()); if(mi>=0) return (+m[3])*10000 + (mi+1)*100 + (+m[1]); } return 99990000 + (d.publishedAt||0)/1e9; }
+
+function extract(days){
+  var X = {sermons:[], thoughts:[], hymns:[], districts:[], churches:0, m25:0, m26:0, funds:0, communicants:0, offerings:0, offeringCount:0};
+  var dmap = {}, seenChurch = {}, seenHymn = {};
+  days = days.slice().sort(function(a,b){ return dayKey(a)-dayKey(b); });
+  days.forEach(function(day){
+    var B = day.blocks || [], dn = dayName(day.title), sess = '', si = 0, dref = {};
+    B.forEach(function(b){ if(b.kind==='session' && !/^(DAY|MINUTES|HELD)\b/i.test(b.text)){ si++; sess = titleCase(String(b.text).replace(/\s*\d{1,2}[:h]\d{2}.*$/,'')); } b._si = si; b._sess = sess;
+      if(b.kind==='district') dref[b.ref] = String(b.text).replace(/^[\d.\s]+/,'').replace(/\.$/,'').trim(); });
+    B.forEach(function(b){
+      if(b.kind==='church'){
+        var dname = b.district || 'District', key = dname+'|'+b.name; if(seenChurch[key]) return; seenChurch[key] = 1;
+        var d = dmap[dname] || (dmap[dname] = {name:dname, churches:0, m25:0, m26:0, funds:0, said:''}); if(X.districts.indexOf(d)<0) X.districts.push(d);
+        d.churches++; d.m25 += num(b.m25)||0; d.m26 += num(b.m26)||0; d.funds += num(b.funds)||0; return; }
+      if(b.kind!=='text' || b.table) return;
+      var t = String(b.text), m;
+      if(/Commendation/.test(b.ref||'')){ var dn2 = dref[String(b.ref).replace(' Commendation','')]; if(dn2 && dmap[dn2]) dmap[dn2].said = t.replace(/^[^:]{0,60}:\s*/,''); }
+      var hre = /hymn\s+(\d{1,4})\s*(?:(?:from|in)\s+(?:the\s+)?([^“"]{2,40}?))?\s*[“"]([^”"]+)[”"](?:\s*[“"]([^”"]+)[”"])?/gi;
+      while((m = hre.exec(t))){ var hk = m[1]+'|'+m[3].toLowerCase().replace(/[^a-z]/g,'').slice(0,12), bk = (m[2]||'').trim().replace(/\bhymnal\b/,'Hymnal');
+        if(seenHymn[hk]){ if(bk && !seenHymn[hk].book) seenHymn[hk].book = bk; continue; }
+        X.hymns.push(seenHymn[hk] = {no:m[1], book:bk, title:m[3].trim(), eng:(m[4]||'').trim(), day:dn}); }
+      var cm = t.match(/(\d[\d ,]*\d|\d)\s+communicants/i); if(cm) X.communicants += num(cm[1])||0;
+      var ore = /offering[^.]{0,90}?\bR\s?(\d[\d ,.]*\d)/gi; while((m = ore.exec(t))){ var ov = num(m[1]); if(ov){ X.offerings += ov; X.offeringCount++; } }
+      if(/thought\s+(of|for)\s+the\s+day/i.test(t)){ var q = quotes(t).filter(function(x){ return x.length>=12; }), r = refs(t), rd = t.match(/([A-Z][\w.]*(?:\s+[A-Z][\w.'’-]*){1,5})\s+read\b/);
+        if(q.length) X.thoughts.push({quote:q[q.length-1], ref:r[0]||'', reader:rd?rd[1]:'', when:b._sess, day:dn}); }
+      if(/\bSermon\s*:/i.test(t)){
+        var dotted = /\.\d+$/.test(b.ref||''), pre = String(b.ref||'').replace(/\.\d+$/,'');
+        var sib = B.filter(function(x){ return x.kind==='text' && x._si===b._si && (dotted ? String(x.ref||'').indexOf(pre+'.')===0 : !/\.\d+$/.test(x.ref||'')); });
+        var parent = dotted ? B.filter(function(x){ return x.kind==='text' && x._si===b._si && x.ref===pre; })[0] : null;
+        var who = ''; sib.forEach(function(x){ var pm = String(x.text).match(/in\s+(?:the\s+)?person\s+of\s+(.*)/i); if(pm && /preacher/i.test(x.text)) who = capName(pm[1]); });
+        if(!who){ var sm = t.match(/Preacher,?\s+(.*)/); if(sm) who = capName(sm[1]); }
+        var body = t.replace(/^[^:]{0,40}Sermon\s*:\s*/i,''), th = body.match(/(?:theme|subject|topic)\s*:\s*([A-Z][^.“"\n]{3,110})\./) || body.match(/(?:theme|subject|topic|title)\b[^“"]{0,60}[“"]([^”"]{2,120})[”"]/i);
+        var les = []; sib.forEach(function(x){ if(/scripture\s+lessons?/i.test(x.text)) les = refs(x.text); });
+        var kind = (t.match(/^([^:]{0,40})Sermon\s*:/i)||['',''])[1].replace(/^the\s*/i,'').trim();
+        var svc = parent ? titleCase(String(parent.text).split('\n')[0].replace(/\s+at\s+\d{1,2}[:h]\d{2}.*$/i,'').split(/\.\s/)[0].replace(/[.:]$/,'')) : (kind ? kind+' Sermon' : '');
+        X.sermons.push({who:who, ref:refs(body)[0]||'', theme:th?th[1].trim():'', lessons:les, service:svc, day:dn, body:body}); }
+    });
+  });
+  X.districts.forEach(function(d){ X.churches += d.churches; X.m25 += d.m25; X.m26 += d.m26; X.funds += d.funds; });
+  X.districts.sort(function(a,b){ return b.m26 - a.m26; });
+  X.days = days;
+  return X;
+}
+
+function countUp(el, to, fmt){ var still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(still || !window.requestAnimationFrame){ el.textContent = fmt(to); return; }
+  var t0 = null, dur = 1800; function step(ts){ if(!t0) t0 = ts; var p = Math.min(1,(ts-t0)/dur), e = 1-Math.pow(1-p,3); el.textContent = fmt(to*e); if(p<1) requestAnimationFrame(step); }
+  el.textContent = fmt(0); requestAnimationFrame(step); }
+
+function render(days){
+  var X = extract(days), h = '', main = document.getElementById('main');
+  days = X.days;
+  if(!days.length){ main.innerHTML = '<div class="wrap"><div class="empty">The record of the Conference will appear here as the Conference Secretaries publish each day’s minutes.</div></div>'; return; }
+  if(X.churches){
+    var st = document.getElementById('stats'), grow = X.m26 - X.m25, mil = X.funds >= 1e6;
+    st.innerHTML = '<div class="stat"><div class="n" id="s1">0</div><div class="l">Churches reported</div><div class="d">'+X.districts.length+' districts</div></div>'+
+      '<div class="stat"><div class="n" id="s2">0</div><div class="l">Members this year</div><div class="d">'+(grow>=0?'+':'−')+spaced(Math.abs(grow))+' on last year</div></div>'+
+      '<div class="stat"><div class="n" id="s3">0</div><div class="l">Raised by the churches</div><div class="d">'+rand(X.funds)+'</div></div>'+
+      '<div class="stat"><div class="n" id="s4">0</div><div class="l">'+(X.sermons.length===1?'Sermon':'Sermons')+' recorded</div><div class="d">'+X.hymns.length+' hymns lifted</div></div>';
+    st.hidden = false;
+    countUp(document.getElementById('s1'), X.churches, function(v){ return spaced(v); });
+    countUp(document.getElementById('s2'), X.m26, function(v){ return spaced(v); });
+    countUp(document.getElementById('s3'), X.funds, function(v){ return mil ? 'R'+(v/1e6).toFixed(1)+'m' : rand(v); });
+    countUp(document.getElementById('s4'), X.sermons.length, function(v){ return String(Math.round(v)); });
+  }
+  document.getElementById('nav').hidden = false;
+  if(X.sermons.length){
+    h += '<section id="word"><div class="wrap"><div class="sechead"><div class="eyebrow">The Word preached</div><h2>What was proclaimed from the pulpit</h2><p>Each sermon as the Conference Secretaries recorded it: the text, the theme and the preacher.</p></div>';
+    X.sermons.forEach(function(s){
+      h += '<article class="sermon">'+(s.ref?'<div class="ref">'+esc(s.ref)+'</div>':'')+
+        '<div class="theme">'+(s.theme?'“'+esc(s.theme)+'”':esc(s.ref||'The Sermon'))+'</div>'+
+        (s.who?'<div class="who">'+esc(s.who)+'</div>':'')+
+        '<div class="svc">'+esc([s.service, s.day].filter(Boolean).join(' · '))+'</div>'+
+        (s.lessons.length?'<div class="lessons">'+s.lessons.map(function(l){ return '<span class="chip">Lesson: '+esc(l)+'</span>'; }).join('')+'</div>':'')+
+        '<details><summary>Read the secretaries’ summary of the sermon</summary>'+s.body.split(/\n\n/).map(function(p){ return '<p>'+esc(p)+'</p>'; }).join('')+'<p class="src">As recorded in the minutes. If something is not as it was preached, propose a correction on the minutes page.</p></details></article>'; });
+    if(X.communicants || X.offerings){ h += '<div class="moments">'+
+      (X.communicants?'<div class="moment"><div class="n">'+spaced(X.communicants)+'</div><div class="l">communicants received Holy Communion</div></div>':'')+
+      (X.offerings?'<div class="moment"><div class="n">'+rand(X.offerings)+'</div><div class="l">given in the '+X.offeringCount+' offerings recorded at worship</div></div>':'')+'</div>'; }
+    h += '</div></section>';
+  }
+  if(X.thoughts.length){
+    h += '<section id="thought"><div class="wrap"><div class="sechead"><div class="eyebrow">Thought for the day</div><h2>A word to carry from the devotions</h2></div><div class="thoughts">'+
+      X.thoughts.map(function(t){ return '<div class="thought"><blockquote>“'+esc(t.quote)+'”</blockquote><div class="meta">'+(t.ref?'<b>'+esc(t.ref)+'</b> · ':'')+(t.reader?'read by '+esc(t.reader)+' · ':'')+esc([t.when,t.day].filter(Boolean).join(', '))+'</div></div>'; }).join('')+'</div></div></section>';
+  }
+  if(X.hymns.length){
+    h += '<section id="songs"><div class="wrap"><div class="sechead"><div class="eyebrow">The songs we lifted</div><h2>Hymns of the session</h2><p>By number, as they were lined in the sanctuary.</p></div><div class="songs">'+
+      X.hymns.map(function(s){ return '<div class="song"><div class="no">'+esc(s.no)+'</div><div><div class="t">'+esc(s.title)+'</div><div class="e">'+esc([s.eng,s.book].filter(Boolean).join(' · '))+'</div></div></div>'; }).join('')+'</div></div></section>';
+  }
+  if(X.districts.length){
+    var max = Math.max.apply(null, X.districts.map(function(d){ return d.m26; })) || 1;
+    h += '<section id="districts"><div class="wrap"><div class="sechead"><div class="eyebrow">'+X.districts.length+' districts, one Conference</div><h2>The pastors’ reports in numbers</h2><p>Membership this year by district, from the reports read on the floor. The bar shows each district’s members against the largest district.</p></div>';
+    X.districts.forEach(function(d){ var g = d.m26 - d.m25;
+      h += '<div class="drow"><h3>'+esc(d.name)+'</h3><div class="big">'+spaced(d.m26)+'<small>members</small></div>'+
+        '<div class="track" role="img" aria-label="'+esc(d.name)+': '+spaced(d.m26)+' members"><div class="bar" data-w="'+(d.m26/max*100).toFixed(1)+'"></div></div>'+
+        '<div class="facts"><span><b>'+d.churches+'</b> churches</span><span><b>'+(g>=0?'+':'−')+spaced(Math.abs(g))+'</b> members on last year</span><span><b>'+rand(d.funds)+'</b> raised by the churches</span></div>'+
+        (d.said?'<details><summary>What the district said of its Presiding Elder</summary><p>'+esc(d.said)+'</p></details>':'')+'</div>'; });
+    h += '</div></section>';
+  }
+  h += '<section id="record"><div class="wrap"><div class="sechead"><div class="eyebrow">The record</div><h2>Read the minutes, and help keep them true</h2><p>Open a day to read the full minutes. If a name, a figure or a word is not as it happened, propose a correction there. The Conference Secretaries decide on each one.</p></div><div class="days">'+
+    days.map(function(d){ var c = d.counts || {};
+      return '<div class="day"><h3>'+esc(dayName(d.title))+'</h3><div class="meta">'+(c.accepted?c.accepted+' corrected':'As distributed')+(c.pending?' · '+c.pending+' proposals waiting':'')+'</div><a href="'+MINUTES_PAGE+'#'+esc(d.id)+'">Open the minutes</a></div>'; }).join('')+'</div></div></section>';
+  main.innerHTML = h;
+  setTimeout(function(){ [].forEach.call(document.querySelectorAll('.bar'), function(b){ b.style.width = b.getAttribute('data-w')+'%'; }); }, 120);
+}
+
+function motes(){ var c = document.getElementById('motes'); if(!c || !c.getContext) return;
+  if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var x = c.getContext('2d'), W, H, P = [], on = true, dpr = Math.min(2, window.devicePixelRatio||1);
+  function size(){ W = c.clientWidth; H = c.clientHeight; c.width = W*dpr; c.height = H*dpr; x.setTransform(dpr,0,0,dpr,0,0); }
+  size(); window.addEventListener('resize', size);
+  for(var i=0;i<70;i++) P.push({x:Math.random(), y:Math.random(), r:.6+Math.random()*2.2, s:.00025+Math.random()*.0007, w:Math.random()*6.28, a:.15+Math.random()*.55});
+  document.addEventListener('visibilitychange', function(){ on = !document.hidden; if(on) requestAnimationFrame(tick); });
+  function tick(){ if(!on) return; x.clearRect(0,0,W,H);
+    P.forEach(function(p){ p.y -= p.s; p.w += .008; if(p.y < -.03){ p.y = 1.03; p.x = Math.random(); }
+      var px = (p.x + Math.sin(p.w)*.012)*W, py = p.y*H, fade = Math.min(1, p.y*3) * Math.min(1, (1-p.y)*5);
+      x.beginPath(); x.arc(px, py, p.r, 0, 6.283); x.fillStyle = 'rgba(240,213,138,'+(p.a*fade).toFixed(3)+')'; x.fill(); });
+    requestAnimationFrame(tick); }
+  requestAnimationFrame(tick); }
+
+function start(){ motes();
+  if(SEED){ render(SEED); return; }
+  fetch(MINUTES_URL+'?action=days').then(function(r){ return r.json(); }).then(function(r){
+    var ds = (r && r.days) || [];
+    return Promise.all(ds.map(function(d){ return fetch(MINUTES_URL+'?action=day&id='+encodeURIComponent(d.id)).then(function(x){ return x.json(); }).then(function(x){ d.blocks = (x && x.blocks) || []; return d; }); }));
+  }).then(render).catch(function(){ document.getElementById('main').innerHTML = '<div class="wrap"><div class="empty">The record could not be loaded just now. Check your connection and refresh the page.</div></div>'; });
+}
+start();
+</script>
+</body>
+</html>

@@ -53,6 +53,9 @@ table{border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-num
 th,td{padding:4px 12px 4px 0;text-align:right;white-space:nowrap}
 th:first-child,td:first-child{text-align:left;white-space:normal;min-width:130px}
 th:last-child,td:last-child{padding-right:0}
+table.pasted td{text-align:left;white-space:normal;border-bottom:1px solid var(--line);vertical-align:top;min-width:0}
+table.pasted td:nth-child(even){text-align:right;white-space:nowrap;font-weight:600}
+table.pasted tr:first-child td{font-weight:700;color:var(--muted);font-size:11px;letter-spacing:.05em;text-transform:uppercase}
 thead th{font-weight:700;color:var(--muted);font-size:11px;letter-spacing:.05em;text-transform:uppercase;border-bottom:1px solid var(--line)}
 .meta{font-size:13.5px;color:var(--muted)}
 .meta b{color:var(--ink);font-variant-numeric:tabular-nums}
@@ -105,7 +108,7 @@ textarea.big{min-height:300px;font-size:14px}
 </head>
 <body>
 <div class="hero"><div class="wrap">
-  <div><div class="eyebrow">M.M. Mokone Memorial Annual Conference 2026</div><h1 id="title">Conference Minutes</h1></div>
+  <div><a class="eyebrow" href="42nd.html" style="text-decoration:none;display:block">‹ The 42nd Session · M.M. Mokone Memorial Annual Conference</a><h1 id="title">Conference Minutes</h1></div>
   <div class="sec" id="secbox"></div>
 </div></div>
 <div class="bar" id="bar" hidden><div class="wrap"><div class="tabs" role="tablist" id="tabs"></div></div></div>
@@ -115,7 +118,6 @@ textarea.big{min-height:300px;font-size:14px}
 <script>
 /* ====== SETTINGS ====== */
 var MINUTES_URL = "https://script.google.com/macros/s/AKfycbzEWYVxcN3-eSBgCr76LIH3LoxZw9LyM6DP34rpScuF4L8eiVRV_Jw8TQbQ_5bIgd76/exec";   // the web app URL of the minutes Apps Script
-var REPORT_URL  = "https://script.google.com/macros/s/AKfycbzuLLT1P3bypTDws-lwex8Ieq_svIeXJpjN3a5yX5R-GSLWH4t9C8T3zyMRXT5WWac78Q/exec"; // Pastor's Summary Reports
 /* ====================== */
 
 var F = {name:'Church name', m25:'Membership, last year', m26:'Membership, this year',
@@ -142,49 +144,65 @@ function send(body){ return fetch(MINUTES_URL, {method:'POST', headers:{'Content
 function parseMinutes(raw){
   var L = [];
   String(raw).replace(/\r/g,'').split('\n').forEach(function(l){
-    var s = l.replace(/ /g,' ').trim();
-    if(!s || /P\s?a\s?g\s?e/.test(s) && s.length<16 || /^_+$/.test(s)) return;
-    if(/^Item(\t|\s{2,})/.test(s) || /^Section [A-Z]\b/.test(s) || /^OTHER FINANCIAL/i.test(s)) return;
+    var s = l.replace(/ /g,' ').replace(/^[ ﻿]+|[ ]+$/g,'');
+    if(!/\S/.test(s) || /P\s?a\s?g\s?e/.test(s) && s.trim().length<16 || /^\s*_+-?\s*$/.test(s)) return;
+    var t = s.trim();
+    if(/^Item(\t|\s{2,})/.test(t) || /^Section [A-Z]\b/.test(t) || /^OTHER FINANCIAL/i.test(t)) return;
     L.push(s);
   });
   var M = [];
   for(var i=0;i<L.length;i++){ var s=L[i];
-    if(/^Total Funds Raised/i.test(s) && !/R\s?\d/.test(s) && i+1<L.length){ s += ' ' + L[++i]; }
+    if(/^\s*Total Funds Raised/i.test(s) && !/R\s?\d/.test(s) && i+1<L.length){ s += ' ' + L[++i].trim(); }
     M.push(s); }
   L = M;
   var cells = function(s){ return s.split(/\t+|\s{2,}/).map(function(c){ return c.trim(); }).filter(function(c){ return c!==''; }); };
   var isRow = function(s){ return /^(Total Membership|Annual Conference|Episcopal Residence|Total Funds)/i.test(s); };
-  var blocks = [], cur = null, district = '', dnum = '', topN = 0, sub = false, lastSub = 0, prevEnd = true;
-  var add = function(b){ blocks.push(b); cur = b; return b; };
+  var NUM = /^(\d{1,3}(?:\.\d{1,3})*)(?:\.\s*|\s+)(?=[^\d\s])(\S.*)$/;
+  var isNum = function(s){ return NUM.test(s) && !/^\d+\s?(years|th|st|nd|rd)\b/i.test(s) && !/^[1-3]\s+(Samuel|Kings|Chronicles|Corinthians|Thessalonians|Timothy|Peter|John)\b/.test(s); };
+  var ends = function(s){ return /[.:!?"”’)]$/.test(s); };
+  var blocks = [], cur = null, district = '', dnum = '', topN = 0, sub = false, lastSub = 0, prevEnd = true, sec = '', lastRef = '', carried = false;
+  var push = function(b){ if(sec) b.sec = sec; blocks.push(b); return b; };
   for(i=0;i<L.length;i++){
-    s = L[i]; var nxt = L[i+1] || '';
+    var rawLine = L[i]; s = rawLine.trim(); var nxt = (L[i+1] || '').trim();
     if(/^Total Membership/i.test(nxt) && !isRow(s)){
       var c = {kind:'church', district:district, ref:dnum, name:s.replace(/\.$/,''), m25:'', m26:'', acA:'', acP:'', acO:'', erA:'', erP:'', erO:'', funds:''};
       i++;
-      while(i<L.length && isRow(L[i])){ var p = cells(L[i]);
+      while(i<L.length && isRow(L[i].trim())){ var ln = L[i].trim(), p = cells(ln);
         if(/^Total Membership/i.test(p[0])){ c.m25=p[1]||''; c.m26=p[2]||''; }
         else if(/^Annual/i.test(p[0])){ c.acA=p[1]||''; c.acP=p[2]||''; c.acO=p[3]||''; }
         else if(/^Episcopal/i.test(p[0])){ c.erA=p[1]||''; c.erP=p[2]||''; c.erO=p[3]||''; }
-        else { c.funds = p.length>1 ? p.slice(1).join(' ') : L[i].replace(/^.*Church\s*/i,''); }
+        else { c.funds = p.length>1 ? p.slice(1).join(' ') : ln.replace(/^.*Church\s*/i,''); }
         i++; }
-      i--; blocks.push(c); cur = null; prevEnd = true; continue;
+      i--; push(c); cur = null; prevEnd = true; carried = false; continue;
     }
-    var m = s.match(/^(\d+(?:\.\d+)?)\.?\s*(.*\bDistrict)\.?$/);
-    if(m && s.length<60){ dnum = m[1]; district = m[2].trim(); if(m[1].indexOf('.')<0){ topN = parseInt(m[1],10); sub=false; }
-      blocks.push({kind:'district', ref:dnum, text:s.replace(/\s+/g,' ')}); cur=null; prevEnd=true; continue; }
-    if(/^(MORNING|AFTERNOON|EVENING) SESSION/i.test(s) || (/^DAY\s/i.test(s) && s.length<60)){ blocks.push({kind:'session', ref:'', text:s}); cur=null; prevEnd=true; continue; }
-    m = s.match(/^(\d+(?:\.\d+)*)\.?\s+(\S.*)$/);
-    if(m && !/^\d+\s?(years|th|st|nd|rd)\b/i.test(s)){
-      var num = m[1], ref = num;
-      if(num.indexOf('.')<0){ var v = parseInt(num,10);
-        if(topN>0 && ((sub && v===lastSub+1) || (!sub && v<=topN && v===1))){ sub=true; lastSub=v; ref=topN+'.'+v; }
+    var m = s.match(/^(\d+(?:\.\d+)?)\.?\s*(\S.*\bDistrict)\.?$/);
+    if(m && s.length<60){ dnum = m[1]; district = m[2].trim(); if(m[1].indexOf('.')<0){ topN = parseInt(m[1],10); sub=false; lastSub=0; }
+      push({kind:'district', ref:dnum, text:s.replace(/\s+/g,' ')}); lastRef = dnum; cur=null; prevEnd=true; carried=false; continue; }
+    if(/^(MORNING|AFTERNOON|EVENING|NIGHT|BUSINESS|OPENING|CLOSING)\s+SESSION\b/i.test(s) && s.length<60){
+      sec = s.replace(/\s*\d{1,2}[:h]\d{2}.*$/,'').toLowerCase().replace(/\b[a-z]/g,function(x){ return x.toUpperCase(); });
+      if(/^BUSINESS|^OPENING|^CLOSING/i.test(s)){ topN = 0; sub = false; lastSub = 0; }
+      push({kind:'session', ref:'', text:s}); cur=null; prevEnd=true; carried=false; lastRef=''; continue; }
+    if((/^DAY\s/i.test(s) || /^MINUTES\s+OF\b/i.test(s) || /^HELD\s+AT\b/i.test(s)) && s.length<110 && blocks.length<4){ blocks.push({kind:'session', ref:'', text:s}); cur=null; prevEnd=true; continue; }
+    if(isNum(s)){
+      m = s.match(NUM); var num = m[1], ref = num;
+      if(num.indexOf('.')<0){ var v = parseInt(num,10), dotted = false;
+        for(var k=i+1;k<L.length;k++){ var nx = L[k].trim(); if(isNum(nx)){ dotted = nx.indexOf(v+'.')===0 && /^\d+\.\d/.test(nx); break; } if(/^\d+\.\d+\s*\S.*District\.?$/.test(nx)){ dotted = nx.indexOf(v+'.')===0; break; } }
+        if(sub && v>lastSub && v<=lastSub+3 && !(v===topN+1 && dotted)){ lastSub=v; ref=topN+'.'+v; }
+        else if(!sub && topN>0 && v===1){ sub=true; lastSub=1; ref=topN+'.1'; }
         else { topN=v; sub=false; lastSub=0; } }
-      add({kind:'text', ref:ref, text:m[2]}); prevEnd = /[.:!?"”’)]$/.test(s); continue;
+      cur = push({kind:'text', ref:ref, text:m[2]}); lastRef = ref; prevEnd = ends(s); carried = /carried\.?$/i.test(s); continue;
     }
-    if(/^[❖•▪■*-]\s*/.test(s) && s.length>3){ add({kind:'text', ref:'Note', text:s.replace(/^[❖•▪■*-]\s*/,'')}); prevEnd=/[.:!?"”’)]$/.test(s); continue; }
-    if(/^(Statement|Word) of commendation/i.test(s)){ add({kind:'text', ref:dnum+' Commendation', text:s}); prevEnd=/[.:!?"”’)]$/.test(s); continue; }
-    if(!cur) add({kind:'text', ref:'', text:s}); else cur.text += (prevEnd ? '\n\n' : ' ') + s;
-    prevEnd = /[.:!?"”’)]$/.test(s);
+    if(/^[❖•▪■*]\s*/.test(s) && s.length>3){ cur = push({kind:'text', ref:'Note', text:s.replace(/^[❖•▪■*]\s*/,'')}); prevEnd=ends(s); carried=/carried\.?$/i.test(s); continue; }
+    if(/^(Statement|Word) of commendation/i.test(s)){ cur = push({kind:'text', ref:dnum+' Commendation', text:s}); prevEnd=ends(s); carried=false; continue; }
+    var isTable = rawLine.indexOf('\t')>=0 || (s.split(' | ').length>=3);
+    if(isTable){
+      var row = (rawLine.indexOf('\t')>=0 ? rawLine.split('\t') : s.split(' | ')).map(function(x){ return x.trim(); }).join(' | ');
+      if(cur && cur.table) cur.text += '\n' + row; else { cur = push({kind:'text', ref:'', table:true, text:row}); if(lastRef) cur.cont = lastRef; }
+      prevEnd = true; carried = false; continue;
+    }
+    if(!cur || cur.table || carried){ cur = push({kind:'text', ref:'', text:s}); if(lastRef) cur.cont = lastRef; }
+    else cur.text += (prevEnd ? '\n\n' : ' ') + s;
+    prevEnd = ends(s); carried = /carried\.?$/i.test(s);
   }
   blocks.forEach(function(b,k){ b.id = 'b'+(k+1); });
   return blocks;
@@ -208,11 +226,12 @@ var blockOf = function(id){ return D.blocks.filter(function(b){ return b.id===id
 var order = function(id){ for(var i=0;i<D.blocks.length;i++) if(D.blocks[i].id===id) return i; return 1e9; };
 function label(b){ if(!b) return 'Removed item';
   if(b.kind==='church') return (b.ref?'Item '+b.ref+', ':'')+b.name;
-  if(b.added) return 'Added item'; if(!b.ref) return 'Heading'; if(b.ref==='Note') return 'Note';
+  if(b.added) return 'Added item'; if(b.table) return 'Table'+(b.cont?' under item '+b.cont:''); if(!b.ref) return b.cont ? 'Item '+b.cont+', continued' : (b.kind==='session'||String(b.text).length<90 ? 'Heading' : 'Paragraph'); if(b.ref==='Note') return 'Note';
   if(/Commendation/.test(b.ref)) return 'Item '+b.ref.replace(' Commendation','')+', commendation';
   return 'Item '+b.ref; }
-function where(b){ var l=label(b); if(!b || b.kind==='church' || (b.ref && b.ref!=='Note' && !/Commendation/.test(b.ref))) return l;
-  var w=words(b.text); return l+' (“'+w.slice(0,6).join(' ')+(w.length>6?'…':'')+'”)'; }
+function where(b){ var l=label(b); if(!b) return l; var sc = b.sec ? ', '+b.sec : '';
+  if(b.kind==='church' || (b.ref && b.ref!=='Note' && !/Commendation/.test(b.ref))) return l+sc;
+  var w=words(String(b.text).replace(/\|/g,' ')); return l+sc+' (“'+w.slice(0,6).join(' ')+(w.length>6?'…':'')+'”)'; }
 function diff(a,b){ var A=words(a),B=words(b),n=A.length,m=B.length,W=m+1; var T=new Uint16Array((n+1)*W),i,j;
   for(i=n-1;i>=0;i--) for(j=m-1;j>=0;j--) T[i*W+j]= A[i]===B[j] ? T[(i+1)*W+j+1]+1 : Math.max(T[(i+1)*W+j],T[i*W+j+1]);
   i=0;j=0; var out=[]; var push=function(t,w){ var l=out[out.length-1]; if(l&&l[0]===t) l[1].push(w); else out.push([t,[w]]); };
@@ -237,7 +256,7 @@ function changeHtml(p){ var b=blockOf(p.block);
 /* ---------- drawing ---------- */
 function blockHtml(b, pend, tools){
   var ps = pend[b.id] || [];
-  var head = b.kind==='district' || b.kind==='session' || (!b.ref && !b.added);
+  var head = b.kind==='district' || b.kind==='session' || (!b.ref && !b.added && !b.table && !b.cont && String(b.text).length<90);
   var h = '<article class="blk '+(b.kind==='church'?'church':'')+(head?' head':'')+'" id="'+esc(b.id)+'">';
   h += '<div class="ref">'+(b.kind==='church'||head||b.ref==='Note'||/Commend/.test(b.ref||'')?'':esc(b.ref||''))+'</div><div class="body">';
   if(b.kind==='church'){
@@ -248,7 +267,8 @@ function blockHtml(b, pend, tools){
       '<tr><td>Episcopal Residence Project</td><td>'+esc(b.erA)+'</td><td>'+esc(b.erP)+'</td><td>'+esc(b.erO)+'</td></tr></tbody></table></div>';
     h += '<div class="meta">Total funds raised by the church: <b>'+esc(b.funds)+'</b></div>';
     if(fl.length) h += '<div class="flag">Check the '+esc(fl.join(' and '))+' figures: assessed less paid does not equal outstanding.</div>';
-    if(sec.name){ reportDiffs(b).forEach(function(t){ h += '<div class="flag">Pastor’s report differs. '+esc(t)+'.</div>'; }); }
+  } else if(b.table){
+    h += '<div class="tscroll"><table class="pasted"><tbody>'+String(b.text).split('\n').map(function(r){ return '<tr>'+r.split(/\s*\|\s*/).map(function(c){ return '<td>'+esc(c)+'</td>'; }).join('')+'</tr>'; }).join('')+'</tbody></table></div>';
   } else h += String(b.text).split(/\n\n/).map(function(p){ return '<p>'+esc(p)+'</p>'; }).join('');
   if(tools){
     h += '<div class="tools"><button type="button" class="propose" data-propose="'+esc(b.id)+'">Propose a change</button>'+
@@ -374,7 +394,7 @@ function renderLayer(){
     h += '<div class="stack"><label for="f-value">What it should be</label><input type="text" id="f-value" autocomplete="off"></div>';
   } else {
     h += '<div class="stack"><label for="f-type">Kind of change</label><select id="f-type"><option value="Correction">Correction: a name, spelling, figure or fact is wrong</option><option value="Amendment">Amendment: the wording should say it differently</option><option value="Addition">Addition: something is missing after this item</option></select></div>';
-    h += '<div class="stack"><label for="f-text" id="f-text-l">Edit the wording as it should read</label><textarea id="f-text">'+esc(b.text)+'</textarea></div>';
+    h += '<div class="stack"><label for="f-text" id="f-text-l">'+(b.table?'Edit the entry that is wrong. Keep the | marks between the columns':'Edit the wording as it should read')+'</label><textarea id="f-text">'+esc(b.text)+'</textarea></div>';
   }
   h += '<div class="stack"><label for="f-reason">Reason <small>(helps the secretary decide)</small></label><input type="text" id="f-reason" autocomplete="off"></div>';
   h += '<div class="row2"><div class="stack"><label for="f-name">Your name</label><input type="text" id="f-name" value="'+esc(me.name)+'"></div>'+
@@ -418,7 +438,7 @@ function fail(msg){ renderChrome(); $('main').innerHTML = '<div class="empty">'+
 function openHome(){ ui.view='home'; D=null; return api({action:'days'}).then(function(r){ if(!r.ok) return fail(r.error); days=r.days; render(); }).catch(function(){ fail('Could not load the minutes. Check your connection.'); }); }
 function openDay(id, keep, quiet){ if(!keep){ ui.tab='minutes'; ui.filter='pending'; }
   return api({action:'day', id:id}).then(function(r){ if(!r.ok) return fail(r.error); if(quiet && (ui.form || !D || JSON.stringify(r)===JSON.stringify(D))) return; D=r; ui.view='day'; render(); }).catch(function(){ if(!keep) fail('Could not load the minutes. Check your connection.'); }); }
-function loadReports(){ if(reports || !sec.name) return; fetch(REPORT_URL).then(function(r){ return r.json(); }).then(function(d){ reports = d.submissions || []; if(ui.view==='day') render(); }).catch(function(){}); }
+function loadReports(){ /* the minutes are the record; they are not compared with the pastors' reports */ }
 function route(){ if(MINUTES_URL.indexOf('PASTE_')===0) return fail('The minutes page is not connected yet.');
   var id = location.hash.replace('#',''); ui.form=null; ui.editing=ui.declining=ui.removing=null;
   if(id==='load' && sec.name){ ui.view='load'; D=null; render(); return; }
