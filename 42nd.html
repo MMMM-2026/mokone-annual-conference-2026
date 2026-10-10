@@ -30,7 +30,7 @@ a{color:var(--gold-hi)}
 .numeral{font-family:var(--head);font-weight:900;line-height:.86;font-size:clamp(132px,36vw,300px);letter-spacing:-.04em;margin:6px 0 0;
   background:linear-gradient(175deg,#fff3c9 0%,var(--gold-hi) 28%,var(--gold) 58%,#8a6410 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
   filter:drop-shadow(0 10px 40px rgba(196,151,42,.35));animation:rise 1.4s cubic-bezier(.2,.7,.2,1) both}
-.numeral sup{font-size:.24em;letter-spacing:.02em;vertical-align:2.05em;line-height:0;margin-left:.06em;font-weight:700}
+.numeral sup{font-size:.24em;letter-spacing:.02em;vertical-align:1.4em;line-height:0;margin-left:.06em;font-weight:700}
 .hero h1{font-family:var(--head);font-weight:700;font-size:clamp(24px,5.4vw,44px);line-height:1.12;margin:0;text-wrap:balance;max-width:20ch;animation:rise 1.4s .15s cubic-bezier(.2,.7,.2,1) both}
 .hero h1 em{font-style:italic;font-weight:600;color:var(--gold-hi)}
 .hero .sub{color:var(--muted);font-size:14px;max-width:46ch;animation:rise 1.4s .3s cubic-bezier(.2,.7,.2,1) both}
@@ -272,12 +272,22 @@ function motes(){ var c = document.getElementById('motes'); if(!c || !c.getConte
     requestAnimationFrame(tick); }
   requestAnimationFrame(tick); }
 
+function getJSON(url, tries){ tries = tries || 4; var n = 0;
+  function once(){ n++; var ctl = window.AbortController ? new AbortController() : null, timer = ctl ? setTimeout(function(){ ctl.abort(); }, 25000) : null;
+    return fetch(url, ctl ? {signal:ctl.signal} : undefined).then(function(r){ return r.text(); }).then(function(t){ if(timer) clearTimeout(timer); return JSON.parse(t); })
+      .catch(function(e){ if(timer) clearTimeout(timer); if(n >= tries) throw e; return new Promise(function(res){ setTimeout(res, 1200*n + Math.random()*800); }).then(once); }); }
+  return once(); }
 function start(){ motes();
   if(SEED){ render(SEED); return; }
-  fetch(MINUTES_URL+'?action=days').then(function(r){ return r.json(); }).then(function(r){
-    var ds = (r && r.days) || [];
-    return Promise.all(ds.map(function(d){ return fetch(MINUTES_URL+'?action=day&id='+encodeURIComponent(d.id)).then(function(x){ return x.json(); }).then(function(x){ d.blocks = (x && x.blocks) || []; return d; }); }));
-  }).then(render).catch(function(){ document.getElementById('main').innerHTML = '<div class="wrap"><div class="empty">The record could not be loaded just now. Check your connection and refresh the page.</div></div>'; });
+  var KEY = 'mm-42nd-record', shown = false;
+  try{ var c = JSON.parse(localStorage.getItem(KEY) || 'null'); if(c && c.length){ render(c); shown = true; } }catch(e){}
+  getJSON(MINUTES_URL+'?action=days').then(function(r){
+    var ds = (r && r.days) || [], i = 0;
+    function next(){ if(i >= ds.length) return ds; var d = ds[i++];
+      return getJSON(MINUTES_URL+'?action=day&id='+encodeURIComponent(d.id)).then(function(x){ if(!x || !x.ok) throw new Error('day'); d.blocks = x.blocks || []; return next(); }); }
+    return next();
+  }).then(function(ds){ try{ localStorage.setItem(KEY, JSON.stringify(ds)); }catch(e){} render(ds); })
+  .catch(function(){ if(!shown) document.getElementById('main').innerHTML = '<div class="wrap"><div class="empty">The record is busy just now. Wait a moment and refresh the page.</div></div>'; });
 }
 start();
 </script>

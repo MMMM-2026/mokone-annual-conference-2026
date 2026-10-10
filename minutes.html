@@ -134,8 +134,13 @@ var $ = function(id){ return document.getElementById(id); };
 var esc = function(s){ return String(s==null?'':s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); };
 var words = function(s){ return String(s).trim().split(/\s+/).filter(Boolean); };
 
+function getJSON(url, tries){ tries = tries || 4; var n = 0;
+  function once(){ n++; var ctl = window.AbortController ? new AbortController() : null, timer = ctl ? setTimeout(function(){ ctl.abort(); }, 25000) : null;
+    return fetch(url, ctl ? {signal:ctl.signal} : undefined).then(function(r){ return r.text(); }).then(function(t){ if(timer) clearTimeout(timer); return JSON.parse(t); })
+      .catch(function(e){ if(timer) clearTimeout(timer); if(n >= tries) throw e; return new Promise(function(res){ setTimeout(res, 1200*n + Math.random()*800); }).then(once); }); }
+  return once(); }
 function api(params){ var q = Object.keys(params).map(function(k){ return k+'='+encodeURIComponent(params[k]); }).join('&');
-  return fetch(MINUTES_URL+'?'+q).then(function(r){ return r.json(); }); }
+  return getJSON(MINUTES_URL+'?'+q); }
 function send(body){ return fetch(MINUTES_URL, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(body)})
   .then(function(r){ return r.json(); })
   .then(function(r){ if(r && r.badPin){ sec={pin:'',name:''}; try{sessionStorage.removeItem('mm-sec');}catch(e){} } return r; }); }
@@ -435,9 +440,9 @@ function render(){
 function fail(msg){ renderChrome(); $('main').innerHTML = '<div class="empty">'+esc(msg)+'<br><br><button class="btn" data-act="retry">Try again</button></div>'; }
 
 /* ---------- loading ---------- */
-function openHome(){ ui.view='home'; D=null; return api({action:'days'}).then(function(r){ if(!r.ok) return fail(r.error); days=r.days; render(); }).catch(function(){ fail('Could not load the minutes. Check your connection.'); }); }
+function openHome(){ ui.view='home'; D=null; return api({action:'days'}).then(function(r){ if(!r.ok) return fail(r.error); days=r.days; render(); }).catch(function(){ fail('The minutes are busy just now. Wait a moment and try again.'); }); }
 function openDay(id, keep, quiet){ if(!keep){ ui.tab='minutes'; ui.filter='pending'; }
-  return api({action:'day', id:id}).then(function(r){ if(!r.ok) return fail(r.error); if(quiet && (ui.form || !D || JSON.stringify(r)===JSON.stringify(D))) return; D=r; ui.view='day'; render(); }).catch(function(){ if(!keep) fail('Could not load the minutes. Check your connection.'); }); }
+  return api({action:'day', id:id}).then(function(r){ if(!r.ok) return fail(r.error); if(quiet && (ui.form || !D || JSON.stringify(r)===JSON.stringify(D))) return; D=r; ui.view='day'; render(); }).catch(function(){ if(!keep) fail('The minutes are busy just now. Wait a moment and try again.'); }); }
 function loadReports(){ /* the minutes are the record; they are not compared with the pastors' reports */ }
 function route(){ if(MINUTES_URL.indexOf('PASTE_')===0) return fail('The minutes page is not connected yet.');
   var id = location.hash.replace('#',''); ui.form=null; ui.editing=ui.declining=ui.removing=null;
@@ -485,7 +490,7 @@ document.addEventListener('click', function(e){
   }
 });
 window.addEventListener('hashchange', route);
-setInterval(function(){ if(ui.view==='day' && D && !ui.form && !ui.editing && !ui.declining && !ui.busy && !document.hidden) openDay(D.day.id, true, true); }, 60000);
+setInterval(function(){ if(sec.name && ui.view==='day' && D && !ui.form && !ui.editing && !ui.declining && !ui.busy && !document.hidden) openDay(D.day.id, true, true); }, 120000);
 loadReports(); route();
 </script>
 </body>
