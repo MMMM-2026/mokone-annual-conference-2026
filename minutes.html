@@ -165,7 +165,7 @@ function parseMinutes(raw){
   var NUM = /^(\d{1,3}(?:\.\d{1,3})*)(?:\.\s*|\s+)(?=[^\d\s])(\S.*)$/;
   var isNum = function(s){ return NUM.test(s) && !/^\d+\s?(years|th|st|nd|rd)\b/i.test(s) && !/^[1-3]\s+(Samuel|Kings|Chronicles|Corinthians|Thessalonians|Timothy|Peter|John)\b/.test(s); };
   var ends = function(s){ return /[.:!?"”’)]$/.test(s); };
-  var blocks = [], cur = null, district = '', dnum = '', topN = 0, sub = false, lastSub = 0, prevEnd = true, sec = '', lastRef = '', carried = false;
+  var blocks = [], cur = null, district = '', dnum = '', topN = 0, sub = false, lastSub = 0, prevEnd = true, sec = '', lastRef = '', carried = false, subBase = '';
   var push = function(b){ if(sec) b.sec = sec; blocks.push(b); return b; };
   for(i=0;i<L.length;i++){
     var rawLine = L[i]; s = rawLine.trim(); var nxt = (L[i+1] || '').trim();
@@ -192,14 +192,15 @@ function parseMinutes(raw){
       m = s.match(NUM); var num = m[1], ref = num;
       if(num.indexOf('.')<0){ var v = parseInt(num,10), dotted = false;
         for(var k=i+1;k<L.length;k++){ var nx = L[k].trim(); if(isNum(nx)){ dotted = nx.indexOf(v+'.')===0 && /^\d+\.\d/.test(nx); break; } if(/^\d+\.\d+\s*\S.*District\.?$/.test(nx)){ dotted = nx.indexOf(v+'.')===0; break; } }
-        if(sub && v>lastSub && v<=lastSub+3 && !(v===topN+1 && dotted)){ lastSub=v; ref=topN+'.'+v; }
-        else if(!sub && topN>0 && v===1){ sub=true; lastSub=1; ref=topN+'.1'; }
+        if(sub && v>lastSub && v<=lastSub+3 && !(v===topN+1 && (dotted || v!==lastSub+1))){ lastSub=v; ref=subBase+'.'+v; }
+        else if(sub && v===1 && lastSub>=1){ lastSub=1; ref=subBase+'.1'; }
+        else if(!sub && topN>0 && (v===1 || (v>1 && v<topN))){ sub=true; lastSub=v; subBase=(lastRef.indexOf(topN+'.')===0 && v===1) ? lastRef : String(topN); ref=subBase+'.'+v; }
         else { topN=v; sub=false; lastSub=0; } }
-      cur = push({kind:'text', ref:ref, text:m[2]}); lastRef = ref; prevEnd = ends(s); carried = /carried\.?$/i.test(s); continue;
+      cur = push({kind:'text', ref:ref, text:m[2].replace(/^[.\s]+/,'')}); lastRef = ref; prevEnd = ends(s); carried = /carried\.?$/i.test(s); continue;
     }
     if(/^[❖•▪■*]\s*/.test(s) && s.length>3){ cur = push({kind:'text', ref:'Note', text:s.replace(/^[❖•▪■*]\s*/,'')}); prevEnd=ends(s); carried=/carried\.?$/i.test(s); continue; }
     if(/^(Statement|Word) of commendation/i.test(s)){ cur = push({kind:'text', ref:dnum+' Commendation', text:s}); prevEnd=ends(s); carried=false; continue; }
-    var isTable = rawLine.indexOf('\t')>=0 || (s.split(' | ').length>=3);
+    var isTable = rawLine.indexOf('\t')>=0 || (s.split(' | ').length>=2);
     if(isTable){
       var row = (rawLine.indexOf('\t')>=0 ? rawLine.split('\t') : s.split(' | ')).map(function(x){ return x.trim(); }).join(' | ');
       if(cur && cur.table) cur.text += '\n' + row; else { cur = push({kind:'text', ref:'', table:true, text:row}); if(lastRef) cur.cont = lastRef; }
