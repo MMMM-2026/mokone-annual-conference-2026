@@ -143,7 +143,7 @@ function capName(s){ var t=String(s).trim().split(/\s+/), out=[];
     if(/[.,;:]$/.test(w) && !/^(Rev|Dr|Bro|Sis|Prof|Mr|Mrs|Ms|PE|Lic|Bp|Mt|St|Rt)\.$/.test(w) && !/^[A-Z]\.$/.test(w)) break; }
   return out.join(' ').replace(/[.,;:]+$/,''); }
 var BOOKS = 'Genesis|Exodus|Leviticus|Numbers|Deuteronomy|Joshua|Judges|Ruth|Samuel|Kings|Chronicles|Ezra|Nehemiah|Esther|Job|Psalms?|Proverbs|Ecclesiastes|Song of Solomon|Isaiah|Jeremiah|Lamentations|Ezekiel|Daniel|Hosea|Joel|Amos|Obadiah|Jonah|Micah|Nahum|Habakkuk|Zephaniah|Haggai|Zechariah|Malachi|Matthew|Mark|Luke|John|Acts?|Romans|Corinthians|Galatians|Ephesians|Philippians|Colossians|Thessalonians|Timothy|Titus|Philemon|Hebrews|James|Peter|Jude|Revelations?';
-function refs(text){ var re = new RegExp('(?:\\b([1-3])(?:st|nd|rd)?\\s*|\\b(First|Second|Third)\\s+|\\b)('+BOOKS+')\\s*(\\d{1,3})(?:\\s*[:.]\\s*(\\d{1,3})(?:\\s*[-–]\\s*(\\d{1,3}))?)?','gi'), out=[], m;
+function refs(text){ var re = new RegExp('(?:\\b([1-3])\\s*(?:st|nd|rd)?\\s*|\\b(First|Second|Third)\\s+|\\b)('+BOOKS+')\\s*(\\d{1,3})(?:\\s*[:.]\\s*(\\d{1,3})(?:\\s*[-–]\\s*(\\d{1,3}))?)?','gi'), out=[], m;
   while((m=re.exec(text))){ var n = m[1] || ({first:'1',second:'2',third:'3'}[String(m[2]||'').toLowerCase()]||'');
     var bk = m[3].charAt(0).toUpperCase()+m[3].slice(1).toLowerCase(); bk = bk==='Psalms'?'Psalm':bk==='Revelations'?'Revelation':bk==='Act'?'Acts':bk;
     var r = (n?n+' ':'')+bk+' '+m[4]+(m[5]?':'+m[5]+(m[6]?'–'+m[6]:''):''); if(out.indexOf(r)<0) out.push(r); }
@@ -151,7 +151,7 @@ function refs(text){ var re = new RegExp('(?:\\b([1-3])(?:st|nd|rd)?\\s*|\\b(Fir
 function quotes(text){ var re=/[“"]([^”"]{2,200})[”"]/g, out=[], m; while((m=re.exec(text))) out.push(m[1].trim()); return out; }
 function dayName(t){ return String(t).replace(/^minutes\s+(of|for)\s+/i,'').replace(/^the\s+/i,''); }
 function titleCase(s){ return String(s).split(/\s+/).map(function(w,i){ var u=w.toUpperCase(), l=w.toLowerCase();
-  if(/^(YPD|RAYAC|WMS|CMLF|SOA|ACEL|AME|AMEC|BOE|PE|RR|GDC)$/.test(u.replace(/[^A-Z]/g,''))) return u;
+  if(u.split('/').every(function(x){ return /^(YPD|RAYAC|WMS|CMLF|SOA|ACEL|AME|AMEC|BOE|PE|RR|GDC)$/.test(x.replace(/[^A-Z]/g,'')); })) return u.replace(/\//g,' / ');
   if(i>0 && /^(and|of|the|for|in|to|a)$/.test(l)) return l;
   return l.charAt(0).toUpperCase()+l.slice(1); }).join(' '); }
 /* Themes the minutes do not record yet. Used only while the minutes give none; once the amendment is accepted the minutes take over. */
@@ -180,7 +180,7 @@ function extract(days){
         if(seenHymn[hk]){ if(bk && !seenHymn[hk].book) seenHymn[hk].book = bk; continue; }
         X.hymns.push(seenHymn[hk] = {no:m[1], book:bk, title:m[3].trim(), eng:(m[4]||'').trim(), day:dn}); }
       var cm = t.match(/(\d[\d ,]*\d|\d)\s+communicants/i); if(cm) X.communicants += num(cm[1])||0;
-      var ore = /offering[^.]{0,90}?\bR\s?(\d[\d ,.]*\d)/gi; while((m = ore.exec(t))){ var ov = num(m[1]); if(ov){ X.offerings += ov; X.offeringCount++; } }
+      var ore = /offering[^.=]{0,90}?\bR\s?(\d[\d ,.]*\d)/gi; while((m = ore.exec(t))){ var ov = num(m[1]); if(ov){ X.offerings += ov; X.offeringCount++; } }
       if(/thought\s+(of|for)\s+the\s+day/i.test(t)){ var q = quotes(t).filter(function(x){ return x.length>=12; }), r = refs(t), oq = t.match(/[“"]([^”"]{12,240}?)[.!?](\s|$)/); if(!q.length && oq) q = [oq[1].trim()]; var rd = t.match(/([A-Z][\w.]*(?:\s+[A-Z][\w.'’-]*){1,5})\s+read\b/);
         if(q.length) X.thoughts.push({quote:q[q.length-1], ref:r[0]||'', reader:rd?rd[1]:'', when:b._sess, day:dn}); }
       if(/\bSermon\s*:/i.test(t)){
@@ -192,7 +192,7 @@ function extract(days){
         var who = ''; sib.forEach(function(x){ var pm = String(x.text).match(/in\s+(?:the\s+)?person\s+of\s+(.*)/i); if(pm && /preacher/i.test(x.text)) who = capName(pm[1]); });
         if(!who){ var sm = t.match(/Preacher,?\s+(.*)/); if(sm) who = capName(sm[1]); }
         var body = t.replace(/^[^:]{0,40}Sermon\s*:\s*/i,''), th = body.match(/(?:theme|subject|topic)\s*:\s*([A-Z][^.“"\n]{3,110})\./) || body.match(/(?:theme|subject|topic|title)\b[^“"]{0,60}[“"]([^”"]{2,120})[”"]/i);
-        var les = []; sib.forEach(function(x){ if(/scripture\s+lessons?/i.test(x.text)) les = refs(x.text); });
+        var les = []; sib.forEach(function(x){ if(/scriptures?\s+lessons?/i.test(x.text)) les = refs(x.text); });
         var kind = (t.match(/^([^:]{0,40})Sermon\s*:/i)||['',''])[1].replace(/^the\s*/i,'').trim();
         var svc = parent ? titleCase(String(parent.text).split('\n')[0].replace(/\s+at\s+\d{1,2}[:h]\d{2}.*$/i,'').split(/\.\s/)[0].replace(/[.:]$/,'')) : (kind ? kind+' Sermon' : '');
         var sref = refs(body)[0]||'', stheme = th ? th[1].trim() : '';

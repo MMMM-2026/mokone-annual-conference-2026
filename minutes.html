@@ -211,7 +211,7 @@ function parseMinutes(raw){
         i++; }
       i--; push(c); cur = null; prevEnd = true; carried = false; continue;
     }
-    var m = s.match(/^(\d+(?:\.\d+)?)\.?\s*(\S.*\bDistrict)\.?$/);
+    var m = s.match(/^(\d+(?:\.\d+)?)(?:\.\s*|\s+)(\S.*\bDistrict)\.?$/);
     if(m && s.length<60){ dnum = m[1]; district = m[2].trim(); if(m[1].indexOf('.')<0){ topN = parseInt(m[1],10); sub=false; lastSub=0; }
       push({kind:'district', ref:dnum, text:s.replace(/\s+/g,' ')}); lastRef = dnum; cur=null; prevEnd=true; carried=false; continue; }
     if(/^(MORNING|AFTERNOON|EVENING|NIGHT|BUSINESS|OPENING|CLOSING)\s+SESSION\b/i.test(s) && s.length<60){
