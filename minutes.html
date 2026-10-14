@@ -30,7 +30,7 @@ h1{font-family:var(--head);font-weight:700;font-size:clamp(20px,5vw,26px);line-h
 .tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--gold)}
 .count{display:inline-block;min-width:20px;padding:0 6px;margin-left:5px;border-radius:10px;background:var(--pend-bg);color:var(--pend);font-size:12px;text-align:center}
 .count.ok{background:var(--ok-bg);color:var(--ok)}
-main.wrap{padding-top:16px;padding-bottom:90px;display:flex;flex-direction:column;gap:14px}
+main.wrap{padding-top:16px;padding-bottom:160px;display:flex;flex-direction:column;gap:14px}
 .notice{font-size:13.5px;color:var(--muted);border-left:3px solid var(--gold);padding:2px 0 2px 12px}
 .notice b{color:var(--ink)}
 .linkbtn{border:0;background:none;padding:0;color:var(--accent);font-weight:600;text-decoration:underline}
@@ -103,6 +103,20 @@ textarea.big{min-height:300px;font-size:14px}
 .row2{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
 .err{color:var(--no);font-size:13.5px;font-weight:700}
 .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--purple);color:#fff;padding:10px 16px;border-radius:8px;font-size:14px;z-index:15;max-width:calc(100% - 32px)}
+.listen{display:flex;align-items:center;gap:14px;width:100%;text-align:left;border:2px solid var(--gold);background:linear-gradient(135deg,#fff8e6,#fdf1d3);color:var(--ink);border-radius:10px;padding:14px 16px;cursor:pointer}
+.listen svg{flex:none;width:34px;height:34px;padding:6px;border-radius:50%;background:var(--gold);color:#fff}
+.listen span{display:flex;flex-direction:column;gap:2px}
+.listen b{font-size:17px}
+.listen small{font-size:13.5px;color:var(--muted)}
+.listen:hover{background:#fdeec6}
+.hear{border:0;background:none;color:var(--accent);font-weight:700;font-size:13px;padding:4px 2px;cursor:pointer;text-decoration:underline}
+.blk.reading{background:#fff6dc;box-shadow:-10px 0 0 #fff6dc,10px 0 0 #fff6dc,inset 4px 0 0 var(--gold);border-radius:4px}
+.player{position:fixed;left:0;right:0;bottom:0;z-index:12;background:var(--purple);color:#fff;border-top:3px solid var(--gold);padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px))}
+.pl-in{max-width:860px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 14px}
+.pl-now{font-size:13.5px;color:var(--goldsoft)}
+.pl-btns{display:flex;flex-wrap:wrap;gap:6px}
+.pl-btns button{border:1px solid rgba(255,255,255,.3);background:transparent;color:#fff;border-radius:20px;padding:7px 13px;font-weight:700;font-size:13.5px;cursor:pointer}
+.pl-btns .pl-main{background:var(--gold);border-color:var(--gold);color:#1b0d05;min-width:96px}
 .print-only{display:none}
 @media print{
   @page{margin:18mm 16mm}
@@ -145,6 +159,7 @@ textarea.big{min-height:300px;font-size:14px}
 <div class="bar" id="bar" hidden><div class="wrap"><div class="tabs" role="tablist" id="tabs"></div></div></div>
 <main class="wrap" id="main"><div class="empty">Loading the minutes…</div></main>
 <div id="layer"></div>
+<div id="player" class="player no-print" hidden></div>
 
 <script>
 /* ====== SETTINGS ====== */
@@ -170,6 +185,73 @@ function getJSON(url, tries){ tries = tries || 4; var n = 0;
     return fetch(url, ctl ? {signal:ctl.signal} : undefined).then(function(r){ return r.text(); }).then(function(t){ if(timer) clearTimeout(timer); return JSON.parse(t); })
       .catch(function(e){ if(timer) clearTimeout(timer); if(n >= tries) throw e; return new Promise(function(res){ setTimeout(res, 1200*n + Math.random()*800); }).then(once); }); }
   return once(); }
+/* ---------- read aloud ---------- */
+var Speak = (function(){
+  var ok = typeof window!=='undefined' && 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+  var S = {items:[], i:0, c:0, chunks:[], playing:false, rate:1, onItem:null, onState:null, voice:null, token:0};
+  function pickVoice(){ if(!ok) return null; var vs = speechSynthesis.getVoices() || [], pref = ['en-ZA','en-GB','en-US','en'];
+    for(var p=0;p<pref.length;p++){ for(var v=0;v<vs.length;v++){ if(String(vs[v].lang).replace('_','-').indexOf(pref[p])===0) return vs[v]; } } return vs[0] || null; }
+  if(ok){ S.voice = pickVoice(); try{ speechSynthesis.onvoiceschanged = function(){ S.voice = pickVoice(); }; }catch(e){} }
+  function clean(t){ return String(t)
+    .replace(/\|/g,', ')
+    .replace(/\bR\s?(\d(?:[\d ,.]*\d)?)/g, function(m,r){ var x = r.replace(/\s/g,''), mm = x.match(/^(.*)[.,](\d{2})$/), whole = mm ? mm[1] : x, cents = mm ? +mm[2] : 0;
+      whole = whole.replace(/[.,]/g,'').replace(/^0+(?=\d)/,''); return whole+' rand'+(cents ? ' '+cents+' cents' : ''); })
+    .replace(/\bRev\.?\s/g,'Reverend ').replace(/\bRevs\.?\s/g,'Reverends ').replace(/\bSis\.?\s/g,'Sister ').replace(/\bBro\.?\s/g,'Brother ')
+    .replace(/\bPE\b/g,'Presiding Elder').replace(/\bDr\.?\s/g,'Doctor ').replace(/\bProf\.?\s/g,'Professor ').replace(/\bMt\.?\s/g,'Mount ')
+    .replace(/\bAMEC?\b|\bA\.M\.E\.?/g,'A M E').replace(/\bBOE\b/g,'Board of Examiners').replace(/\bYPD\b/g,'Y P D').replace(/\bRAYAC\b/g,'Ray-ack')
+    .replace(/\b(\d+)(?:st|nd|rd|th)\b/gi,'$1')
+    .replace(/\b([A-Z][a-z]+)\s+(\d{1,3})\s*:\s*(\d{1,3})(?:\s*[-–]\s*(\d{1,3}))?/g, function(m,bk,c,v,v2){ return bk+' '+c+' verse'+(v2?'s ':' ')+v+(v2?' to '+v2:''); })
+    .replace(/(\d{1,2})h(\d{2})/g,'$1:$2').replace(/[❖•▪■*_“”"]/g,' ').replace(/\s+/g,' ').trim(); }
+  function split(t){ var parts = clean(t).match(/[^.!?;]+[.!?;]*/g) || [], out = [], cur = '';
+    parts.forEach(function(p){ p = p.trim(); if(!p) return; if((cur+' '+p).length > 220 && cur){ out.push(cur); cur = p; } else cur = cur ? cur+' '+p : p; });
+    if(cur) out.push(cur);
+    return out.reduce(function(a,s){ while(s.length>260){ var k = s.lastIndexOf(' ',240); if(k<60) k = 240; a.push(s.slice(0,k)); s = s.slice(k); } a.push(s); return a; },[]); }
+  function state(){ if(S.onState) S.onState(S.playing, S.i, S.items.length); }
+  function speakNext(tok){
+    if(tok!==S.token || !S.playing) return;
+    if(S.c >= S.chunks.length){ S.i++; S.c = 0; if(S.i >= S.items.length){ S.playing = false; state(); if(S.onItem) S.onItem(-1); return; } load(); }
+    var u = new SpeechSynthesisUtterance(S.chunks[S.c]); if(S.voice) u.voice = S.voice; u.lang = (S.voice && S.voice.lang) || 'en-ZA'; u.rate = S.rate;
+    u.onend = function(){ if(tok!==S.token) return; S.c++; speakNext(tok); };
+    u.onerror = function(e){ if(tok!==S.token) return; if(e && (e.error==='interrupted' || e.error==='canceled')) return; S.c++; speakNext(tok); };
+    speechSynthesis.speak(u);
+  }
+  function load(){ S.chunks = split(S.items[S.i].text); if(!S.chunks.length) S.chunks = ['']; if(S.onItem) S.onItem(S.i); }
+  return {
+    ok: ok, clean: clean, split: split,
+    set: function(items, onItem, onState){ this.stop(); S.items = items; S.onItem = onItem; S.onState = onState; S.i = 0; S.c = 0; },
+    play: function(from){ if(!ok || !S.items.length) return; speechSynthesis.cancel(); S.token++; if(typeof from==='number'){ S.i = Math.max(0,Math.min(from,S.items.length-1)); S.c = 0; }
+      S.playing = true; load(); state(); var t = S.token; setTimeout(function(){ speakNext(t); }, 60); },
+    pause: function(){ if(!ok) return; S.token++; S.playing = false; speechSynthesis.cancel(); state(); },
+    stop: function(){ if(!ok) return; S.token++; S.playing = false; try{ speechSynthesis.cancel(); }catch(e){} S.i = 0; S.c = 0; if(S.onItem) S.onItem(-1); state(); },
+    next: function(){ if(S.i < S.items.length-1) this.play(S.i+1); },
+    prev: function(){ this.play(S.c>1 ? S.i : Math.max(0,S.i-1)); },
+    slower: function(){ S.rate = S.rate===1 ? 0.85 : 1; if(S.playing) this.play(S.i); return S.rate; },
+    get playing(){ return S.playing; }, get index(){ return S.i; }, get rate(){ return S.rate; }
+  };
+})();
+
+function speechText(b){
+  if(b.kind==='church') return b.name+'. Total membership: '+b.m25+' last year, '+b.m26+' this year. Annual Conference Budget: assessed '+b.acA+', paid '+b.acP+', outstanding '+b.acO+'. Episcopal Residence Project: assessed '+b.erA+', paid '+b.erP+', outstanding '+b.erO+'. Total funds raised by the church: '+b.funds+'.';
+  var t = String(b.text||'');
+  if(b.table) t = t.split('\n').map(function(r){ return r.split(/\s*\|\s*/).filter(Boolean).join(', '); }).join('. ');
+  var lead = b.kind==='text' && b.ref && /^\d/.test(b.ref) && !/Commendation/.test(b.ref) ? 'Item '+b.ref+'. ' : '';
+  return lead + t;
+}
+function speakItems(){ return D.blocks.map(function(b){ return {id:b.id, text:speechText(b)}; }); }
+function onSpeakItem(i){ [].forEach.call(document.querySelectorAll('.blk.reading'), function(e){ e.classList.remove('reading'); });
+  ui.speakAt = i; if(i<0 || !D) return; var b = D.blocks[i], el = b && document.getElementById(b.id);
+  if(el){ el.classList.add('reading'); el.scrollIntoView({block:'center', behavior:'smooth'}); } }
+function onSpeakState(playing, i, n){ ui.speaking = playing || (ui.speakAt>=0 && ui.speakAt!=null); drawPlayer(); }
+function drawPlayer(){ var bar = document.getElementById('player'); if(!bar) return;
+  var on = Speak.ok && ui.view==='day' && D && ui.speakAt!=null && ui.speakAt>=0;
+  bar.hidden = !on; if(!on) return;
+  bar.innerHTML = '<div class="pl-in"><div class="pl-now">Reading '+(ui.speakAt+1)+' of '+D.blocks.length+'</div><div class="pl-btns">'+
+    '<button type="button" data-act="sp-prev" aria-label="Previous item">‹ Back</button>'+
+    (Speak.playing ? '<button type="button" class="pl-main" data-act="sp-pause">Pause</button>' : '<button type="button" class="pl-main" data-act="sp-resume">Continue</button>')+
+    '<button type="button" data-act="sp-next" aria-label="Next item">Next ›</button>'+
+    '<button type="button" data-act="sp-rate">'+(Speak.rate<1?'Normal speed':'Slower')+'</button>'+
+    '<button type="button" data-act="sp-stop">Stop</button></div></div>'; }
+function startSpeaking(from){ Speak.set(speakItems(), onSpeakItem, onSpeakState); Speak.play(from||0); }
 function api(params){ var q = Object.keys(params).map(function(k){ return k+'='+encodeURIComponent(params[k]); }).join('&');
   return getJSON(MINUTES_URL+'?'+q); }
 function send(body){ return fetch(MINUTES_URL, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(body)})
@@ -309,7 +391,7 @@ function blockHtml(b, pend, tools){
     h += '<div class="tscroll"><table class="pasted"><tbody>'+String(b.text).split('\n').map(function(r){ return '<tr>'+r.split(/\s*\|\s*/).map(function(c){ return '<td>'+esc(c)+'</td>'; }).join('')+'</tr>'; }).join('')+'</tbody></table></div>';
   } else h += String(b.text).split(/\n\n/).map(function(p){ return '<p>'+esc(p)+'</p>'; }).join('');
   if(tools){
-    h += '<div class="tools"><button type="button" class="propose" data-propose="'+esc(b.id)+'">Propose a change</button>'+
+    h += '<div class="tools"><button type="button" class="propose" data-propose="'+esc(b.id)+'">Propose a change</button>'+(Speak.ok?'<button type="button" class="hear" data-hear="'+esc(b.id)+'">Listen from here</button>':'')+
       (b.changed?'<span class="pill accepted">Corrected</span>':'')+(b.added?'<span class="pill accepted">Added</span>':'')+
       (ps.length?'<span class="pill pending">'+ps.length+' waiting for the secretary</span>':'')+'</div>';
     if(ps.length) h += '<div class="waiting">'+ps.map(function(p){ return '<div><div>'+changeHtml(p)+'</div><div class="who">'+who(p)+'</div></div>'; }).join('')+'</div>';
@@ -356,6 +438,7 @@ function renderMinutes(){
   var h = '<div class="notice">'+(sec.name ? '<b>Secretary view.</b> The text below is the official record. It changes only when a secretary accepts a proposal.'
     : isResolutions() ? '<b>These are the resolutions as adopted by the Conference.</b> If you find a spelling or typing error, tap “Propose a change” on that resolution. The substance of a resolution cannot be changed here.' : '<b>These are the official minutes.</b> Tap “Propose a change” on any item. Your proposal goes to the Conference Secretaries, and the minutes stay as they are until a secretary accepts it.')+
     ' <button class="linkbtn" data-act="refresh">Refresh</button></div>';
+  if(Speak.ok) h += '<button type="button" class="listen no-print" data-act="listen"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg><span><b>Listen to '+(isResolutions()?'these resolutions':'these minutes')+'</b><small>Prefer to listen? Tap here and they are read aloud to you, item by item. You can pause at any time.</small></span></button>';
   if(districts.length) h += '<div class="jump">'+districts.map(function(d){ return '<button type="button" data-jump="'+esc(d.id)+'">'+esc(d.text.replace(/^[\d.\s]+/,'').replace(/\.$/,''))+'</button>'; }).join('')+'</div>';
   if(flagged.length) h += '<details class="check"><summary>'+flagged.length+' churches have figures that do not add up</summary><ul>'+
     flagged.map(function(b){ return '<li><button class="linkbtn" data-jump="'+esc(b.id)+'">'+esc(b.name)+'</button> ('+esc(String(b.district).replace(' District',''))+'): '+esc(flags(b).join(' and '))+'</li>'; }).join('')+
@@ -473,7 +556,7 @@ var toastT;
 function toast(m){ var t = document.querySelector('.toast'); if(!t){ t=document.createElement('div'); t.className='toast'; t.setAttribute('role','status'); document.body.appendChild(t); }
   t.textContent=m; t.hidden=false; clearTimeout(toastT); toastT=setTimeout(function(){ t.hidden=true; },4000); }
 function render(){
-  renderChrome();
+  renderChrome(); setTimeout(function(){ if(ui.speakAt!=null && ui.speakAt>=0 && D && D.blocks[ui.speakAt]){ var el=document.getElementById(D.blocks[ui.speakAt].id); if(el) el.classList.add('reading'); } drawPlayer(); },0);
   $('main').innerHTML = ui.view==='load' ? renderLoad() : ui.view==='day' && D ? (ui.tab==='minutes'?renderMinutes():ui.tab==='proposals'?renderProposals():renderSchedule()) : renderHome();
   renderLayer();
 }
@@ -484,7 +567,7 @@ function openHome(){ ui.view='home'; D=null; return api({action:'days'}).then(fu
 function openDay(id, keep, quiet){ if(!keep){ ui.tab='minutes'; ui.filter='pending'; }
   return api({action:'day', id:id}).then(function(r){ if(!r.ok) return fail(r.error); if(quiet && (ui.form || !D || JSON.stringify(r)===JSON.stringify(D))) return; D=r; ui.view='day'; render(); }).catch(function(){ if(!keep) fail('The minutes are busy just now. Wait a moment and try again.'); }); }
 function loadReports(){ /* the minutes are the record; they are not compared with the pastors' reports */ }
-function route(){ if(MINUTES_URL.indexOf('PASTE_')===0) return fail('The minutes page is not connected yet.');
+function route(){ try{ Speak.stop(); }catch(e){} ui.speakAt = null; if(MINUTES_URL.indexOf('PASTE_')===0) return fail('The minutes page is not connected yet.');
   var id = location.hash.replace('#',''); ui.form=null; ui.editing=ui.declining=ui.removing=null;
   if(id==='load' && sec.name){ ui.view='load'; D=null; render(); return; }
   if(/^D-/.test(id)) openDay(id); else openHome(); }
@@ -494,10 +577,11 @@ function act(body, msg){ ui.busy=true; render(); body.pin = sec.pin;
   .catch(function(){ ui.busy=false; render(); toast('Could not reach the server. Nothing was changed.'); }); }
 
 document.addEventListener('click', function(e){
-  var t = e.target.closest('[data-tab],[data-filter],[data-jump],[data-propose],[data-act]'); if(!t) return;
+  var t = e.target.closest('[data-tab],[data-filter],[data-jump],[data-propose],[data-hear],[data-act]'); if(!t) return;
   var d = t.dataset;
   if(d.act==='close-form'){ if(e.target===t){ ui.form=null; renderLayer(); } return; }
-  if(d.tab){ ui.tab=d.tab; render(); window.scrollTo(0,0); return; }
+  if(d.hear){ var hi = D.blocks.findIndex(function(x){ return x.id===d.hear; }); if(hi>=0) startSpeaking(hi); return; }
+  if(d.tab){ if(d.tab!=='minutes'){ Speak.stop(); } ui.tab=d.tab; render(); window.scrollTo(0,0); return; }
   if(d.filter){ ui.filter=d.filter; render(); return; }
   if(d.jump){ if(ui.tab!=='minutes'){ ui.tab='minutes'; render(); } var el=$(d.jump); if(el) el.scrollIntoView({block:'start'}); return; }
   if(d.propose){ ui.form=d.propose; renderLayer(); var f=document.querySelector('#f-value,#f-text'); if(f) f.focus(); return; }
@@ -507,6 +591,13 @@ document.addEventListener('click', function(e){
     case 'signout': sec={pin:'',name:''}; try{sessionStorage.removeItem('mm-sec');}catch(x){} if(ui.view==='load') location.hash=''; else render(); return;
     case 'home': if(location.hash) location.hash=''; else route(); return;
     case 'retry': route(); return;
+    case 'listen': startSpeaking(0); return;
+    case 'sp-pause': Speak.pause(); return;
+    case 'sp-resume': Speak.play(Speak.index); return;
+    case 'sp-next': Speak.next(); return;
+    case 'sp-prev': Speak.prev(); return;
+    case 'sp-rate': Speak.slower(); drawPlayer(); return;
+    case 'sp-stop': Speak.stop(); ui.speakAt = null; drawPlayer(); return;
     case 'print': window.print(); return;
     case 'refresh': openDay(D.day.id, true).then(function(){ toast('Up to date.'); }); return;
     case 'load': ui.preview=null; ui.loadText=''; ui.loadTitle=''; location.hash='load'; return;

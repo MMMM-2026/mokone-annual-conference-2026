@@ -126,6 +126,9 @@ footer{margin-top:70px;border-top:1px solid var(--line);padding-top:22px;padding
 .fn{font-size:14px;color:var(--ivory);margin-top:4px}
 .times{display:inline-block;font-family:var(--ui);font-style:normal;font-size:12px;font-weight:700;letter-spacing:.04em;color:#1b0d05;background:var(--gold-hi);border-radius:20px;padding:1px 9px;vertical-align:middle;margin-left:6px}
 @media (prefers-reduced-motion:reduce){.fnote{animation:none}}
+.lbtn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--gold);background:rgba(196,151,42,.14);color:var(--gold-hi);border-radius:40px;padding:8px 16px;font:inherit;font-size:14px;font-weight:700;cursor:pointer;margin-top:16px}
+.lbtn.on{background:var(--gold);color:#1b0d05}
+.lbtn:hover{background:rgba(196,151,42,.28)}
 </style>
 </head>
 <body>
@@ -231,6 +234,57 @@ function extract(days){
   return X;
 }
 
+/* ---------- read aloud ---------- */
+var Speak = (function(){
+  var ok = typeof window!=='undefined' && 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+  var S = {items:[], i:0, c:0, chunks:[], playing:false, rate:1, onItem:null, onState:null, voice:null, token:0};
+  function pickVoice(){ if(!ok) return null; var vs = speechSynthesis.getVoices() || [], pref = ['en-ZA','en-GB','en-US','en'];
+    for(var p=0;p<pref.length;p++){ for(var v=0;v<vs.length;v++){ if(String(vs[v].lang).replace('_','-').indexOf(pref[p])===0) return vs[v]; } } return vs[0] || null; }
+  if(ok){ S.voice = pickVoice(); try{ speechSynthesis.onvoiceschanged = function(){ S.voice = pickVoice(); }; }catch(e){} }
+  function clean(t){ return String(t)
+    .replace(/\|/g,', ')
+    .replace(/\bR\s?(\d(?:[\d ,.]*\d)?)/g, function(m,r){ var x = r.replace(/\s/g,''), mm = x.match(/^(.*)[.,](\d{2})$/), whole = mm ? mm[1] : x, cents = mm ? +mm[2] : 0;
+      whole = whole.replace(/[.,]/g,'').replace(/^0+(?=\d)/,''); return whole+' rand'+(cents ? ' '+cents+' cents' : ''); })
+    .replace(/\bRev\.?\s/g,'Reverend ').replace(/\bRevs\.?\s/g,'Reverends ').replace(/\bSis\.?\s/g,'Sister ').replace(/\bBro\.?\s/g,'Brother ')
+    .replace(/\bPE\b/g,'Presiding Elder').replace(/\bDr\.?\s/g,'Doctor ').replace(/\bProf\.?\s/g,'Professor ').replace(/\bMt\.?\s/g,'Mount ')
+    .replace(/\bAMEC?\b|\bA\.M\.E\.?/g,'A M E').replace(/\bBOE\b/g,'Board of Examiners').replace(/\bYPD\b/g,'Y P D').replace(/\bRAYAC\b/g,'Ray-ack')
+    .replace(/\b(\d+)(?:st|nd|rd|th)\b/gi,'$1')
+    .replace(/\b([A-Z][a-z]+)\s+(\d{1,3})\s*:\s*(\d{1,3})(?:\s*[-–]\s*(\d{1,3}))?/g, function(m,bk,c,v,v2){ return bk+' '+c+' verse'+(v2?'s ':' ')+v+(v2?' to '+v2:''); })
+    .replace(/(\d{1,2})h(\d{2})/g,'$1:$2').replace(/[❖•▪■*_“”"]/g,' ').replace(/\s+/g,' ').trim(); }
+  function split(t){ var parts = clean(t).match(/[^.!?;]+[.!?;]*/g) || [], out = [], cur = '';
+    parts.forEach(function(p){ p = p.trim(); if(!p) return; if((cur+' '+p).length > 220 && cur){ out.push(cur); cur = p; } else cur = cur ? cur+' '+p : p; });
+    if(cur) out.push(cur);
+    return out.reduce(function(a,s){ while(s.length>260){ var k = s.lastIndexOf(' ',240); if(k<60) k = 240; a.push(s.slice(0,k)); s = s.slice(k); } a.push(s); return a; },[]); }
+  function state(){ if(S.onState) S.onState(S.playing, S.i, S.items.length); }
+  function speakNext(tok){
+    if(tok!==S.token || !S.playing) return;
+    if(S.c >= S.chunks.length){ S.i++; S.c = 0; if(S.i >= S.items.length){ S.playing = false; state(); if(S.onItem) S.onItem(-1); return; } load(); }
+    var u = new SpeechSynthesisUtterance(S.chunks[S.c]); if(S.voice) u.voice = S.voice; u.lang = (S.voice && S.voice.lang) || 'en-ZA'; u.rate = S.rate;
+    u.onend = function(){ if(tok!==S.token) return; S.c++; speakNext(tok); };
+    u.onerror = function(e){ if(tok!==S.token) return; if(e && (e.error==='interrupted' || e.error==='canceled')) return; S.c++; speakNext(tok); };
+    speechSynthesis.speak(u);
+  }
+  function load(){ S.chunks = split(S.items[S.i].text); if(!S.chunks.length) S.chunks = ['']; if(S.onItem) S.onItem(S.i); }
+  return {
+    ok: ok, clean: clean, split: split,
+    set: function(items, onItem, onState){ this.stop(); S.items = items; S.onItem = onItem; S.onState = onState; S.i = 0; S.c = 0; },
+    play: function(from){ if(!ok || !S.items.length) return; speechSynthesis.cancel(); S.token++; if(typeof from==='number'){ S.i = Math.max(0,Math.min(from,S.items.length-1)); S.c = 0; }
+      S.playing = true; load(); state(); var t = S.token; setTimeout(function(){ speakNext(t); }, 60); },
+    pause: function(){ if(!ok) return; S.token++; S.playing = false; speechSynthesis.cancel(); state(); },
+    stop: function(){ if(!ok) return; S.token++; S.playing = false; try{ speechSynthesis.cancel(); }catch(e){} S.i = 0; S.c = 0; if(S.onItem) S.onItem(-1); state(); },
+    next: function(){ if(S.i < S.items.length-1) this.play(S.i+1); },
+    prev: function(){ this.play(S.c>1 ? S.i : Math.max(0,S.i-1)); },
+    slower: function(){ S.rate = S.rate===1 ? 0.85 : 1; if(S.playing) this.play(S.i); return S.rate; },
+    get playing(){ return S.playing; }, get index(){ return S.i; }, get rate(){ return S.rate; }
+  };
+})();
+
+var LISTEN = {items:[], on:-1};
+function listenTo(i, text){ if(LISTEN.on===i && Speak.playing){ Speak.stop(); return; }
+  Speak.set([{text:text}], function(k){ if(k<0){ LISTEN.on=-1; markListen(); } }, function(){ markListen(); }); LISTEN.on = i; Speak.play(0); markListen(); }
+function markListen(){ [].forEach.call(document.querySelectorAll('[data-listen]'), function(b){ var on = +b.getAttribute('data-listen')===LISTEN.on && Speak.playing;
+  b.classList.toggle('on', on); b.querySelector('span').textContent = on ? 'Stop listening' : b.getAttribute('data-label'); }); }
+document.addEventListener('click', function(e){ var b = e.target.closest('[data-listen]'); if(!b) return; var i = +b.getAttribute('data-listen'); listenTo(i, LISTEN.items[i]||''); });
 function countUp(el, to, fmt){ var still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(still || !window.requestAnimationFrame){ el.textContent = fmt(to); return; }
   var t0 = null, dur = 1800; function step(ts){ if(!t0) t0 = ts; var p = Math.min(1,(ts-t0)/dur), e = 1-Math.pow(1-p,3); el.textContent = fmt(to*e); if(p<1) requestAnimationFrame(step); }
@@ -255,12 +309,15 @@ function render(days){
   document.getElementById('nav').hidden = false;
   if(X.sermons.length){
     h += '<section id="word"><div class="wrap"><div class="sechead"><div class="eyebrow">The Word preached</div><h2>What was proclaimed from the pulpit</h2><p>Each sermon as the Conference Secretaries recorded it: the text, the theme and the preacher.</p></div>';
+    LISTEN.items = [];
     X.sermons.forEach(function(s){
+      var li = LISTEN.items.push((s.ref?s.ref+'. ':'')+(s.theme?s.theme+'. ':'')+(s.who?'Preached by '+s.who+'. ':'')+s.body) - 1;
       h += '<article class="sermon">'+(s.ref?'<div class="ref">'+esc(s.ref)+'</div>':'')+
         '<div class="theme">'+(s.theme?'“'+esc(s.theme)+'”':esc(s.ref||'The Sermon'))+'</div>'+
         (s.who?'<div class="who">'+esc(s.who)+'</div>':'')+
         '<div class="svc">'+esc([s.service, s.day].filter(Boolean).join(' · '))+'</div>'+
         (s.lessons.length?'<div class="lessons">'+s.lessons.map(function(l){ return '<span class="chip">Lesson: '+esc(l)+'</span>'; }).join('')+'</div>':'')+
+        (Speak.ok?'<button type="button" class="lbtn" data-listen="'+li+'" data-label="Listen to this sermon"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg><span>Listen to this sermon</span></button>':'')+
         '<details><summary>Read the secretaries’ summary of the sermon</summary>'+s.body.split(/\n\n/).map(function(p){ return '<p>'+esc(p)+'</p>'; }).join('')+'<p class="src">As recorded in the minutes. If something is not as it was preached, propose a correction on the minutes page.</p></details></article>'; });
     if(X.communicants || X.offerings){ h += '<div class="moments">'+
       (X.communicants?'<div class="moment"><div class="n">'+spaced(X.communicants)+'</div><div class="l">communicants received Holy Communion</div></div>':'')+

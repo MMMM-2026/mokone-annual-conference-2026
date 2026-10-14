@@ -74,6 +74,9 @@ footer a{font-weight:600}
 .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--gold);color:#1b0d05;font-weight:700;padding:10px 16px;border-radius:8px;font-size:14px;z-index:20;max-width:calc(100% - 32px)}
 @media (max-width:600px){.charge{grid-template-columns:minmax(0,1fr) auto}.charge .p{grid-column:1}.charge .copy{grid-row:1 / span 2;grid-column:2;align-self:center}.stats .stat .l{letter-spacing:.08em}}
 @media (prefers-reduced-motion:reduce){.word,blockquote.send{animation:none}html{scroll-behavior:auto}}
+.lbtn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--gold);background:rgba(196,151,42,.14);color:var(--gold-hi);border-radius:40px;padding:8px 16px;font:inherit;font-size:14px;font-weight:700;cursor:pointer;margin-top:16px}
+.lbtn.on{background:var(--gold);color:#1b0d05}
+.lbtn:hover{background:rgba(196,151,42,.28)}
 </style>
 </head>
 <body>
@@ -122,6 +125,57 @@ function extract(days){
   });
   return out;
 }
+/* ---------- read aloud ---------- */
+var Speak = (function(){
+  var ok = typeof window!=='undefined' && 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+  var S = {items:[], i:0, c:0, chunks:[], playing:false, rate:1, onItem:null, onState:null, voice:null, token:0};
+  function pickVoice(){ if(!ok) return null; var vs = speechSynthesis.getVoices() || [], pref = ['en-ZA','en-GB','en-US','en'];
+    for(var p=0;p<pref.length;p++){ for(var v=0;v<vs.length;v++){ if(String(vs[v].lang).replace('_','-').indexOf(pref[p])===0) return vs[v]; } } return vs[0] || null; }
+  if(ok){ S.voice = pickVoice(); try{ speechSynthesis.onvoiceschanged = function(){ S.voice = pickVoice(); }; }catch(e){} }
+  function clean(t){ return String(t)
+    .replace(/\|/g,', ')
+    .replace(/\bR\s?(\d(?:[\d ,.]*\d)?)/g, function(m,r){ var x = r.replace(/\s/g,''), mm = x.match(/^(.*)[.,](\d{2})$/), whole = mm ? mm[1] : x, cents = mm ? +mm[2] : 0;
+      whole = whole.replace(/[.,]/g,'').replace(/^0+(?=\d)/,''); return whole+' rand'+(cents ? ' '+cents+' cents' : ''); })
+    .replace(/\bRev\.?\s/g,'Reverend ').replace(/\bRevs\.?\s/g,'Reverends ').replace(/\bSis\.?\s/g,'Sister ').replace(/\bBro\.?\s/g,'Brother ')
+    .replace(/\bPE\b/g,'Presiding Elder').replace(/\bDr\.?\s/g,'Doctor ').replace(/\bProf\.?\s/g,'Professor ').replace(/\bMt\.?\s/g,'Mount ')
+    .replace(/\bAMEC?\b|\bA\.M\.E\.?/g,'A M E').replace(/\bBOE\b/g,'Board of Examiners').replace(/\bYPD\b/g,'Y P D').replace(/\bRAYAC\b/g,'Ray-ack')
+    .replace(/\b(\d+)(?:st|nd|rd|th)\b/gi,'$1')
+    .replace(/\b([A-Z][a-z]+)\s+(\d{1,3})\s*:\s*(\d{1,3})(?:\s*[-–]\s*(\d{1,3}))?/g, function(m,bk,c,v,v2){ return bk+' '+c+' verse'+(v2?'s ':' ')+v+(v2?' to '+v2:''); })
+    .replace(/(\d{1,2})h(\d{2})/g,'$1:$2').replace(/[❖•▪■*_“”"]/g,' ').replace(/\s+/g,' ').trim(); }
+  function split(t){ var parts = clean(t).match(/[^.!?;]+[.!?;]*/g) || [], out = [], cur = '';
+    parts.forEach(function(p){ p = p.trim(); if(!p) return; if((cur+' '+p).length > 220 && cur){ out.push(cur); cur = p; } else cur = cur ? cur+' '+p : p; });
+    if(cur) out.push(cur);
+    return out.reduce(function(a,s){ while(s.length>260){ var k = s.lastIndexOf(' ',240); if(k<60) k = 240; a.push(s.slice(0,k)); s = s.slice(k); } a.push(s); return a; },[]); }
+  function state(){ if(S.onState) S.onState(S.playing, S.i, S.items.length); }
+  function speakNext(tok){
+    if(tok!==S.token || !S.playing) return;
+    if(S.c >= S.chunks.length){ S.i++; S.c = 0; if(S.i >= S.items.length){ S.playing = false; state(); if(S.onItem) S.onItem(-1); return; } load(); }
+    var u = new SpeechSynthesisUtterance(S.chunks[S.c]); if(S.voice) u.voice = S.voice; u.lang = (S.voice && S.voice.lang) || 'en-ZA'; u.rate = S.rate;
+    u.onend = function(){ if(tok!==S.token) return; S.c++; speakNext(tok); };
+    u.onerror = function(e){ if(tok!==S.token) return; if(e && (e.error==='interrupted' || e.error==='canceled')) return; S.c++; speakNext(tok); };
+    speechSynthesis.speak(u);
+  }
+  function load(){ S.chunks = split(S.items[S.i].text); if(!S.chunks.length) S.chunks = ['']; if(S.onItem) S.onItem(S.i); }
+  return {
+    ok: ok, clean: clean, split: split,
+    set: function(items, onItem, onState){ this.stop(); S.items = items; S.onItem = onItem; S.onState = onState; S.i = 0; S.c = 0; },
+    play: function(from){ if(!ok || !S.items.length) return; speechSynthesis.cancel(); S.token++; if(typeof from==='number'){ S.i = Math.max(0,Math.min(from,S.items.length-1)); S.c = 0; }
+      S.playing = true; load(); state(); var t = S.token; setTimeout(function(){ speakNext(t); }, 60); },
+    pause: function(){ if(!ok) return; S.token++; S.playing = false; speechSynthesis.cancel(); state(); },
+    stop: function(){ if(!ok) return; S.token++; S.playing = false; try{ speechSynthesis.cancel(); }catch(e){} S.i = 0; S.c = 0; if(S.onItem) S.onItem(-1); state(); },
+    next: function(){ if(S.i < S.items.length-1) this.play(S.i+1); },
+    prev: function(){ this.play(S.c>1 ? S.i : Math.max(0,S.i-1)); },
+    slower: function(){ S.rate = S.rate===1 ? 0.85 : 1; if(S.playing) this.play(S.i); return S.rate; },
+    get playing(){ return S.playing; }, get index(){ return S.i; }, get rate(){ return S.rate; }
+  };
+})();
+
+var LISTEN = {items:[], on:-1};
+function listenTo(i, text){ if(LISTEN.on===i && Speak.playing){ Speak.stop(); return; }
+  Speak.set([{text:text}], function(k){ if(k<0){ LISTEN.on=-1; markListen(); } }, function(){ markListen(); }); LISTEN.on = i; Speak.play(0); markListen(); }
+function markListen(){ [].forEach.call(document.querySelectorAll('[data-listen]'), function(b){ var on = +b.getAttribute('data-listen')===LISTEN.on && Speak.playing;
+  b.classList.toggle('on', on); b.querySelector('span').textContent = on ? 'Stop listening' : b.getAttribute('data-label'); }); }
+document.addEventListener('click', function(e){ var b = e.target.closest('[data-listen]'); if(!b) return; var i = +b.getAttribute('data-listen'); listenTo(i, LISTEN.items[i]||''); });
 function hl(s, q){ s = esc(s); if(!q) return s; var i = s.toLowerCase().indexOf(esc(q).toLowerCase()); if(i<0) return s; var e = esc(q).length; return s.slice(0,i)+'<mark>'+s.slice(i,i+e)+'</mark>'+s.slice(i+e); }
 function slug(s){ return 'd-'+String(s).toLowerCase().replace(/[^a-z]+/g,'-').replace(/^-|-$/g,''); }
 
@@ -132,14 +186,16 @@ function draw(){
   if(heads.length){ shown += heads.length;
     h += '<section id="heads"><div class="wrap"><div class="sechead"><div class="eyebrow">Presented with their certificates</div><h2>The Component Heads</h2><p>Those who lead the components and auxiliaries of the Conference, as presented on Sunday 11 October 2026.</p></div><div class="heads">'+
       heads.map(function(x){ return '<div class="headc"><div class="role">'+hl(x.role,q)+'</div><div class="who">'+hl(x.who,q)+'</div></div>'; }).join('')+'</div></div></section>'; }
+  LISTEN.items = [];
   A.districts.forEach(function(d){
+    var li = LISTEN.items.push(d.name+'. Presiding Elder: '+d.pe+'. '+d.charges.map(function(c){ return c.charge+': '+c.pastor+'.'; }).join(' ')) - 1;
     var all = match(d.name, d.pe), ch = all ? d.charges : d.charges.filter(function(c){ return match(c.charge, c.pastor); });
     if(!all && !ch.length) return; shown += ch.length + 1;
-    h += '<section class="district" id="'+slug(d.name)+'"><div class="wrap"><div class="pe"><div class="dn">'+hl(d.name,q)+'</div><div><div class="pl">Presiding Elder</div><div class="pn">'+hl(d.pe,q)+'</div></div><div class="cnt">'+d.charges.length+' charges</div></div><ul class="charges">'+
+    h += '<section class="district" id="'+slug(d.name)+'"><div class="wrap"><div class="pe"><div class="dn">'+hl(d.name,q)+'</div><div><div class="pl">Presiding Elder</div><div class="pn">'+hl(d.pe,q)+'</div></div><div class="cnt">'+d.charges.length+' charges'+(Speak.ok?'<br><button type="button" class="lbtn" data-listen="'+li+'" data-label="Listen to this district"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg><span>Listen to this district</span></button>':'')+'</div></div><ul class="charges">'+
       ch.map(function(c){ return '<li class="charge"><div class="c">'+hl(c.charge,q)+'</div><div class="p">'+hl(c.pastor,q)+'</div><button type="button" class="copy" data-copy="'+esc(c.pastor+' is appointed to '+c.charge+', '+d.name+', for the Conference year 2026–2027.')+'">Copy</button></li>'; }).join('')+'</ul></div></section>';
   });
   if(!shown) h = '<div class="wrap"><div class="none">Nothing matches “'+esc(q)+'”. Try part of a name, such as a surname or the name of the church.</div></div>';
-  document.getElementById('main').innerHTML = h;
+  document.getElementById('main').innerHTML = h; markListen();
 }
 function render(days){
   A = extract(days);
