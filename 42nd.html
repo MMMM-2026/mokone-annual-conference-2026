@@ -107,6 +107,25 @@ footer{margin-top:70px;border-top:1px solid var(--line);padding-top:22px;padding
 .moment{padding:22px 4px;display:flex;flex-direction:column;gap:4px}
 .moment .n{font-family:var(--head);font-weight:700;font-size:clamp(34px,6.4vw,54px);line-height:1;color:var(--gold-hi);font-variant-numeric:tabular-nums}
 .moment .l{color:var(--muted);font-size:14.5px}
+.resolutions{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.resolutions li{display:grid;grid-template-columns:clamp(44px,9vw,72px) minmax(0,1fr);gap:14px;padding:16px 0;border-bottom:1px solid var(--line);align-items:baseline}
+.resolutions .rn{font-family:var(--head);font-weight:900;font-size:clamp(26px,5vw,40px);line-height:1;color:var(--gold-hi);text-align:right;font-variant-numeric:tabular-nums}
+.resolutions p{margin:0;font-size:16px;line-height:1.6;max-width:66ch}
+.resolutions details{margin:0;border:0;padding:0}
+.resolutions summary{font-weight:400;color:var(--ivory);font-size:16px;line-height:1.6}
+.resolutions details p{margin-top:8px;font-family:var(--ui);font-size:16px}
+.favs{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-bottom:26px}
+.fav{position:relative;overflow:hidden;border:1px solid var(--line);border-top:3px solid var(--gold);background:linear-gradient(150deg,var(--plum),var(--purple));padding:22px 22px 20px;display:flex;flex-direction:column;gap:6px}
+.fl{font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-hi);font-weight:600}
+.fno{font-family:var(--head);font-weight:900;font-size:clamp(72px,16vw,120px);line-height:.95;background:linear-gradient(175deg,#fff3c9 0%,var(--gold-hi) 30%,var(--gold) 65%,#8a6410 100%);-webkit-background-clip:text;background-clip:text;color:transparent;font-variant-numeric:tabular-nums}
+.fx{font-size:.32em;margin-left:.15em;vertical-align:1.6em;line-height:0}
+.fnote{font-family:var(--head);font-size:clamp(64px,14vw,104px);line-height:1;color:var(--gold-hi);animation:sway 3.2s ease-in-out infinite;transform-origin:50% 90%;width:max-content}
+@keyframes sway{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg) translateY(-4px)}}
+.ft{font-family:var(--head);font-style:italic;font-weight:600;font-size:clamp(21px,3.6vw,28px);line-height:1.25;text-wrap:balance}
+.fe{color:var(--muted);font-size:14px}
+.fn{font-size:14px;color:var(--ivory);margin-top:4px}
+.times{display:inline-block;font-family:var(--ui);font-style:normal;font-size:12px;font-weight:700;letter-spacing:.04em;color:#1b0d05;background:var(--gold-hi);border-radius:20px;padding:1px 9px;vertical-align:middle;margin-left:6px}
+@media (prefers-reduced-motion:reduce){.fnote{animation:none}}
 </style>
 </head>
 <body>
@@ -120,7 +139,7 @@ footer{margin-top:70px;border-top:1px solid var(--line);padding-top:22px;padding
     <div class="sub" id="presiding">Polokwane AME Church, Polokwane · 8 to 11 October 2026<br><b>Senior Bishop Wilfred Jacobus Messiah</b>, presiding</div>
     <div class="stats" id="stats" hidden></div>
     <nav class="nav" id="nav" hidden>
-      <a href="#word">The Word</a><a href="#thought">Thought for the day</a><a href="#songs">Songs</a><a href="#districts">Districts</a><a class="cta" href="#record">Read the minutes</a>
+      <a class="cta" href="appointments.html">Find your pastor for 2026–2027</a><a class="cta" href="#record">Read the minutes</a><a href="#word">The Word</a><a href="#thought">Thought for the day</a><a href="#songs">Songs</a><a href="#districts">Districts</a><a href="#resolved">Resolutions</a><a href="appointments.html">Appointments</a>
     </nav>
   </div>
 </header>
@@ -156,6 +175,9 @@ function titleCase(s){ return String(s).split(/\s+/).map(function(w,i){ var u=w.
   return l.charAt(0).toUpperCase()+l.slice(1); }).join(' '); }
 /* Themes the minutes do not record yet. Used only while the minutes give none; once the amendment is accepted the minutes take over. */
 var SUPPLIED_THEMES = [{who:'Mekgoe', ref:'1 Kings 18:43–46', theme:'Pray one more time'}];
+/* Remembered from the hall by Rev. S.Z. Moremi; the minutes record hymn 360 twice and the chorus not at all. */
+var HYMN_OF_THE_SESSION = {no:'360', times:'More than three times', note:'Lined again and again across the Session'};
+var SONG_OF_THE_SESSION = {title:'Hakena letho matsohong aka kenale Jeso bophelong baka', note:'The song the Conference kept returning to'};
 var MONTHS = ['january','february','march','april','may','june','july','august','september','october','november','december'];
 function dayKey(d){ var m = String(d.title).match(/(\d{1,2})(?:st|nd|rd|th)?\s+([A-Za-z]+)\s+(\d{4})/); if(m){ var mi = MONTHS.indexOf(m[2].toLowerCase()); if(mi>=0) return (+m[3])*10000 + (mi+1)*100 + (+m[1]); } return 99990000 + (d.publishedAt||0)/1e9; }
 
@@ -177,8 +199,8 @@ function extract(days){
       if(/Commendation/.test(b.ref||'')){ var dn2 = dref[String(b.ref).replace(' Commendation','')]; if(dn2 && dmap[dn2]) dmap[dn2].said = t.replace(/^[^:]{0,60}:\s*/,''); }
       var hre = /hymn\s+(\d{1,4})\s*(?:(?:from|in)\s+(?:the\s+)?([^“"]{2,40}?))?\s*[“"]([^”"]+)[”"](?:\s*[“"]+([^”"]+)[”"])?/gi;
       while((m = hre.exec(t))){ var hk = m[1]+'|'+m[3].toLowerCase().replace(/[^a-z]/g,'').slice(0,12), bk = (m[2]||'').trim().replace(/\bhymnal\b/,'Hymnal');
-        if(seenHymn[hk]){ if(bk && !seenHymn[hk].book) seenHymn[hk].book = bk; continue; }
-        X.hymns.push(seenHymn[hk] = {no:m[1], book:bk, title:m[3].trim(), eng:(m[4]||'').trim(), day:dn}); }
+        if(seenHymn[hk]){ seenHymn[hk].times++; if(bk && !seenHymn[hk].book) seenHymn[hk].book = bk; continue; }
+        X.hymns.push(seenHymn[hk] = {no:m[1], book:bk, title:m[3].trim(), eng:(m[4]||'').trim(), day:dn, times:1}); }
       var cm = t.match(/(\d[\d ,]*\d|\d)\s+communicants/i); if(cm) X.communicants += num(cm[1])||0;
       var ore = /offering[^.=]{0,90}?\bR\s?(\d[\d ,.]*\d)/gi; while((m = ore.exec(t))){ var ov = num(m[1]); if(ov){ X.offerings += ov; X.offeringCount++; } }
       if(/thought\s+(of|for)\s+the\s+day/i.test(t)){ var q = quotes(t).filter(function(x){ return x.length>=12; }), r = refs(t), oq = t.match(/[“"]([^”"]{12,240}?)[.!?](\s|$)/); if(!q.length && oq) q = [oq[1].trim()]; var rd = t.match(/([A-Z][\w.]*(?:\s+[A-Z][\w.'’-]*){1,5})\s+read\b/);
@@ -200,6 +222,9 @@ function extract(days){
         X.sermons.push({who:who, ref:sref, theme:stheme, lessons:les, service:svc, day:dn, body:body}); }
     });
   });
+  X.resolutions = [];
+  days.forEach(function(day){ if(!/^resolutions\b/i.test(day.title)) return;
+    (day.blocks||[]).forEach(function(b){ if(b.kind==='text' && /^\d+$/.test(b.ref||'')) X.resolutions.push({no:b.ref, text:String(b.text).replace(/^May it be resolved that\s+/i,'').replace(/^That\s+/,'')}); }); });
   X.districts.forEach(function(d){ X.churches += d.churches; X.m25 += d.m25; X.m26 += d.m26; X.funds += d.funds; });
   X.districts.sort(function(a,b){ return b.m26 - a.m26; });
   X.days = days;
@@ -247,8 +272,15 @@ function render(days){
       X.thoughts.map(function(t){ return '<div class="thought"><blockquote>“'+esc(t.quote)+'”</blockquote><div class="meta">'+(t.ref?'<b>'+esc(t.ref)+'</b> · ':'')+(t.reader?'read by '+esc(t.reader)+' · ':'')+esc([t.when,t.day].filter(Boolean).join(', '))+'</div></div>'; }).join('')+'</div></div></section>';
   }
   if(X.hymns.length){
-    h += '<section id="songs"><div class="wrap"><div class="sechead"><div class="eyebrow">The songs we lifted</div><h2>Hymns of the session</h2><p>By number, as they were lined in the sanctuary.</p></div><div class="songs">'+
-      X.hymns.map(function(s){ return '<div class="song"><div class="no">'+esc(s.no)+'</div><div><div class="t">'+esc(s.title)+'</div><div class="e">'+esc([s.eng,s.book].filter(Boolean).join(' · '))+'</div></div></div>'; }).join('')+'</div></div></section>';
+    var top = X.hymns.filter(function(s){ return s.no===HYMN_OF_THE_SESSION.no; })[0];
+    h += '<section id="songs"><div class="wrap"><div class="sechead"><div class="eyebrow">The songs we lifted</div><h2>Hymns of the session</h2><p>By number, as they were lined in the sanctuary.</p></div>';
+    if(top || SONG_OF_THE_SESSION) h += '<div class="favs">'+
+      (top ? '<div class="fav"><div class="fl">Hymn of the Session</div><div class="fno">'+esc(top.no)+'<span class="fx">×3+</span></div><div class="ft">'+esc(top.title)+'</div><div class="fe">'+esc([top.eng,top.book].filter(Boolean).join(' · '))+'</div><div class="fn">'+esc(HYMN_OF_THE_SESSION.times)+'. '+esc(HYMN_OF_THE_SESSION.note)+'.</div></div>' : '')+
+      (SONG_OF_THE_SESSION ? '<div class="fav"><div class="fl">Song of the Session</div><div class="fnote" aria-hidden="true">♪</div><div class="ft">'+esc(SONG_OF_THE_SESSION.title)+'</div><div class="fn">'+esc(SONG_OF_THE_SESSION.note)+'.</div></div>' : '')+
+      '</div>';
+    h += '<div class="songs">'+
+      X.hymns.map(function(s){ var t = s.no===HYMN_OF_THE_SESSION.no ? HYMN_OF_THE_SESSION.times : s.times>1 ? (s.times===2?'Sung twice':'Sung '+s.times+' times') : '';
+        return '<div class="song"><div class="no">'+esc(s.no)+'</div><div><div class="t">'+esc(s.title)+(t?' <span class="times">'+esc(t)+'</span>':'')+'</div><div class="e">'+esc([s.eng,s.book].filter(Boolean).join(' · '))+'</div></div></div>'; }).join('')+'</div></div></section>';
   }
   if(X.districts.length){
     var max = Math.max.apply(null, X.districts.map(function(d){ return d.m26; })) || 1;
@@ -259,6 +291,11 @@ function render(days){
         '<div class="facts"><span><b>'+d.churches+'</b> churches</span><span><b>'+(g>=0?'+':'−')+spaced(Math.abs(g))+'</b> members on last year</span><span><b>'+rand(d.funds)+'</b> raised by the churches</span></div>'+
         (d.said?'<details><summary>What the district said of its Presiding Elder</summary><p>'+esc(d.said)+'</p></details>':'')+'</div>'; });
     h += '</div></section>';
+  }
+  if(X.resolutions.length){
+    h += '<section id="resolved"><div class="wrap"><div class="sechead"><div class="eyebrow">Adopted on Sunday 11 October 2026</div><h2>What the Conference resolved</h2><p>The '+X.resolutions.length+' resolutions of the 42nd Session, as read by the Conference Secretaries and adopted by the Conference.</p></div><ol class="resolutions">'+
+      X.resolutions.map(function(r){ var t = r.text.charAt(0).toUpperCase()+r.text.slice(1), w = t.split(/\s+/), short = w.length>34;
+        return '<li><span class="rn">'+esc(r.no)+'</span><div>'+(short ? '<details><summary>'+esc(w.slice(0,28).join(' '))+'…</summary><p>'+esc(t)+'</p></details>' : '<p>'+esc(t)+'</p>')+'</div></li>'; }).join('')+'</ol></div></section>';
   }
   h += '<section id="record"><div class="wrap"><div class="sechead"><div class="eyebrow">The record</div><h2>Read the minutes, and help keep them true</h2><p>Open a day to read the full minutes. If a name, a figure or a word is not as it happened, propose a correction there. The Conference Secretaries decide on each one.</p></div><div class="days">'+
     days.map(function(d){ var c = d.counts || {};

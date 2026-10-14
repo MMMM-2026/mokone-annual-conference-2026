@@ -139,7 +139,7 @@ textarea.big{min-height:300px;font-size:14px}
 </head>
 <body>
 <div class="hero"><div class="wrap">
-  <div><a class="eyebrow" href="42nd.html" style="text-decoration:none;display:block">‹ The 42nd Session · M.M. Mokone Memorial Annual Conference</a><div class="print-only" style="font-size:10pt;margin-top:2pt">Minutes of the 42nd Session of the Mangena Maake Mokone Memorial Annual Conference</div><h1 id="title">Conference Minutes</h1></div>
+  <div><a class="eyebrow" href="42nd.html" style="text-decoration:none;display:block">‹ The 42nd Session · M.M. Mokone Memorial Annual Conference</a><div class="print-only" style="font-size:10pt;margin-top:2pt">The 42nd Session of the Mangena Maake Mokone Memorial Annual Conference</div><h1 id="title">Conference Minutes</h1></div>
   <div class="sec" id="secbox"></div>
 </div></div>
 <div class="bar" id="bar" hidden><div class="wrap"><div class="tabs" role="tablist" id="tabs"></div></div></div>
@@ -218,7 +218,7 @@ function parseMinutes(raw){
       sec = s.replace(/\s*\d{1,2}[:h]\d{2}.*$/,'').toLowerCase().replace(/\b[a-z]/g,function(x){ return x.toUpperCase(); });
       if(/^BUSINESS|^OPENING|^CLOSING/i.test(s)){ topN = 0; sub = false; lastSub = 0; }
       push({kind:'session', ref:'', text:s}); cur=null; prevEnd=true; carried=false; lastRef=''; continue; }
-    if((/^DAY\s/i.test(s) || /^MINUTES\s+OF\b/i.test(s) || /^HELD\s+AT\b/i.test(s)) && s.length<110 && blocks.length<4){ blocks.push({kind:'session', ref:'', text:s}); cur=null; prevEnd=true; continue; }
+    if((/^DAY\s/i.test(s) || /^(MINUTES|RESOLUTIONS)\s+OF\b/i.test(s) || /^HELD\s+AT\b/i.test(s)) && s.length<170 && blocks.length<4){ blocks.push({kind:'session', ref:'', text:s}); cur=null; prevEnd=true; continue; }
     if(isNum(s)){
       m = s.match(NUM); var num = m[1], ref = num;
       if(num.indexOf('.')<0){ var v = parseInt(num,10), dotted = false;
@@ -259,6 +259,7 @@ function reportDiffs(b){ var r=reportFor(b); if(!r) return [];
   var map={m25:'Total Prev',m26:'Total Curr',acA:'ACB Assessed',acP:'ACB Paid',erA:'ERP Assessed',erP:'ERP Paid',erO:'ERP Outstanding',funds:'Funds Raised'}, out=[];
   Object.keys(map).forEach(function(k){ var a=num(b[k]), v=num(r[map[k]]); if(isNaN(a)||isNaN(v)) return; if(Math.abs(a-v)>=1) out.push(F[k]+': minutes say '+b[k]+', the report says '+r[map[k]]); });
   return out; }
+var isResolutions = function(){ return !!(D && /^resolutions\b/i.test(D.day.title)); };
 var blockOf = function(id){ return D.blocks.filter(function(b){ return b.id===id; })[0]; };
 var order = function(id){ for(var i=0;i<D.blocks.length;i++) if(D.blocks[i].id===id) return i; return 1e9; };
 function label(b){ if(!b) return 'Removed item';
@@ -353,18 +354,18 @@ function renderMinutes(){
   var districts = D.blocks.filter(function(b){ return b.kind==='district'; });
   var flagged = D.blocks.filter(function(b){ return b.kind==='church' && flags(b).length; });
   var h = '<div class="notice">'+(sec.name ? '<b>Secretary view.</b> The text below is the official record. It changes only when a secretary accepts a proposal.'
-    : '<b>These are the official minutes.</b> Tap “Propose a change” on any item. Your proposal goes to the Conference Secretaries, and the minutes stay as they are until a secretary accepts it.')+
+    : isResolutions() ? '<b>These are the resolutions as adopted by the Conference.</b> If you find a spelling or typing error, tap “Propose a change” on that resolution. The substance of a resolution cannot be changed here.' : '<b>These are the official minutes.</b> Tap “Propose a change” on any item. Your proposal goes to the Conference Secretaries, and the minutes stay as they are until a secretary accepts it.')+
     ' <button class="linkbtn" data-act="refresh">Refresh</button></div>';
   if(districts.length) h += '<div class="jump">'+districts.map(function(d){ return '<button type="button" data-jump="'+esc(d.id)+'">'+esc(d.text.replace(/^[\d.\s]+/,'').replace(/\.$/,''))+'</button>'; }).join('')+'</div>';
   if(flagged.length) h += '<details class="check"><summary>'+flagged.length+' churches have figures that do not add up</summary><ul>'+
     flagged.map(function(b){ return '<li><button class="linkbtn" data-jump="'+esc(b.id)+'">'+esc(b.name)+'</button> ('+esc(String(b.district).replace(' District',''))+'): '+esc(flags(b).join(' and '))+'</li>'; }).join('')+
     '</ul><div class="meta">Checked automatically: assessed less paid should equal outstanding.</div></details>';
   var c2 = counts(), SL = scheduleLines();
-  h += '<div class="acts no-print"><button class="btn" data-act="print">Print these minutes or save them as a PDF</button><span class="meta">Prints the minutes as they now stand, with the schedule of corrections at the end.</span></div>';
+  h += '<div class="acts no-print"><button class="btn" data-act="print">Print '+(isResolutions()?'these resolutions':'these minutes')+' or save them as a PDF</button><span class="meta">Prints the minutes as they now stand, with the schedule of corrections at the end.</span></div>';
   h += '<div class="book">'+D.blocks.map(function(b){ return blockHtml(b,pend,true); }).join('')+'</div>';
-  h += '<div class="print-only printfoot"><h2>Schedule of corrections</h2>'+(SL.length ? '<ol>'+SL.map(function(l){ return '<li>'+esc(l.t)+' Proposed by '+esc(l.by)+'.</li>'; }).join('')+'</ol>' : '<p>No corrections have been accepted on these minutes.</p>')+
-    '<p>These minutes include the '+c2.accepted+' correction'+(c2.accepted===1?'':'s')+' accepted by the Conference Secretaries'+(c2.pending?'. '+c2.pending+' proposal'+(c2.pending===1?' was':'s were')+' still waiting for a decision when this copy was printed':'')+'. Printed '+esc(stamp(Date.now()))+'.</p>'+
-    '<div class="sign"><div>Conference Secretary</div><div>Date</div></div></div>';
+  h += '<div class="print-only printfoot"><h2>Schedule of corrections</h2>'+(SL.length ? '<ol>'+SL.map(function(l){ return '<li>'+esc(l.t)+' Proposed by '+esc(l.by)+'.</li>'; }).join('')+'</ol>' : '<p>No corrections have been accepted on '+(isResolutions()?'these resolutions':'these minutes')+'.</p>')+
+    '<p>'+(isResolutions()?'These resolutions include the ':'These minutes include the ')+c2.accepted+' correction'+(c2.accepted===1?'':'s')+' accepted by the Conference Secretaries'+(c2.pending?'. '+c2.pending+' proposal'+(c2.pending===1?' was':'s were')+' still waiting for a decision when this copy was printed':'')+'. Printed '+esc(stamp(Date.now()))+'.</p>'+
+    '<div class="sign"><div>Rev. JH Monegi (Secretary)</div><div>Rev. LEP Makhura (Assistant Secretary)</div><div>Rev. FR Moloisane (Engrossing Secretary)</div></div><div class="sign" style="margin-top:20pt"><div>Date</div><div style="border:0"></div><div style="border:0"></div></div></div>';
   return h;
 }
 function renderProposals(){
@@ -436,7 +437,8 @@ function renderLayer(){
     h += '<div class="stack"><label for="f-field">Which entry is wrong?</label><select id="f-field">'+Object.keys(F).map(function(k){ return '<option value="'+k+'">'+esc(F[k])+' (now '+esc(b[k])+')</option>'; }).join('')+'</select></div>';
     h += '<div class="stack"><label for="f-value">What it should be</label><input type="text" id="f-value" autocomplete="off"></div>';
   } else {
-    h += '<div class="stack"><label for="f-type">Kind of change</label><select id="f-type"><option value="Correction">Correction: a name, spelling, figure or fact is wrong</option><option value="Amendment">Amendment: the wording should say it differently</option><option value="Addition">Addition: something is missing after this item</option></select></div>';
+    if(isResolutions()) h += '<div class="notice">These resolutions were adopted by the Conference. Only a spelling or typing error can be corrected here; the substance of a resolution cannot be changed.</div><div class="stack"><label for="f-type">Kind of change</label><select id="f-type"><option value="Correction">Correction: a spelling or typing error</option></select></div>';
+    else h += '<div class="stack"><label for="f-type">Kind of change</label><select id="f-type"><option value="Correction">Correction: a name, spelling, figure or fact is wrong</option><option value="Amendment">Amendment: the wording should say it differently</option><option value="Addition">Addition: something is missing after this item</option></select></div>';
     h += '<div class="stack"><label for="f-text" id="f-text-l">'+(b.table?'Edit the entry that is wrong. Keep the | marks between the columns':'Edit the wording as it should read')+'</label><textarea id="f-text">'+esc(b.text)+'</textarea></div>';
   }
   h += '<div class="stack"><label for="f-reason">Reason <small>(helps the secretary decide)</small></label><input type="text" id="f-reason" autocomplete="off"></div>';

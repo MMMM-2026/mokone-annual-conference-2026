@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sent · Appointments of the 42nd Session</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600;1,700&family=Open+Sans:wght@400;600;700&display=swap">
+<style>
+/* Layout: the reading of the appointments. One column on the night purple of the 42nd Session; the sending scripture first, then the component heads, then each district read in turn: its Presiding Elder, then charge by charge. Gold marks every place a servant is sent. */
+:root{
+  --night:#12061f; --purple:#231036; --plum:#3a1750; --line:rgba(232,201,122,.22);
+  --gold:#C4972A; --gold-hi:#f0d58a; --ivory:#f6efe2; --muted:#bfaed3;
+  --head:"Playfair Display",Georgia,"Times New Roman",serif; --ui:"Open Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--night);color:var(--ivory);font-family:var(--ui);font-size:16px;line-height:1.6;overflow-x:hidden}
+[hidden]{display:none!important}
+a{color:var(--gold-hi)}
+:focus-visible{outline:2px solid var(--gold-hi);outline-offset:3px}
+.wrap{max-width:980px;margin:0 auto;padding-left:20px;padding-right:20px}
+.eyebrow{font-size:11.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold-hi);font-weight:600}
+.hero{position:relative;overflow:hidden;background:radial-gradient(120% 90% at 50% 0%,#4a1f6b 0%,#2a1140 42%,var(--night) 100%);border-bottom:3px solid var(--gold);text-align:center}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.hero .wrap{position:relative;padding-top:40px;padding-bottom:40px;display:flex;flex-direction:column;align-items:center;gap:12px}
+.hero img{width:70px;height:70px;object-fit:contain}
+.word{font-family:var(--head);font-weight:900;line-height:.9;font-size:clamp(96px,26vw,220px);letter-spacing:-.03em;margin:4px 0 0;
+  background:linear-gradient(175deg,#fff3c9 0%,var(--gold-hi) 28%,var(--gold) 58%,#8a6410 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 10px 40px rgba(196,151,42,.35));animation:rise 1.4s cubic-bezier(.2,.7,.2,1) both}
+.hero h1{font-family:var(--head);font-weight:700;font-size:clamp(22px,4.6vw,36px);line-height:1.15;margin:0;text-wrap:balance;max-width:24ch}
+.hero .sub{color:var(--muted);font-size:14.5px;max-width:52ch}
+.hero .sub b{color:var(--ivory);font-weight:600}
+blockquote.send{margin:18px 0 0;max-width:34ch;font-family:var(--head);font-style:italic;font-weight:600;font-size:clamp(21px,3.8vw,30px);line-height:1.3;text-wrap:balance;animation:rise 1.4s .25s cubic-bezier(.2,.7,.2,1) both}
+blockquote.send cite{display:block;margin-top:10px;font-family:var(--ui);font-style:normal;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-hi);font-weight:600}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%;margin-top:22px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.stat{padding:16px 6px;border-left:1px solid var(--line);min-width:0}
+.stat:first-child{border-left:0}
+.stat .n{font-family:var(--head);font-weight:700;font-size:clamp(28px,6vw,46px);line-height:1;color:var(--gold-hi);font-variant-numeric:tabular-nums}
+.stat .l{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+.find{position:sticky;top:0;z-index:5;background:rgba(18,6,31,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.find .wrap{padding-top:12px;padding-bottom:12px;display:flex;flex-direction:column;gap:8px}
+.find label{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-hi);font-weight:600}
+.find input{width:100%;font:inherit;font-size:17px;color:var(--ivory);background:var(--purple);border:1px solid var(--line);border-radius:8px;padding:11px 14px}
+.find input::placeholder{color:var(--muted)}
+.jump{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
+.jump a{flex:none;border:1px solid var(--line);border-radius:40px;padding:5px 12px;font-size:13px;font-weight:600;text-decoration:none;color:var(--ivory)}
+section{padding-top:56px}
+.sechead{display:flex;flex-direction:column;gap:6px;margin-bottom:22px}
+.sechead h2{font-family:var(--head);font-weight:700;font-size:clamp(28px,5.4vw,44px);line-height:1.08;margin:0;text-wrap:balance}
+.sechead p{margin:0;color:var(--muted);max-width:60ch;font-size:15px}
+.heads{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.headc{background:var(--night);padding:18px 18px 16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.headc .role{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-hi);font-weight:600;line-height:1.45}
+.headc .who{font-family:var(--head);font-weight:700;font-size:20px;line-height:1.2}
+.district{scroll-margin-top:130px}
+.pe{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 18px;border-top:3px solid var(--gold);background:linear-gradient(150deg,var(--plum),var(--purple));padding:20px clamp(16px,3vw,26px)}
+.pe .dn{font-family:var(--head);font-weight:900;font-size:clamp(28px,5.6vw,46px);line-height:1}
+.pe .pl{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-hi);font-weight:600}
+.pe .pn{font-family:var(--head);font-style:italic;font-weight:600;font-size:clamp(19px,3.4vw,26px);line-height:1.2}
+.pe .cnt{font-size:13px;color:var(--muted);width:100%}
+.charges{list-style:none;margin:0;padding:0}
+.charge{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr) auto;gap:4px 18px;align-items:baseline;padding:14px clamp(4px,1.5vw,14px);border-bottom:1px solid var(--line)}
+.charge .c{font-family:var(--head);font-weight:700;font-size:clamp(18px,3vw,22px);line-height:1.2}
+.charge .p{font-size:16px;line-height:1.35}
+.copy{border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:20px;padding:3px 11px;font:inherit;font-size:12px;font-weight:600;cursor:pointer}
+.copy:hover{color:var(--gold-hi);border-color:var(--gold)}
+mark{background:rgba(240,213,138,.28);color:inherit;border-radius:2px;padding:0 1px}
+.none{color:var(--muted);padding:26px 0;text-align:center}
+.empty{color:var(--muted);text-align:center;padding:50px 0}
+footer{margin-top:64px;border-top:1px solid var(--line);padding-top:22px;padding-bottom:60px;color:var(--muted);font-size:13px;text-align:center}
+footer a{font-weight:600}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--gold);color:#1b0d05;font-weight:700;padding:10px 16px;border-radius:8px;font-size:14px;z-index:20;max-width:calc(100% - 32px)}
+@media (max-width:600px){.charge{grid-template-columns:minmax(0,1fr) auto}.charge .p{grid-column:1}.charge .copy{grid-row:1 / span 2;grid-column:2;align-self:center}.stats .stat .l{letter-spacing:.08em}}
+@media (prefers-reduced-motion:reduce){.word,blockquote.send{animation:none}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header class="hero">
+  <canvas id="motes" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <img src="ame19th-logo-white.png" alt="" onerror="this.hidden=true">
+    <div class="eyebrow">The 42nd Session · Mangena Maake Mokone Memorial Annual Conference</div>
+    <div class="word" aria-hidden="true">Sent</div>
+    <h1>Pastoral appointments for the Conference year 2026–2027</h1>
+    <div class="sub">Read at the close of the 42nd Session, Polokwane AME Church, on Sunday 11 October 2026.<br><b>Senior Bishop Wilfred Jacobus Messiah</b>, presiding</div>
+    <blockquote class="send">“Behold, I send you forth as sheep in the midst of wolves.”<cite>Matthew 10:16 · read at the Commissioning Service</cite></blockquote>
+    <div class="stats" id="stats" hidden></div>
+  </div>
+</header>
+<div class="find" id="find" hidden><div class="wrap">
+  <label for="q">Find your church or your pastor</label>
+  <input id="q" type="search" autocomplete="off" placeholder="Type a church, a pastor or a district">
+  <nav class="jump" id="jump"></nav>
+</div></div>
+<main id="main"><div class="wrap"><div class="empty">Gathering the appointments…</div></div></main>
+<footer><div class="wrap">Drawn from the minutes of Sunday 11 October 2026, kept by the Conference Secretaries. If a name or a charge is not as it was read, propose a correction on the <a href="minutes.html">minutes page</a>.<br><br><a href="42nd.html">‹ The 42nd Session</a></div></footer>
+<script>
+var MINUTES_URL = "https://script.google.com/macros/s/AKfycbzEWYVxcN3-eSBgCr76LIH3LoxZw9LyM6DP34rpScuF4L8eiVRV_Jw8TQbQ_5bIgd76/exec";
+var SEED = /*SEED*/null;
+var esc = function(s){ return String(s==null?'':s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); };
+var A = null;
+
+function rows(t){ return String(t).split('\n').map(function(r){ return r.split(/\s*\|\s*/).map(function(c){ return c.trim(); }); }).filter(function(r){ return r.length>=2 && r[0]; }); }
+function extract(days){
+  var out = {heads:[], districts:[], dayId:''};
+  days.forEach(function(day){
+    var B = day.blocks || [], inApp = false, inHeads = false, cur = null;
+    B.forEach(function(b){
+      var t = String(b.text||'');
+      if(b.kind==='text' && /^Presentation of Certificates to Component/i.test(t)){ inHeads = true; out.dayId = day.id; return; }
+      if(b.kind==='text' && /^Pastoral Appointments/i.test(t)){ inApp = true; inHeads = false; out.dayId = day.id; return; }
+      if(inHeads && b.table){ rows(t).forEach(function(r){ if(/^name/i.test(r[0])) return; out.heads.push({who:r[0], role:r.slice(1).join(' ')}); }); return; }
+      if(!inApp) return;
+      if(b.kind==='district'){ cur = {name:t.replace(/^[\d.\s]+/,'').replace(/\.$/,'').trim(), pe:'', charges:[]}; out.districts.push(cur); return; }
+      if(b.kind==='text' && /^\d+$/.test(b.ref||'')){ inApp = false; cur = null; return; }
+      if(!cur) return;
+      var pm = t.match(/^Presiding Elder:\s*(.+?)\.?$/i); if(pm){ cur.pe = pm[1]; return; }
+      if(b.table) rows(t).forEach(function(r){ if(/^charge$/i.test(r[0])) return; cur.charges.push({charge:r[0], pastor:r.slice(1).join(' ')}); });
+    });
+  });
+  return out;
+}
+function hl(s, q){ s = esc(s); if(!q) return s; var i = s.toLowerCase().indexOf(esc(q).toLowerCase()); if(i<0) return s; var e = esc(q).length; return s.slice(0,i)+'<mark>'+s.slice(i,i+e)+'</mark>'+s.slice(i+e); }
+function slug(s){ return 'd-'+String(s).toLowerCase().replace(/[^a-z]+/g,'-').replace(/^-|-$/g,''); }
+
+function draw(){
+  var q = (document.getElementById('q').value || '').trim(), ql = q.toLowerCase(), h = '', shown = 0;
+  var match = function(){ if(!ql) return true; for(var i=0;i<arguments.length;i++) if(String(arguments[i]).toLowerCase().indexOf(ql)>=0) return true; return false; };
+  var heads = A.heads.filter(function(x){ return match(x.who, x.role); });
+  if(heads.length){ shown += heads.length;
+    h += '<section id="heads"><div class="wrap"><div class="sechead"><div class="eyebrow">Presented with their certificates</div><h2>The Component Heads</h2><p>Those who lead the components and auxiliaries of the Conference, as presented on Sunday 11 October 2026.</p></div><div class="heads">'+
+      heads.map(function(x){ return '<div class="headc"><div class="role">'+hl(x.role,q)+'</div><div class="who">'+hl(x.who,q)+'</div></div>'; }).join('')+'</div></div></section>'; }
+  A.districts.forEach(function(d){
+    var all = match(d.name, d.pe), ch = all ? d.charges : d.charges.filter(function(c){ return match(c.charge, c.pastor); });
+    if(!all && !ch.length) return; shown += ch.length + 1;
+    h += '<section class="district" id="'+slug(d.name)+'"><div class="wrap"><div class="pe"><div class="dn">'+hl(d.name,q)+'</div><div><div class="pl">Presiding Elder</div><div class="pn">'+hl(d.pe,q)+'</div></div><div class="cnt">'+d.charges.length+' charges</div></div><ul class="charges">'+
+      ch.map(function(c){ return '<li class="charge"><div class="c">'+hl(c.charge,q)+'</div><div class="p">'+hl(c.pastor,q)+'</div><button type="button" class="copy" data-copy="'+esc(c.pastor+' is appointed to '+c.charge+', '+d.name+', for the Conference year 2026–2027.')+'">Copy</button></li>'; }).join('')+'</ul></div></section>';
+  });
+  if(!shown) h = '<div class="wrap"><div class="none">Nothing matches “'+esc(q)+'”. Try part of a name, such as a surname or the name of the church.</div></div>';
+  document.getElementById('main').innerHTML = h;
+}
+function render(days){
+  A = extract(days);
+  if(!A.districts.length){ document.getElementById('main').innerHTML = '<div class="wrap"><div class="empty">The appointments will appear here once the Conference Secretaries publish the minutes of Sunday 11 October 2026.</div></div>'; return; }
+  var n = 0, pes = 0; A.districts.forEach(function(d){ n += d.charges.length; if(d.pe) pes++; });
+  var st = document.getElementById('stats');
+  st.innerHTML = '<div class="stat"><div class="n">'+n+'</div><div class="l">Charges</div></div><div class="stat"><div class="n">'+A.districts.length+'</div><div class="l">Districts</div></div><div class="stat"><div class="n">'+A.heads.length+'</div><div class="l">Component heads</div></div>';
+  st.hidden = false;
+  document.getElementById('jump').innerHTML = (A.heads.length?'<a href="#heads">Component Heads</a>':'')+A.districts.map(function(d){ return '<a href="#'+slug(d.name)+'">'+esc(d.name.replace(/\s*District$/,''))+'</a>'; }).join('');
+  document.getElementById('find').hidden = false;
+  draw();
+}
+var toastT;
+function toast(m){ var t = document.querySelector('.toast'); if(!t){ t = document.createElement('div'); t.className = 'toast'; t.setAttribute('role','status'); document.body.appendChild(t); } t.textContent = m; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(function(){ t.hidden = true; }, 3200); }
+document.addEventListener('click', function(e){ var b = e.target.closest('[data-copy]'); if(!b) return; var txt = b.getAttribute('data-copy');
+  var done = function(){ toast('Copied. Paste it into WhatsApp.'); };
+  var fb = function(){ var ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); done(); }catch(x){ toast(txt); } ta.remove(); };
+  try{ navigator.clipboard.writeText(txt).then(done, fb); }catch(x){ fb(); } });
+document.addEventListener('input', function(e){ if(e.target.id==='q' && A) draw(); });
+
+function getJSON(url, tries){ tries = tries || 4; var n = 0;
+  function once(){ n++; var ctl = window.AbortController ? new AbortController() : null, timer = ctl ? setTimeout(function(){ ctl.abort(); }, 25000) : null;
+    return fetch(url, ctl ? {signal:ctl.signal} : undefined).then(function(r){ return r.text(); }).then(function(t){ if(timer) clearTimeout(timer); return JSON.parse(t); })
+      .catch(function(e){ if(timer) clearTimeout(timer); if(n >= tries) throw e; return new Promise(function(res){ setTimeout(res, 1200*n + Math.random()*800); }).then(once); }); }
+  return once(); }
+function motes(){ var c = document.getElementById('motes'); if(!c || !c.getContext) return;
+  if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var x = c.getContext('2d'), W, H, P = [], on = true, dpr = Math.min(2, window.devicePixelRatio||1);
+  function size(){ W = c.clientWidth; H = c.clientHeight; c.width = W*dpr; c.height = H*dpr; x.setTransform(dpr,0,0,dpr,0,0); }
+  size(); window.addEventListener('resize', size);
+  for(var i=0;i<60;i++) P.push({x:Math.random(), y:Math.random(), r:.6+Math.random()*2, s:.00025+Math.random()*.0007, w:Math.random()*6.28, a:.15+Math.random()*.5});
+  document.addEventListener('visibilitychange', function(){ on = !document.hidden; if(on) requestAnimationFrame(tick); });
+  function tick(){ if(!on) return; x.clearRect(0,0,W,H);
+    P.forEach(function(p){ p.y -= p.s; p.w += .008; if(p.y < -.03){ p.y = 1.03; p.x = Math.random(); }
+      var px = (p.x + Math.sin(p.w)*.012)*W, py = p.y*H, fade = Math.min(1, p.y*3) * Math.min(1, (1-p.y)*5);
+      x.beginPath(); x.arc(px, py, p.r, 0, 6.283); x.fillStyle = 'rgba(240,213,138,'+(p.a*fade).toFixed(3)+')'; x.fill(); });
+    requestAnimationFrame(tick); }
+  requestAnimationFrame(tick); }
+function start(){ motes();
+  if(SEED){ render(SEED); return; }
+  var KEY = 'mm-42nd-appointments', shown = false;
+  try{ var c = JSON.parse(localStorage.getItem(KEY) || 'null'); if(c && c.length){ render(c); shown = true; } }catch(e){}
+  getJSON(MINUTES_URL+'?action=days').then(function(r){
+    var ds = ((r && r.days) || []).filter(function(d){ return /sunday|day four|11 october/i.test(d.title) && !/^resolutions/i.test(d.title); });
+    var i = 0; function next(){ if(i >= ds.length) return ds; var d = ds[i++];
+      return getJSON(MINUTES_URL+'?action=day&id='+encodeURIComponent(d.id)).then(function(x){ d.blocks = (x && x.blocks) || []; return next(); }); }
+    return next();
+  }).then(function(ds){ try{ localStorage.setItem(KEY, JSON.stringify(ds)); }catch(e){} render(ds); })
+  .catch(function(){ if(!shown) document.getElementById('main').innerHTML = '<div class="wrap"><div class="empty">The appointments are busy just now. Wait a moment and refresh the page.</div></div>'; });
+}
+start();
+</script>
+</body>
+</html>
